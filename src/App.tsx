@@ -23,8 +23,11 @@ import {
   MessageSquare,
   X,
   Send,
-  Loader2
+  Loader2,
+  Coins,
+  Cloud
 } from "lucide-react";
+import { PartnerForm } from "./components/PartnerForm";
 
 const SectionTitle = ({ children, subtitle, light = false, id }: { children: ReactNode, subtitle?: string, light?: boolean, id?: string }) => (
   <div className="mb-12 md:mb-16">
@@ -251,10 +254,11 @@ export default function App() {
             <a href="#solution" className="hover:text-brand-orange-dark transition-colors">The Model</a>
             <a href="#impact" className="hover:text-brand-orange-dark transition-colors">Impact</a>
             <a href="#roadmap" className="hover:text-brand-orange-dark transition-colors">Roadmap</a>
+            <a href="#partner" className="hover:text-brand-orange-dark transition-colors">Partner</a>
           </div>
-          <button className="bg-brand-green text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-brand-light-green transition-all uppercase tracking-tight">
+          <a href="#partner" className="bg-brand-green text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-brand-light-green transition-all uppercase tracking-tight">
             Partner With Us
-          </button>
+          </a>
         </div>
       </nav>
 
@@ -410,66 +414,165 @@ export default function App() {
             
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-12">
-                <div className="flex gap-6">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-brand-light-green/10 flex items-center justify-center text-brand-light-green" aria-hidden="true">
-                    <TrendingUp className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h4 className="text-2xl font-serif mb-2">Farmer Income +20%</h4>
-                    <p className="text-brand-ink/60">Waste revenue adds ₹2,000–₹2,700/month directly to average farmer households. 26,400 ha of farmland already primed.</p>
-                  </div>
-                </div>
-                <div className="flex gap-6">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange" aria-hidden="true">
-                    <Users className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h4 className="text-2xl font-serif mb-2">Community-Run Units</h4>
-                    <p className="text-brand-ink/60">Partnering with Self-Help Groups (SHGs) and tribal youth cooperatives. Each unit creates 8–12 direct jobs inside villages.</p>
-                  </div>
-                </div>
-                <div className="flex gap-6">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green" aria-hidden="true">
-                    <ShieldCheck className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h4 className="text-2xl font-serif mb-2">Zero Burn, Zero Methane</h4>
-                    <p className="text-brand-ink/60">Eliminating field burning and sequestering carbon in durable boards. Supporting India's Net Zero 2070 pledge.</p>
-                  </div>
-                </div>
+                {[
+                  {
+                    icon: <TrendingUp className="w-8 h-8" />,
+                    title: "Farmer Income +20%",
+                    desc: "Waste revenue adds ₹2,000–₹2,700/month directly to average farmer households. 26,400 ha of farmland already primed.",
+                    color: "bg-brand-light-green/10 text-brand-light-green"
+                  },
+                  {
+                    icon: <Users className="w-8 h-8" />,
+                    title: "Community-Run Units",
+                    desc: "Partnering with Self-Help Groups (SHGs) and tribal youth cooperatives. Each unit creates 8–12 direct jobs inside villages.",
+                    color: "bg-brand-orange/10 text-brand-orange"
+                  },
+                  {
+                    icon: <ShieldCheck className="w-8 h-8" />,
+                    title: "Zero Burn, Zero Methane",
+                    desc: "Eliminating field burning and sequestering carbon in durable boards. Supporting India's Net Zero 2070 pledge.",
+                    color: "bg-brand-green/10 text-brand-green"
+                  }
+                ].map((item, i) => (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.2, duration: 0.6 }}
+                    className="flex gap-6"
+                  >
+                    <div className={`flex-shrink-0 w-16 h-16 rounded-full ${item.color} flex items-center justify-center`} aria-hidden="true">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-serif mb-2">{item.title}</h4>
+                      <p className="text-brand-ink/60">{item.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
               
-              <div className="bg-brand-green rounded-[40px] p-12 text-white relative overflow-hidden">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="bg-brand-green rounded-[40px] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl"
+              >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" aria-hidden="true" />
-                <h3 className="text-3xl font-serif mb-8">Structural Advantage</h3>
-                <div className="space-y-6" role="img" aria-label="Chart showing price comparison: Imported Plywood at 102 rupees per square foot versus Green-to-Gold at 48 rupees per square foot.">
-                  <div className="flex justify-between items-end">
-                    <span className="text-sm uppercase tracking-widest opacity-60">Imported Plywood</span>
-                    <span className="font-mono">₹102/sqft</span>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="p-2 bg-white/10 rounded-lg">
+                      <BarChart3 className="w-6 h-6 text-brand-orange" />
+                    </div>
+                    <h3 className="text-3xl font-serif">The Value Proposition</h3>
                   </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      whileInView={{ width: '100%' }}
-                      className="h-full bg-white/40"
-                    />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Cost Savings Infographic */}
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Coins className="w-4 h-4 text-brand-orange" />
+                        <span className="text-xs uppercase tracking-widest opacity-60 font-bold">Cost Savings</span>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="relative">
+                          <div className="flex justify-between text-[10px] uppercase tracking-tighter mb-1 opacity-40">
+                            <span>Imported Plywood</span>
+                            <span>₹102</span>
+                          </div>
+                          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              whileInView={{ width: '100%' }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 1, delay: 0.5 }}
+                              className="h-full bg-white/20"
+                            />
+                          </div>
+                        </div>
+                        <div className="relative">
+                          <div className="flex justify-between text-[10px] uppercase tracking-tighter mb-1 text-brand-orange font-bold">
+                            <span>Green-to-Gold</span>
+                            <span>₹48</span>
+                          </div>
+                          <div className="h-4 bg-white/10 rounded-full overflow-hidden">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              whileInView={{ width: '47%' }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 1, delay: 0.7 }}
+                              className="h-full bg-brand-orange"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-[11px] leading-relaxed opacity-60 italic">
+                        * 54% reduction in construction material costs for Tripura.
+                      </p>
+                    </div>
+
+                    {/* Carbon Sequestration Infographic */}
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Cloud className="w-4 h-4 text-brand-light-green" />
+                        <span className="text-xs uppercase tracking-widest opacity-60 font-bold">Carbon Impact</span>
+                      </div>
+                      <div className="bg-white/5 rounded-2xl p-6 border border-white/10 relative group">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="text-4xl font-serif text-brand-light-green">-12kg</div>
+                          <div className="w-10 h-10 bg-brand-light-green/20 rounded-full flex items-center justify-center">
+                            <Leaf className="w-5 h-5 text-brand-light-green" />
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium mb-1">CO2e per Board</div>
+                        <p className="text-[10px] opacity-60 leading-tight">
+                          Net-negative carbon footprint by sequestering bamboo & pineapple waste into durable construction boards.
+                        </p>
+                        
+                        {/* Decorative Carbon Particles */}
+                        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+                          {[...Array(5)].map((_, i) => (
+                            <motion.div
+                              key={i}
+                              animate={{ 
+                                y: [0, -20, 0],
+                                opacity: [0.2, 0.5, 0.2]
+                              }}
+                              transition={{ 
+                                duration: 3 + i, 
+                                repeat: Infinity,
+                                delay: i * 0.5
+                              }}
+                              className="absolute w-1 h-1 bg-white rounded-full"
+                              style={{ 
+                                left: `${20 + i * 15}%`, 
+                                top: `${40 + i * 10}%` 
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-[11px] leading-relaxed opacity-60 italic">
+                        * Supporting India's Net Zero 2070 pledge through local action.
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-end">
-                    <span className="text-sm uppercase tracking-widest opacity-60">Green-to-Gold (Target)</span>
-                    <span className="font-mono text-brand-orange font-bold">₹48/sqft</span>
-                  </div>
-                  <div className="h-4 bg-white/10 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      whileInView={{ width: '47%' }}
-                      className="h-full bg-brand-orange"
-                    />
+
+                  {/* Bottom Stats */}
+                  <div className="mt-10 pt-8 border-t border-white/10 grid grid-cols-2 gap-4">
+                    <div className="text-center">
+                      <div className="text-2xl font-serif text-brand-orange">100k+</div>
+                      <div className="text-[9px] uppercase tracking-widest opacity-40">Tonnes Waste Saved</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-serif text-brand-light-green">8-12</div>
+                      <div className="text-[9px] uppercase tracking-widest opacity-40">Jobs per Mini-Factory</div>
+                    </div>
                   </div>
                 </div>
-                <p className="mt-12 text-sm italic opacity-60">
-                  * Price per sq ft (18mm standard) — lower is better. We are not just eco-friendly; we are the cheapest option in the market.
-                </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -570,6 +673,38 @@ export default function App() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </section>
+
+        {/* Partner Section */}
+        <section id="partner" className="py-24 px-6 bg-brand-paper" aria-labelledby="partner-title">
+          <div className="max-w-7xl mx-auto">
+            <SectionTitle id="partner-title" subtitle="Collaboration">Partner With Us</SectionTitle>
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h3 className="text-4xl font-serif text-brand-green leading-tight">
+                  Let's Build the <br />
+                  <span className="italic text-brand-orange">Green Economy</span> Together.
+                </h3>
+                <p className="text-lg text-brand-ink/70 leading-relaxed">
+                  Whether you are an investor looking for high-impact opportunities, a farmer with biomass waste, or a distributor ready to bring sustainable materials to the market — we want to hear from you.
+                </p>
+                <div className="space-y-4">
+                  {[
+                    "Direct access to Tripura's vast biomass resources",
+                    "Impact-first investment with scalable returns",
+                    "Community-driven manufacturing model",
+                    "Zero-waste circular economy leadership"
+                  ].map((benefit, i) => (
+                    <div key={i} className="flex items-center gap-3 text-brand-ink/80">
+                      <CheckCircle2 className="w-5 h-5 text-brand-light-green" />
+                      <span>{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <PartnerForm />
             </div>
           </div>
         </section>
