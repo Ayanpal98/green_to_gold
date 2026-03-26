@@ -1,0 +1,637 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useRef, useEffect, ReactNode } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { GoogleGenAI } from "@google/genai";
+import { 
+  ArrowRight, 
+  Leaf, 
+  Factory, 
+  Users, 
+  TrendingUp, 
+  ShieldCheck, 
+  Globe, 
+  Mail, 
+  MapPin,
+  ChevronRight,
+  CheckCircle2,
+  Zap,
+  BarChart3,
+  MessageSquare,
+  X,
+  Send,
+  Loader2
+} from "lucide-react";
+
+const SectionTitle = ({ children, subtitle, light = false, id }: { children: ReactNode, subtitle?: string, light?: boolean, id?: string }) => (
+  <div className="mb-12 md:mb-16">
+    <motion.span 
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      className={`text-xs uppercase tracking-[0.2em] font-semibold ${light ? 'text-white/60' : 'text-brand-orange-dark'}`}
+    >
+      {subtitle}
+    </motion.span>
+    <motion.h2 
+      id={id}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 }}
+      className={`text-4xl md:text-6xl mt-4 leading-tight ${light ? 'text-white' : 'text-brand-green'}`}
+    >
+      {children}
+    </motion.h2>
+  </div>
+);
+
+const SYSTEM_INSTRUCTION = `
+You are the official AI assistant for Green-to-Gold, a sustainable manufacturing startup based in Tripura, India. 
+Your goal is to answer questions from potential investors, partners, and farmers about the project based on the following pitch deck information:
+
+[Project Overview]
+- Mission: Transforming agricultural waste into high-value bio-composite construction materials.
+- Tagline: Building Tripura's Future From Its Own Soil.
+- Core Advantage: Cheaper, stronger, and local materials.
+
+[The Problem]
+- "Distance Tax": 30-40% added cost to imported construction materials due to the 1,500 km Siliguri Corridor bottleneck.
+- Waste: 100,000s of tonnes of biomass (pineapple and bamboo) burned annually.
+- Housing: Tripura housing is among India's most expensive to build.
+
+[The Solution: Farm-Gate Mini-Factories]
+1. Collect: Buy waste from farmers at ₹2,000/tonne (currently burned for free).
+2. Process: Modular mini-factory presses bamboo+pineapple fibre into bio-composite boards on-site.
+3. Sell: Supply boards locally at up to 54% below imported plywood prices (₹48/sqft target).
+- Bonus Revenue: Bio-fuel pellets from leftover dust.
+
+[Impact]
+- Economic: Farmer income +15-20% (adds ₹2,000-₹2,700/month).
+- Social: Community-run units (SHGs and tribal youth cooperatives), 8-12 direct jobs per unit.
+- Environmental: Zero field burning, sequesters carbon, supports India's Net Zero 2070 pledge.
+
+[Business & Roadmap]
+- Market: India construction market $2.13T by 2030.
+- Roadmap: 
+  - Phase I (Months 1-6): Pilot in Unakoti district, BIS certification.
+  - Phase II (Months 6-15): 5 units operational in West Tripura + Unakoti.
+  - Phase III (Months 15-36): 20 units across all 8 districts, export pipeline.
+- Investment Ask: ₹1.5 Crore Seed Round (60% Equipment, 25% Training, 15% R&D).
+
+[Contact]
+- Email: contact@greentogold.in
+- Location: Agartala, Tripura, India.
+
+Be professional, concise, and enthusiastic about the project's impact on Tripura and Northeast India. If you don't know the answer, politely direct them to contact@greentogold.in.
+`;
+
+const ChatBot = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<{ role: 'user' | 'model', text: string }[]>([
+    { role: 'model', text: "Namaste! I'm the Green-to-Gold AI. How can I help you learn about our sustainable manufacturing mission in Tripura?" }
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+
+    const userMessage = input.trim();
+    setInput("");
+    setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    setIsLoading(true);
+
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+      const chat = ai.chats.create({
+        model: "gemini-3-flash-preview",
+        config: { systemInstruction: SYSTEM_INSTRUCTION },
+        history: messages.map(m => ({
+          role: m.role,
+          parts: [{ text: m.text }]
+        }))
+      });
+
+      const response = await chat.sendMessage({ message: userMessage });
+      const text = response.text;
+
+      if (text) {
+        setMessages(prev => [...prev, { role: 'model', text }]);
+      }
+    } catch (error) {
+      console.error("Chat Error:", error);
+      setMessages(prev => [...prev, { role: 'model', text: "I'm sorry, I encountered an error. Please try again later or contact us at contact@greentogold.in." }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      {/* Floating Button */}
+      <motion.button
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close chat" : "Open chat about Green-to-Gold"}
+        aria-expanded={isOpen}
+        aria-controls="chatbot-window"
+        className="fixed bottom-8 right-8 z-[60] w-16 h-16 bg-brand-orange text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-brand-orange/90 transition-colors"
+      >
+        {isOpen ? <X className="w-8 h-8" aria-hidden="true" /> : <MessageSquare className="w-8 h-8" aria-hidden="true" />}
+      </motion.button>
+
+      {/* Chat Window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id="chatbot-window"
+            role="dialog"
+            aria-label="Green-to-Gold AI Chatbot"
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-28 right-8 z-[60] w-[90vw] md:w-[400px] h-[500px] glass-card shadow-2xl flex flex-col overflow-hidden border border-brand-green/10"
+          >
+            {/* Header */}
+            <div className="p-6 bg-brand-green text-white flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                <Leaf className="w-6 h-6" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="font-serif text-lg leading-none mb-1">Green-to-Gold AI</h3>
+                <span className="text-xs opacity-60 flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 bg-brand-light-green rounded-full animate-pulse" aria-hidden="true" />
+                  Online & Ready
+                </span>
+              </div>
+            </div>
+
+            {/* Messages */}
+            <div 
+              ref={scrollRef}
+              className="flex-1 overflow-y-auto p-6 space-y-4 bg-brand-paper/50"
+              aria-live="polite"
+            >
+              {messages.map((msg, i) => (
+                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed ${
+                    msg.role === 'user' 
+                      ? 'bg-brand-orange text-white rounded-tr-none' 
+                      : 'bg-white text-brand-ink rounded-tl-none shadow-sm'
+                  }`}>
+                    <span className="sr-only">{msg.role === 'user' ? 'You:' : 'Assistant:'}</span>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm" aria-label="Assistant is typing">
+                    <Loader2 className="w-5 h-5 animate-spin text-brand-green" aria-hidden="true" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Input */}
+            <div className="p-4 bg-white border-t border-brand-green/5 flex gap-2">
+              <input 
+                type="text" 
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                placeholder="Ask about our mission..."
+                aria-label="Chat message"
+                className="flex-1 bg-brand-paper/50 rounded-full px-6 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange/20 transition-all"
+              />
+              <button 
+                onClick={handleSend}
+                disabled={isLoading || !input.trim()}
+                aria-label="Send message"
+                className="w-12 h-12 bg-brand-green text-white rounded-full flex items-center justify-center hover:bg-brand-light-green transition-colors disabled:opacity-50"
+              >
+                <Send className="w-5 h-5" aria-hidden="true" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
+export default function App() {
+  return (
+    <div className="min-h-screen selection:bg-brand-orange selection:text-white">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 px-6 py-4" aria-label="Main navigation">
+        <div className="max-w-7xl mx-auto flex justify-between items-center glass-card px-8 py-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-brand-green rounded-full flex items-center justify-center" aria-hidden="true">
+              <Leaf className="text-white w-5 h-5" />
+            </div>
+            <span className="font-serif text-xl font-bold tracking-tight text-brand-green">Green-to-Gold</span>
+          </div>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
+            <a href="#problem" className="hover:text-brand-orange-dark transition-colors">The Problem</a>
+            <a href="#solution" className="hover:text-brand-orange-dark transition-colors">The Model</a>
+            <a href="#impact" className="hover:text-brand-orange-dark transition-colors">Impact</a>
+            <a href="#roadmap" className="hover:text-brand-orange-dark transition-colors">Roadmap</a>
+          </div>
+          <button className="bg-brand-green text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-brand-light-green transition-all uppercase tracking-tight">
+            Partner With Us
+          </button>
+        </div>
+      </nav>
+
+      <main id="main-content">
+        {/* Hero Section */}
+        <header className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-10" aria-hidden="true">
+            <div className="absolute top-20 right-[-10%] w-[600px] h-[600px] bg-brand-light-green rounded-full blur-[120px] animate-float" />
+            <div className="absolute bottom-10 left-[-5%] w-[400px] h-[400px] bg-brand-orange rounded-full blur-[100px]" />
+          </div>
+
+          <div className="max-w-7xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <span className="inline-block px-4 py-1 rounded-full border border-brand-green/20 text-brand-green text-xs font-bold uppercase tracking-widest mb-6">
+                  Tripura's Sustainable Manufacturing Leader
+                </span>
+                <h1 className="text-7xl md:text-9xl font-serif leading-[0.9] text-brand-green mb-8">
+                  From Waste <br />
+                  <span className="italic text-brand-orange">to Wealth.</span>
+                </h1>
+                <p className="text-xl md:text-2xl text-brand-ink/70 max-w-xl mb-10 leading-relaxed">
+                  Transforming agricultural waste into high-value bio-composite construction materials — cheaper, stronger, and built from Tripura's own soil.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <button className="bg-brand-green text-white px-8 py-4 rounded-full text-lg font-medium hover:scale-105 transition-transform flex items-center gap-3">
+                    Explore the Model <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                  </button>
+                  <div className="flex items-center gap-4 px-6 py-4 border border-brand-green/10 rounded-full bg-white/50">
+                    <div className="flex -space-x-2" aria-hidden="true">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="w-8 h-8 rounded-full border-2 border-brand-paper bg-brand-light-green/20 overflow-hidden">
+                          <img src={`https://picsum.photos/seed/farmer${i}/100/100`} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium text-brand-green">1,000+ Farmers Impacted</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="relative"
+              >
+                <div className="aspect-square rounded-[40px] overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
+                  <img 
+                    src="https://picsum.photos/seed/bamboo-construction/1200/1200" 
+                    alt="Close-up of sustainable bio-composite material texture" 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="absolute -bottom-10 -left-10 glass-card p-8 max-w-[280px] shadow-xl animate-float">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-brand-orange/10 rounded-lg" aria-hidden="true">
+                      <TrendingUp className="text-brand-orange w-6 h-6" />
+                    </div>
+                    <span className="font-serif text-2xl font-bold">54% Cheaper</span>
+                  </div>
+                  <p className="text-sm text-brand-ink/60">Than imported plywood, with superior moisture resistance and strength.</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </header>
+
+        {/* The Problem Section */}
+        <section id="problem" className="py-24 px-6 bg-brand-green text-white relative overflow-hidden" aria-labelledby="problem-title">
+          <div className="max-w-7xl mx-auto relative z-10">
+            <SectionTitle id="problem-title" subtitle="The Challenge" light>The Distance Tax That <br />Strangles Growth</SectionTitle>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="p-10 border border-white/10 rounded-3xl bg-white/5">
+                <h3 className="text-6xl font-serif text-brand-orange mb-4">30-40%</h3>
+                <p className="text-lg text-white/80 leading-relaxed">
+                  Premium added to all imported construction materials via the 1,500 km Siliguri Corridor bottleneck.
+                </p>
+              </div>
+              <div className="p-10 border border-white/10 rounded-3xl bg-white/5">
+                <h3 className="text-6xl font-serif text-brand-orange mb-4">100k+</h3>
+                <p className="text-lg text-white/80 leading-relaxed">
+                  Tonnes of biomass (pineapple & bamboo) burned annually — zero value captured, high environmental cost.
+                </p>
+              </div>
+              <div className="p-10 border border-white/10 rounded-3xl bg-white/5">
+                <h3 className="text-6xl font-serif text-brand-orange mb-4">Lowest</h3>
+                <p className="text-lg text-white/80 leading-relaxed">
+                  PMAY-U completion rates in India due to sky-high building costs for local families.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* The Solution Section */}
+        <section id="solution" className="py-24 px-6" aria-labelledby="solution-title">
+          <div className="max-w-7xl mx-auto">
+            <SectionTitle id="solution-title" subtitle="Our Solution">Farm-Gate Mini-Factories, <br />AI-Enabled</SectionTitle>
+            
+            <div className="grid lg:grid-cols-3 gap-12">
+              {[
+                { 
+                  step: "01", 
+                  title: "Collect", 
+                  desc: "Buy waste from farmers at ₹2,000/tonne — turning a disposal cost into a revenue stream.",
+                  icon: <Leaf className="w-8 h-8" aria-hidden="true" />
+                },
+                { 
+                  step: "02", 
+                  title: "Process", 
+                  desc: "Modular mini-factory presses bamboo + pineapple fibre into bio-composite boards on-site.",
+                  icon: <Factory className="w-8 h-8" aria-hidden="true" />
+                },
+                { 
+                  step: "03", 
+                  title: "Sell", 
+                  desc: "Supply boards locally at up to 54% below imported plywood prices, with bio-fuel pellets as bonus revenue.",
+                  icon: <Globe className="w-8 h-8" aria-hidden="true" />
+                }
+              ].map((item, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group p-10 glass-card hover:bg-white transition-all duration-500"
+                >
+                  <div className="flex justify-between items-start mb-8">
+                    <div className="p-4 bg-brand-green/5 rounded-2xl text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors">
+                      {item.icon}
+                    </div>
+                    <span className="font-serif text-4xl text-brand-ink/10 group-hover:text-brand-orange-dark/20 transition-colors" aria-hidden="true">{item.step}</span>
+                  </div>
+                  <h3 className="text-2xl font-serif mb-4">{item.title}</h3>
+                  <p className="text-brand-ink/60 leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Impact Section */}
+        <section id="impact" className="py-24 px-6 bg-brand-paper relative" aria-labelledby="impact-title">
+          <div className="max-w-7xl mx-auto">
+            <SectionTitle id="impact-title" subtitle="The Triple Win">Impact at the Core</SectionTitle>
+            
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-12">
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-brand-light-green/10 flex items-center justify-center text-brand-light-green" aria-hidden="true">
+                    <TrendingUp className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-serif mb-2">Farmer Income +20%</h4>
+                    <p className="text-brand-ink/60">Waste revenue adds ₹2,000–₹2,700/month directly to average farmer households. 26,400 ha of farmland already primed.</p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange" aria-hidden="true">
+                    <Users className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-serif mb-2">Community-Run Units</h4>
+                    <p className="text-brand-ink/60">Partnering with Self-Help Groups (SHGs) and tribal youth cooperatives. Each unit creates 8–12 direct jobs inside villages.</p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green" aria-hidden="true">
+                    <ShieldCheck className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-serif mb-2">Zero Burn, Zero Methane</h4>
+                    <p className="text-brand-ink/60">Eliminating field burning and sequestering carbon in durable boards. Supporting India's Net Zero 2070 pledge.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-brand-green rounded-[40px] p-12 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" aria-hidden="true" />
+                <h3 className="text-3xl font-serif mb-8">Structural Advantage</h3>
+                <div className="space-y-6" role="img" aria-label="Chart showing price comparison: Imported Plywood at 102 rupees per square foot versus Green-to-Gold at 48 rupees per square foot.">
+                  <div className="flex justify-between items-end">
+                    <span className="text-sm uppercase tracking-widest opacity-60">Imported Plywood</span>
+                    <span className="font-mono">₹102/sqft</span>
+                  </div>
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '100%' }}
+                      className="h-full bg-white/40"
+                    />
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-sm uppercase tracking-widest opacity-60">Green-to-Gold (Target)</span>
+                    <span className="font-mono text-brand-orange font-bold">₹48/sqft</span>
+                  </div>
+                  <div className="h-4 bg-white/10 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '47%' }}
+                      className="h-full bg-brand-orange"
+                    />
+                  </div>
+                </div>
+                <p className="mt-12 text-sm italic opacity-60">
+                  * Price per sq ft (18mm standard) — lower is better. We are not just eco-friendly; we are the cheapest option in the market.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Roadmap Section */}
+        <section id="roadmap" className="py-24 px-6 overflow-hidden" aria-labelledby="roadmap-title">
+          <div className="max-w-7xl mx-auto">
+            <SectionTitle id="roadmap-title" subtitle="Execution">The Sandbox Method</SectionTitle>
+            
+            <div className="relative">
+              {/* Timeline Line */}
+              <div className="absolute top-0 left-8 md:left-1/2 w-px h-full bg-brand-ink/10 -translate-x-1/2 hidden md:block" aria-hidden="true" />
+              
+              <div className="space-y-24">
+                {[
+                  {
+                    phase: "Phase I",
+                    title: "Launch",
+                    time: "Months 1–6",
+                    items: ["3-month pilot: 1 unit, Unakoti", "Bamboo-to-composite perfected", "BIS 1659 certification initiated", "First 50 SHG technicians trained"],
+                    align: "left"
+                  },
+                  {
+                    phase: "Phase II",
+                    title: "Standardise",
+                    time: "Months 6–15",
+                    items: ["Deploy task-tracking software", "Quality control digitised", "5 units operational in West Tripura", "PMAY-U supply agreements signed"],
+                    align: "right"
+                  },
+                  {
+                    phase: "Phase III",
+                    title: "Scale",
+                    time: "Months 15–36",
+                    items: ["20 farm-gate units across 8 districts", "State-wide bio-manufacturing live", "Bangladesh + Mizoram export pipeline", "Carbon credit monetisation begins"],
+                    align: "left"
+                  }
+                ].map((step, i) => (
+                  <div key={i} className={`flex flex-col md:flex-row gap-8 md:gap-0 items-center ${step.align === 'right' ? 'md:flex-row-reverse' : ''}`}>
+                    <div className="w-full md:w-1/2 px-8">
+                      <motion.div 
+                        initial={{ opacity: 0, x: step.align === 'left' ? -30 : 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        className={`glass-card p-10 ${step.align === 'right' ? 'text-right' : ''}`}
+                      >
+                        <span className="text-brand-orange-dark font-bold uppercase tracking-widest text-xs mb-2 block">{step.phase}</span>
+                        <h3 className="text-3xl font-serif mb-1">{step.title}</h3>
+                        <span className="text-brand-ink/40 text-sm mb-6 block">{step.time}</span>
+                        <ul className={`space-y-3 ${step.align === 'right' ? 'flex flex-col items-end' : ''}`}>
+                          {step.items.map((item, j) => (
+                            <li key={j} className="flex items-center gap-3 text-brand-ink/70">
+                              {step.align === 'left' && <CheckCircle2 className="w-4 h-4 text-brand-light-green" aria-hidden="true" />}
+                              {item}
+                              {step.align === 'right' && <CheckCircle2 className="w-4 h-4 text-brand-light-green" aria-hidden="true" />}
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    </div>
+                    <div className="relative z-10 w-16 h-16 rounded-full bg-brand-green border-8 border-brand-paper flex items-center justify-center text-white font-serif text-xl" aria-hidden="true">
+                      {i + 1}
+                    </div>
+                    <div className="w-full md:w-1/2" aria-hidden="true" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Moat Section */}
+        <section className="py-24 px-6 bg-brand-ink text-white" aria-labelledby="moat-title">
+          <div className="max-w-7xl mx-auto">
+            <SectionTitle id="moat-title" subtitle="Competitive Moat" light>Why This Is Hard to Copy</SectionTitle>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <caption className="sr-only">Competitive comparison between Imported Plywood, Mutha Bamboowood, and Green-to-Gold</caption>
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th scope="col" className="py-6 px-4 font-serif text-xl">Factor</th>
+                    <th scope="col" className="py-6 px-4 font-serif text-xl opacity-40">Imported Plywood</th>
+                    <th scope="col" className="py-6 px-4 font-serif text-xl text-brand-orange">Green-to-Gold</th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm md:text-base">
+                  {[
+                    { factor: "Transport Cost", old: "30–40% Premium", new: "Zero — Farm-Gate" },
+                    { factor: "Biomass Sourcing", old: "External Raw Material", new: "Waste Stream (Near-Zero Cost)" },
+                    { factor: "Energy Model", old: "Grid-Dependent", new: "Self-Powered (Bio-Pellets)" },
+                    { factor: "Community Ownership", old: "None", new: "SHG-Operated Units" },
+                    { factor: "Carbon Benefit", old: "Negative (Transport)", new: "Positive (Sequesters Carbon)" }
+                  ].map((row, i) => (
+                    <tr key={i} className="border-b border-white/5 group hover:bg-white/5 transition-colors">
+                      <th scope="row" className="py-6 px-4 font-medium">{row.factor}</th>
+                      <td className="py-6 px-4 opacity-40">{row.old}</td>
+                      <td className="py-6 px-4 text-brand-light-green font-bold">{row.new}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* CTA / Footer */}
+      <footer className="py-24 px-6 bg-brand-paper" aria-label="Footer">
+        <div className="max-w-7xl mx-auto glass-card p-12 md:p-20 text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-green via-brand-orange to-brand-light-green" aria-hidden="true" />
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <h2 className="text-5xl md:text-7xl font-serif text-brand-green mb-8">
+              Building Tripura's Future <br />
+              <span className="italic text-brand-orange">From Its Own Soil.</span>
+            </h2>
+            <p className="text-xl text-brand-ink/60 max-w-2xl mx-auto mb-12">
+              Join us in building an independent, green manufacturing economy for India's Northeast.
+            </p>
+            
+            <div className="grid md:grid-cols-4 gap-8 mb-16">
+              <div>
+                <div className="text-brand-orange-dark font-serif text-4xl mb-2">₹1.5 Cr</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">Seed Ask</div>
+              </div>
+              <div>
+                <div className="text-brand-green font-serif text-4xl mb-2">20 Units</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">By 2027</div>
+              </div>
+              <div>
+                <div className="text-brand-green font-serif text-4xl mb-2">₹496L</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">Y3 Revenue (Proj.)</div>
+              </div>
+              <div>
+                <div className="text-brand-green font-serif text-4xl mb-2">1,000+</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">Farmers Impacted</div>
+              </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 pt-12 border-t border-brand-ink/5">
+              <a href="mailto:contact@greentogold.in" className="flex items-center gap-3 text-brand-green hover:text-brand-orange-dark transition-colors font-medium">
+                <Mail className="w-5 h-5" aria-hidden="true" /> contact@greentogold.in
+              </a>
+              <div className="flex items-center gap-3 text-brand-ink/60 font-medium">
+                <MapPin className="w-5 h-5" aria-hidden="true" /> Agartala, Tripura, India
+              </div>
+            </div>
+          </motion.div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto mt-12 flex flex-col md:flex-row justify-between items-center text-xs uppercase tracking-[0.2em] font-bold opacity-40">
+          <span>© 2026 Green-to-Gold Sustainable Manufacturing</span>
+          <div className="flex gap-8 mt-4 md:mt-0">
+            <a href="#" className="hover:opacity-100 transition-opacity">Privacy</a>
+            <a href="#" className="hover:opacity-100 transition-opacity">Terms</a>
+            <a href="#" className="hover:opacity-100 transition-opacity">Investor Portal</a>
+          </div>
+        </div>
+      </footer>
+      <ChatBot />
+    </div>
+  );
+}
