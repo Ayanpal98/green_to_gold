@@ -16,6 +16,7 @@ import {
   Globe, 
   Mail, 
   MapPin,
+  Linkedin,
   ChevronRight,
   CheckCircle2,
   Zap,
@@ -84,10 +85,11 @@ Your goal is to answer questions from potential investors, partners, and farmers
 - Investment Ask: ₹1.5 Crore Seed Round (60% Equipment, 25% Training, 15% R&D).
 
 [Contact]
-- Email: contact@greentogold.in
+- Email: contact@greentogold.in, Info.atsfy@gmail.com
+- LinkedIn: https://www.linkedin.com/in/atsfy/
 - Location: Agartala, Tripura, India.
 
-Be professional, concise, and enthusiastic about the project's impact on Tripura and Northeast India. If you don't know the answer, politely direct them to contact@greentogold.in.
+Be professional, concise, and enthusiastic about the project's impact on Tripura and Northeast India. If you don't know the answer, politely direct them to contact@greentogold.in or Info.atsfy@gmail.com.
 `;
 
 const ChatBot = () => {
@@ -247,7 +249,10 @@ export default function App() {
             <div className="w-8 h-8 bg-brand-green rounded-full flex items-center justify-center" aria-hidden="true">
               <Leaf className="text-white w-5 h-5" />
             </div>
-            <span className="font-serif text-xl font-bold tracking-tight text-brand-green">Green-to-Gold</span>
+            <div className="flex flex-col">
+              <span className="font-serif text-xl font-bold tracking-tight text-brand-green">Green-to-Gold</span>
+              <span className="text-[10px] uppercase tracking-widest font-bold opacity-40 -mt-1">by ATSFY Technologies</span>
+            </div>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
             <a href="#problem" className="hover:text-brand-orange-dark transition-colors">The Problem</a>
@@ -746,19 +751,32 @@ export default function App() {
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 pt-12 border-t border-brand-ink/5">
+            <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-x-12 gap-y-6 pt-12 border-t border-brand-ink/5">
               <a href="mailto:contact@greentogold.in" className="flex items-center gap-3 text-brand-green hover:text-brand-orange-dark transition-colors font-medium">
                 <Mail className="w-5 h-5" aria-hidden="true" /> contact@greentogold.in
+              </a>
+              <a href="mailto:Info.atsfy@gmail.com" className="flex items-center gap-3 text-brand-green hover:text-brand-orange-dark transition-colors font-medium">
+                <Mail className="w-5 h-5" aria-hidden="true" /> Info.atsfy@gmail.com
+              </a>
+              <a href="https://www.linkedin.com/in/atsfy/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-brand-green hover:text-brand-orange-dark transition-colors font-medium">
+                <Linkedin className="w-5 h-5" aria-hidden="true" /> LinkedIn
               </a>
               <div className="flex items-center gap-3 text-brand-ink/60 font-medium">
                 <MapPin className="w-5 h-5" aria-hidden="true" /> Agartala, Tripura, India
               </div>
             </div>
+            <div className="mt-12 pt-8 border-t border-brand-ink/5">
+              <span className="text-xs uppercase tracking-[0.3em] font-bold opacity-40">Under ATSFY Technologies</span>
+            </div>
           </motion.div>
         </div>
         
         <div className="max-w-7xl mx-auto mt-12 flex flex-col md:flex-row justify-between items-center text-xs uppercase tracking-[0.2em] font-bold opacity-40">
-          <span>© 2026 Green-to-Gold Sustainable Manufacturing</span>
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+            <span>© 2026 Green-to-Gold Sustainable Manufacturing</span>
+            <span className="hidden md:inline">•</span>
+            <span>Under ATSFY Technologies</span>
+          </div>
           <div className="flex gap-8 mt-4 md:mt-0">
             <a href="#" className="hover:opacity-100 transition-opacity">Privacy</a>
             <a href="#" className="hover:opacity-100 transition-opacity">Terms</a>
