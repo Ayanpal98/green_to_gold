@@ -26,7 +26,11 @@ import {
   Send,
   Loader2,
   Coins,
-  Cloud
+  Cloud,
+  Droplets,
+  Sun,
+  FlaskConical,
+  ShoppingBag
 } from "lucide-react";
 import { PartnerForm } from "./components/PartnerForm";
 
@@ -67,13 +71,17 @@ Your goal is to answer questions from potential investors, partners, and farmers
 
 [The Solution: Farm-Gate Mini-Factories]
 1. Collect: Buy waste from farmers at ₹2,000/tonne (currently burned for free).
-2. Process: Modular mini-factory presses bamboo+pineapple fibre into bio-composite boards on-site.
-3. Sell: Supply boards locally at up to 54% below imported plywood prices (₹48/sqft target).
-- Bonus Revenue: Bio-fuel pellets from leftover dust.
+2. Process: Modular mini-factory presses bamboo, pineapple fibre, rice husk, and bagasse into high-value products.
+3. Sell: Supply bio-composite boards, biodegradable tableware, and compostable packaging locally and nationally.
+
+[Core Product Range]
+- Biodegradable Cutlery & Tableware: Made via compression molding; heat-resistant, shelf-stable (10-12 months), replaces plastic in hotels/events.
+- ECO-Packaging: Mycelium- or pulp-based bags, trays, and foams; fully compostable in 3 months, ISO certified for e-commerce/food delivery.
+- Compostable Films: Starch-bound sheets for carry bags and retail wraps; low-cost extrusion replacement for single-use plastics.
 
 [Impact]
 - Economic: Farmer income +15-20% (adds ₹2,000-₹2,700/month).
-- Social: Community-run units (SHGs and tribal youth cooperatives), 8-12 direct jobs per unit.
+- Social: Community-run units, 8-12 direct jobs per unit. Strong Govt. backing through grants and schemes.
 - Environmental: Zero field burning, sequesters carbon, supports India's Net Zero 2070 pledge.
 
 [Business & Roadmap]
@@ -83,6 +91,12 @@ Your goal is to answer questions from potential investors, partners, and farmers
   - Phase II (Months 6-15): 5 units operational in West Tripura + Unakoti.
   - Phase III (Months 15-36): 20 units across all 8 districts, export pipeline.
 - Investment Ask: ₹1.5 Crore Seed Round (60% Equipment, 25% Training, 15% R&D).
+
+[Future Vision & Integrations]
+1. Agro-Waste Valorization: producing bio-enzymes, organic fertilizers, and biochar from pineapple/rice/bamboo waste. Supported by NABARD climate funds.
+2. Renewable Energy Hubs: community biogas (SATAT scheme) and solar-drying units to power rural micro-grids and reduce LPG imports.
+3. Skill & Market Linkages: SHG-led factories for handicrafts and food products, ONDC e-commerce integration, and B2B exports to Bangladesh via FPOs. Supporting "Lakhpati Didi" initiative.
+4. Water & Irrigation: Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030 (SDG Vision), using waste-based mulches.
 
 [Contact]
 - Email: contact@greentogold.in, Info.atsfy@gmail.com
@@ -257,6 +271,8 @@ export default function App() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
             <a href="#problem" className="hover:text-brand-orange-dark transition-colors">The Problem</a>
             <a href="#solution" className="hover:text-brand-orange-dark transition-colors">The Model</a>
+            <a href="#products" className="hover:text-brand-orange-dark transition-colors">Products</a>
+            <a href="#vision" className="hover:text-brand-orange-dark transition-colors">Vision 2030</a>
             <a href="#impact" className="hover:text-brand-orange-dark transition-colors">Impact</a>
             <a href="#roadmap" className="hover:text-brand-orange-dark transition-colors">Roadmap</a>
             <a href="#partner" className="hover:text-brand-orange-dark transition-colors">Partner</a>
@@ -406,6 +422,68 @@ export default function App() {
                   </div>
                   <h3 className="text-2xl font-serif mb-4">{item.title}</h3>
                   <p className="text-brand-ink/60 leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Product Section */}
+        <section id="products" className="py-24 px-6 bg-white" aria-labelledby="products-title">
+          <div className="max-w-7xl mx-auto">
+            <SectionTitle id="products-title" subtitle="Market Ready">Sustainable Product Range</SectionTitle>
+            <div className="grid lg:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Biodegradable Tableware",
+                  desc: "Premium cutlery and tableware made via compression molding from rice husk and bagasse. Heat-resistant and shelf-stable for 10-12 months.",
+                  tag: "Plastic Alternative",
+                  image: "https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&q=80&w=800",
+                  features: ["100% Home Compostable", "Heat Resistant", "Hotel/Event Ready"]
+                },
+                {
+                  title: "Mycelium Packaging",
+                  desc: "Fully compostable packaging solutions including bags, trays, and protective foams. ISO certified and optimized for e-commerce.",
+                  tag: "ISO Certified",
+                  image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800",
+                  features: ["Composts in 3 Months", "Shock Absorbent", "Zero Moisture Debt"]
+                },
+                {
+                  title: "Compostable Films",
+                  desc: "Starch-bound sheets for retail carry bags and protective wraps. Low-cost extrusion process replacing single-use plastics.",
+                  tag: "Retail Friendly",
+                  image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800",
+                  features: ["High Tensile Strength", "Low-Cost Extrusion", "Non-Toxic Residue"]
+                }
+              ].map((product, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-brand-paper rounded-3xl overflow-hidden border border-brand-green/5 hover:shadow-xl transition-all group"
+                >
+                  <div className="h-64 overflow-hidden relative">
+                    <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+                    <div className="absolute top-4 right-4 bg-brand-orange text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full">{product.tag}</div>
+                  </div>
+                  <div className="p-8">
+                    <h3 className="text-2xl font-serif text-brand-green mb-3">{product.title}</h3>
+                    <p className="text-brand-ink/60 text-sm leading-relaxed mb-6">{product.desc}</p>
+                    <ul className="space-y-2 mb-8">
+                      {product.features.map((feat, j) => (
+                        <li key={j} className="flex items-center gap-2 text-xs font-semibold text-brand-green/80">
+                          <CheckCircle2 className="w-3 h-3 text-brand-light-green" />
+                          {feat}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="pt-6 border-t border-brand-green/5 flex justify-between items-center">
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-brand-orange-dark">Govt. Grant Eligible</span>
+                      <ChevronRight className="w-4 h-4 text-brand-green" />
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -644,6 +722,82 @@ export default function App() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Future Vision Section */}
+        <section id="vision" className="py-24 px-6 bg-brand-green text-white relative overflow-hidden" aria-labelledby="vision-title">
+          <div className="absolute top-0 right-0 w-full h-full -z-0 opacity-5 pointer-events-none">
+            <div className="absolute top-1/4 right-0 w-[800px] h-[800px] bg-brand-light-green rounded-full blur-[200px]" />
+          </div>
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            <SectionTitle id="vision-title" subtitle="Vision 2030" light>Integrated Future <br />Insights</SectionTitle>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {[
+                {
+                  title: "Agro-Waste Valorization",
+                  icon: <FlaskConical className="w-8 h-8" />,
+                  desc: "Beyond construction, we're ramping up to produce bio-enzymes, organic fertilizers, and biochar soil amendments.",
+                  details: "Leveraging NABARD climate funds to reduce chemical import dependency while healing Tripura's acidic soils.",
+                  color: "border-brand-light-green/20"
+                },
+                {
+                  title: "Renewable Energy Hubs",
+                  icon: <Sun className="w-8 h-8" />,
+                  desc: "Establishing community biogas plants (SATAT Scheme) and solar-drying units for farm produce.",
+                  details: "Powering rural micro-grids and cutting LPG imports to fuel Tripura's 12.46% GSDP growth targets.",
+                  color: "border-brand-orange/20"
+                },
+                {
+                  title: "Skill & Market Linkages",
+                  icon: <ShoppingBag className="w-8 h-8" />,
+                  desc: "SHG-led micro-factories for rubber products and bamboo handicrafts with direct B2B export pipelines.",
+                  details: "ONDC e-commerce integration targeting Bangladesh markets, boosting 'Lakhpati Didi' numbers beyond 1 lakh.",
+                  color: "border-white/10"
+                },
+                {
+                  title: "Water & Irrigation Boost",
+                  icon: <Droplets className="w-8 h-8" />,
+                  desc: "Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030, per SDG Vision.",
+                  details: "Utilizing agro-waste mulches to conserve soil moisture for year-round horticultural self-reliance.",
+                  color: "border-brand-light-green/30"
+                }
+              ].map((insight, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15 }}
+                  className={`p-10 border ${insight.color} rounded-[32px] bg-white/5 hover:bg-white/10 transition-all group`}
+                >
+                  <div className="flex items-start justify-between mb-8">
+                    <div className="p-4 bg-white/10 rounded-2xl text-white group-hover:scale-110 transition-transform">
+                      {insight.icon}
+                    </div>
+                  </div>
+                  <h3 className="text-3xl font-serif mb-4">{insight.title}</h3>
+                  <p className="text-white/80 mb-6 leading-relaxed">{insight.desc}</p>
+                  <div className="pt-6 border-t border-white/10">
+                    <p className="text-sm italic text-white/50">{insight.details}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              className="mt-16 p-8 rounded-[40px] border border-white/20 bg-gradient-to-br from-brand-orange/20 to-transparent flex flex-col md:flex-row items-center justify-between gap-8"
+            >
+              <div className="text-center md:text-left">
+                <h4 className="text-2xl font-serif mb-2">Our commitment to sustainable local growth</h4>
+                <p className="text-white/60">Aligning with National SDG targets for 2030.</p>
+              </div>
+              <div className="text-4xl font-serif text-brand-orange">Vision 2030</div>
+            </motion.div>
           </div>
         </section>
 
