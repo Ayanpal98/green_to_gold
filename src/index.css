@@ -53,3 +53,55 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* 3D Effects Utility */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.translate-z-10 {
+  transform: translateZ(20px);
+}
+
+.translate-z-20 {
+  transform: translateZ(40px);
+}
+
+/* PDF Viewer Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+  
+  /* Force individual pages on new sheets if necessary */
+  .print-break-page {
+    page-break-before: always;
+  }
+  
+  /* Prevent background colors from disappearing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

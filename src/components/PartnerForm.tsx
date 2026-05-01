@@ -18,11 +18,22 @@ export const PartnerForm = () => {
     e.preventDefault();
     setStatus("loading");
     
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setStatus("success");
-      setFormData({ name: "", organization: "", email: "", type: "Investor", message: "" });
+      const response = await fetch("https://formspree.io/f/info.atsfy@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        setFormData({ name: "", organization: "", email: "", type: "Investor", message: "" });
+      } else {
+        setStatus("error");
+      }
     } catch (error) {
       setStatus("error");
     }
