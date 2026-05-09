@@ -5,7 +5,17 @@
 
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  onAuthStateChanged, 
+  User,
+  signOut 
+} from "firebase/auth";
 import { GoogleGenAI } from "@google/genai";
+import { auth } from "./lib/firebase";
+import BambooSenseDSS from "./components/BambooSenseDSS";
 import { 
   ArrowRight, 
   Leaf, 
@@ -256,13 +266,14 @@ const ChatBot = () => {
   );
 };
 
-export default function App() {
+function LandingPage({ user }: { user: User | null }) {
   const [isDocOpen, setIsDocOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
+    { label: 'BambooSense DSS', href: '/dss', external: true },
     { label: 'The Problem', href: '#problem' },
     { label: 'The Model', href: '#solution' },
     { label: 'Products', href: '#products' },
@@ -297,18 +308,53 @@ export default function App() {
           {/* Desktop Navigation Links */}
           <div className="hidden xl:flex items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-brand-green/70">
             {navLinks.map((link) => (
-              <a 
-                key={link.href}
-                href={link.href} 
-                className="hover:text-brand-orange transition-colors relative group py-2"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all group-hover:w-full" />
-              </a>
+              link.external ? (
+                <Link 
+                  key={link.href}
+                  to={link.href} 
+                  className="bg-brand-orange/10 text-brand-orange-dark px-4 py-2 rounded-xl hover:bg-brand-orange hover:text-white transition-all relative group"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a 
+                  key={link.href}
+                  href={link.href} 
+                  className="hover:text-brand-orange transition-colors relative group py-2"
+                >
+                  {link.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all group-hover:w-full" />
+                </a>
+              )
             ))}
           </div>
 
           <div className="flex items-center gap-3">
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:block text-right">
+                  <div className="text-[8px] font-bold text-brand-ink/40 uppercase tracking-widest">Active User</div>
+                  <div className="text-[10px] font-bold text-brand-green">{user.displayName || 'Stakeholder'}</div>
+                </div>
+                <button 
+                  onClick={() => signOut(auth)}
+                  className="bg-brand-paper border border-brand-green/10 text-brand-ink px-4 py-2 rounded-xl text-[10px] font-bold hover:bg-red-50 hover:text-red-600 transition-all uppercase tracking-widest"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => {
+                  const provider = new GoogleAuthProvider();
+                  signInWithPopup(auth, provider).catch(console.error);
+                }}
+                className="bg-brand-ink text-white px-5 md:px-6 py-2 md:py-2.5 rounded-full text-[10px] md:text-xs font-bold hover:bg-brand-green transition-all uppercase tracking-widest shadow-lg"
+              >
+                Sign In
+              </button>
+            )}
+
             <a href="#partner" className="hidden sm:inline-flex bg-brand-green text-white px-5 md:px-6 py-2 md:py-2.5 rounded-full text-[10px] md:text-xs font-bold hover:bg-brand-ink transition-all uppercase tracking-widest shadow-lg shadow-brand-green/20">
               Partner With Us
             </a>
@@ -334,18 +380,30 @@ export default function App() {
             >
               <div className="flex flex-col gap-6">
                 {navLinks.map((link, i) => (
-                  <motion.a
-                    key={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors flex justify-between items-center group"
-                  >
-                    {link.label}
-                    <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0" />
-                  </motion.a>
+                  link.external ? (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="text-2xl font-serif text-brand-orange-dark hover:text-brand-orange transition-colors flex justify-between items-center group"
+                    >
+                      {link.label}
+                      <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0" />
+                    </Link>
+                  ) : (
+                    <motion.a
+                      key={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      href={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors flex justify-between items-center group"
+                    >
+                      {link.label}
+                      <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0" />
+                    </motion.a>
+                  )
                 ))}
                 
                 <div className="mt-4 pt-8 border-t border-brand-green/10">
@@ -1638,5 +1696,25 @@ export default function App() {
       </footer>
       <ChatBot />
     </div>
+  );
+}
+
+export default function App() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+    });
+    return unsub;
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage user={user} />} />
+        <Route path="/dss" element={user ? <BambooSenseDSS /> : <LandingPage user={user} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // District Resources: Read-only for all signed-in users
+    match /district_resources/{resourceId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // Harvest Recommendations: Read/Write for signed-in users
+    match /harvest_recommendations/{recId} {
+      allow read, create: if isSignedIn();
+      allow update, delete: if false;
+    }
+
+    // SHG Activity: Read/Write for signed-in users
+    match /shg_activity/{activityId} {
+      allow read, create, update: if isSignedIn();
+      allow delete: if false;
+    }
+
+    // DSS Alerts: Read-only for all, update for 'resolved' field
+    match /dss_alerts/{alertId} {
+      allow read: if isSignedIn();
+      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resolved']);
+    }
+  }
+}
