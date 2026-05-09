@@ -11,7 +11,7 @@ import {
   GoogleAuthProvider, 
   onAuthStateChanged, 
   User,
-  signOut 
+  signOut,
 } from "firebase/auth";
 import { GoogleGenAI } from "@google/genai";
 import { auth } from "./lib/firebase";
@@ -1701,19 +1701,29 @@ function LandingPage({ user }: { user: User | null }) {
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
+      setAuthLoading(false);
     });
     return unsub;
   }, []);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-brand-paper flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-brand-green animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage user={user} />} />
-        <Route path="/dss" element={user ? <BambooSenseDSS /> : <LandingPage user={user} />} />
+        <Route path="/dss" element={<BambooSenseDSS />} />
       </Routes>
     </BrowserRouter>
   );

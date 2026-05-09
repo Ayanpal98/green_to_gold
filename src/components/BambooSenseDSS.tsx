@@ -19,7 +19,8 @@ import {
   TrendingUp,
   MapPin
 } from "lucide-react";
-import { db } from "../lib/firebase";
+import { GoogleGenAI } from "@google/genai";
+import { db, auth } from "../lib/firebase";
 import { 
   collection, 
   query, 
@@ -32,6 +33,48 @@ import {
   onSnapshot,
   Timestamp 
 } from "firebase/firestore";
+
+// Error Scaling for Firestore (per Integration Instructions)
+enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+    emailVerified?: boolean | null;
+    isAnonymous?: boolean | null;
+  }
+}
+
+const handleFirestoreError = (error: unknown, operationType: OperationType, path: string | null) => {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: auth.currentUser?.uid,
+      email: auth.currentUser?.email,
+      emailVerified: auth.currentUser?.emailVerified,
+      isAnonymous: auth.currentUser?.isAnonymous,
+    },
+    operationType,
+    path
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  // In prototype mode, showing a clear toast/alert for permission issues
+  if (errInfo.error.includes("permission-denied")) {
+    console.warn("Permission Denied: Ensure rules are deployed and Firestore is in standard mode.");
+  }
+  return null; // Return null to allow graceful failing in UI
+};
 
 // Types
 interface DistrictResource {
@@ -99,20 +142,20 @@ const BambooSenseDSS = () => {
     // Real-time listeners
     const unsubResources = onSnapshot(collection(db, "district_resources"), (snapshot) => {
       setResources(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DistrictResource)));
-    });
+    }, (error) => handleFirestoreError(error, OperationType.GET, "district_resources"));
 
     const unsubActivities = onSnapshot(collection(db, "shg_activity"), (snapshot) => {
       setActivities(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SHGActivity)));
-    });
+    }, (error) => handleFirestoreError(error, OperationType.GET, "shg_activity"));
 
     const unsubAlerts = onSnapshot(query(collection(db, "dss_alerts"), orderBy("detected_at", "desc")), (snapshot) => {
       setAlerts(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DSSAlert)));
-    });
+    }, (error) => handleFirestoreError(error, OperationType.GET, "dss_alerts"));
 
     const unsubRecs = onSnapshot(query(collection(db, "harvest_recommendations"), orderBy("created_at", "desc")), (snapshot) => {
       setRecommendations(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as HarvestRec)));
       setLoading(false);
-    });
+    }, (error) => handleFirestoreError(error, OperationType.GET, "harvest_recommendations"));
 
     return () => {
       unsubResources();
@@ -128,26 +171,36 @@ const BambooSenseDSS = () => {
     setEngineResult(null);
 
     try {
-      const response = await fetch("/api/bamboosense/advisor", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(engineForm),
+      const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY!);
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        systemInstruction: "You are BambooSense, a sustainable bamboo harvest advisor for Green-to-Gold, Tripura, Northeast India. Return recommendations in 4 sections: Recommended Harvest Volume, Optimal Harvest Window, Replanting Trigger (Yes/Hold/No with reason), Forest Dept Note. Keep each section to 1-2 sentences. Be specific and practical.",
       });
 
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
+      const prompt = `Provide a harvest recommendation for:
+            District: ${engineForm.district}
+            Species: ${engineForm.species}
+            Clump Age: ${engineForm.age} years
+            Current Season: ${engineForm.season}
+            Density: ${engineForm.density} culms/hectare`;
 
-      setEngineResult(data.recommendation);
+      const result = await model.generateContent(prompt);
+      const recommendationText = result.response.text() || "No recommendation generated.";
+      setEngineResult(recommendationText);
 
       // Save to history
-      await addDoc(collection(db, "harvest_recommendations"), {
-        ...engineForm,
-        recommendation_text: data.recommendation,
-        created_at: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error("Advisor Error:", error);
-      alert("Failed to get recommendation. Please try again.");
+      try {
+        await addDoc(collection(db, "harvest_recommendations"), {
+          ...engineForm,
+          recommendation_text: recommendationText,
+          created_at: new Date().toISOString()
+        });
+      } catch (err) {
+        handleFirestoreError(err, OperationType.WRITE, "harvest_recommendations");
+      }
+    } catch (error: any) {
+      console.error("Gemini AI Error:", error);
+      alert("Failed to get AI recommendation. Please try again.");
     } finally {
       setEngineLoading(false);
     }
@@ -157,7 +210,7 @@ const BambooSenseDSS = () => {
     try {
       await updateDoc(doc(db, "dss_alerts", id), { resolved: true });
     } catch (error) {
-      console.error("Resolve Alert Error:", error);
+      handleFirestoreError(error, OperationType.UPDATE, `dss_alerts/${id}`);
     }
   };
 
@@ -181,6 +234,15 @@ const BambooSenseDSS = () => {
     <div className="min-h-screen bg-brand-paper selection:bg-brand-orange selection:text-white pt-24 pb-12">
       <div className="max-w-7xl mx-auto px-6">
         <header className="mb-12">
+          {/* Prototype Banner */}
+          <div className="mb-8 p-4 bg-brand-orange/10 border border-brand-orange/20 rounded-2xl flex items-center gap-3">
+            <div className="p-2 bg-brand-orange rounded-full text-white">
+              <Zap className="w-4 h-4" />
+            </div>
+            <p className="text-xs font-bold text-brand-orange-dark uppercase tracking-widest leading-relaxed">
+              System Note: This is an AI-powered prototype. Harvest algorithms and recommendations are indicative and part of the BambooSense Alpha phase.
+            </p>
+          </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <motion.div 
@@ -448,7 +510,7 @@ const HarvestEngine = ({ form, setForm, loading, result, submit, history }: any)
             </div>
             <div>
               <h3 className="text-3xl font-serif text-brand-ink">Strategy Analysis</h3>
-              <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Claude 3.5 Sonnet Insight</p>
+              <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Gemini 3 Flash Insight</p>
             </div>
           </div>
           <div className="prose prose-sm text-brand-ink/70 max-w-none space-y-6">

@@ -11,28 +11,33 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // District Resources: Read-only for all signed-in users
+    // Prototype: allow public read for DSS visibility
+    function isPublic() {
+      return true;
+    }
+
+    // District Resources: Public Read-only
     match /district_resources/{resourceId} {
-      allow read: if isSignedIn();
+      allow read: if isPublic();
       allow write: if false;
     }
 
-    // Harvest Recommendations: Read/Write for signed-in users
+    // Harvest Recommendations: Public Create/Read (History logs)
     match /harvest_recommendations/{recId} {
-      allow read, create: if isSignedIn();
+      allow read, create: if isPublic();
       allow update, delete: if false;
     }
 
-    // SHG Activity: Read/Write for signed-in users
+    // SHG Activity: Public Read/Write for prototype
     match /shg_activity/{activityId} {
-      allow read, create, update: if isSignedIn();
+      allow read, create, update: if isPublic();
       allow delete: if false;
     }
 
-    // DSS Alerts: Read-only for all, update for 'resolved' field
+    // DSS Alerts: Public Read, anyone can resolve in prototype
     match /dss_alerts/{alertId} {
-      allow read: if isSignedIn();
-      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resolved']);
+      allow read: if isPublic();
+      allow update: if isPublic() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['resolved']);
     }
   }
 }
