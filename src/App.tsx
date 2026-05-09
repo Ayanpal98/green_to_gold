@@ -4,7 +4,13 @@
  */
 
 import React, { useState, useRef, useEffect, ReactNode } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { 
+  motion, 
+  AnimatePresence, 
+  useMotionValue, 
+  useSpring, 
+  useTransform 
+} from "motion/react";
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { GoogleGenAI } from "@google/genai";
 import BioSenseDSS from "./components/BioSenseDSS";
@@ -264,6 +270,34 @@ function LandingPage({ user }: { user: any }) {
   const [activePage, setActivePage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   const handleDownloadPDF = () => {
     window.print();
   };
@@ -325,31 +359,14 @@ function LandingPage({ user }: { user: any }) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, delay: 0.2 }}
                 className="relative perspective-2000"
-                onMouseMove={(e) => {
-                  const card = e.currentTarget;
-                  const rect = card.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  const centerX = rect.width / 2;
-                  const centerY = rect.height / 2;
-                  const rotateX = (centerY - y) / 40;
-                  const rotateY = (x - centerX) / 40;
-                  
-                  const target = card.querySelector('.tilt-target') as HTMLElement;
-                  if (target) {
-                    target.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  const card = e.currentTarget;
-                  const target = card.querySelector('.tilt-target') as HTMLElement;
-                  if (target) {
-                    target.style.transform = `rotateX(0deg) rotateY(0deg)`;
-                  }
-                }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
               >
                 {/* The 3D Illustration Container */}
-                <div className="tilt-target relative aspect-square md:aspect-[4/3] transition-transform duration-500 ease-out preserve-3d">
+                <motion.div 
+                  style={{ rotateX, rotateY }}
+                  className="relative aspect-square md:aspect-[4/3] preserve-3d"
+                >
                   
                   {/* Base Platform (Glass Island) */}
                   <div className="absolute inset-[10%] bg-brand-green/5 backdrop-blur-3xl rounded-full border border-white/20 shadow-[0_64px_128px_-32px_rgba(30,58,30,0.3)] translate-z-0" />
@@ -457,7 +474,7 @@ function LandingPage({ user }: { user: any }) {
                     <path d="M 600,200 L 400,400" stroke="currentColor" fill="none" className="text-brand-green" strokeWidth="1" strokeDasharray="8 8" />
                     <circle cx="50%" cy="50%" r="20%" stroke="currentColor" fill="none" className="text-brand-green/20" strokeWidth="2" />
                   </svg>
-                </div>
+                </motion.div>
               </motion.div>
             </div>
           </div>

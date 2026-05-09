@@ -190,7 +190,7 @@ const BioSenseDSS = () => {
 
     // Simulated AI Logic for Prototype
     setTimeout(() => {
-      const volume = engineForm.status === 'Critical' ? 0 : Math.floor(engineForm.density * 0.15);
+      const volume = Math.floor(engineForm.density * 0.15);
       const isReplant = engineForm.age > 3 ? "Yes" : "Hold";
       
       const simulatedRec = `
