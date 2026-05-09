@@ -6,15 +6,7 @@
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
-import { 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  onAuthStateChanged, 
-  User,
-  signOut,
-} from "firebase/auth";
 import { GoogleGenAI } from "@google/genai";
-import { auth } from "./lib/firebase";
 import BambooSenseDSS from "./components/BambooSenseDSS";
 import { 
   ArrowRight, 
@@ -266,7 +258,7 @@ const ChatBot = () => {
   );
 };
 
-function LandingPage({ user }: { user: User | null }) {
+function LandingPage({ user }: { user: any }) {
   const [isDocOpen, setIsDocOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -330,31 +322,6 @@ function LandingPage({ user }: { user: User | null }) {
           </div>
 
           <div className="flex items-center gap-3">
-            {user ? (
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:block text-right">
-                  <div className="text-[8px] font-bold text-brand-ink/40 uppercase tracking-widest">Active User</div>
-                  <div className="text-[10px] font-bold text-brand-green">{user.displayName || 'Stakeholder'}</div>
-                </div>
-                <button 
-                  onClick={() => signOut(auth)}
-                  className="bg-brand-paper border border-brand-green/10 text-brand-ink px-4 py-2 rounded-xl text-[10px] font-bold hover:bg-red-50 hover:text-red-600 transition-all uppercase tracking-widest"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <button 
-                onClick={() => {
-                  const provider = new GoogleAuthProvider();
-                  signInWithPopup(auth, provider).catch(console.error);
-                }}
-                className="bg-brand-ink text-white px-5 md:px-6 py-2 md:py-2.5 rounded-full text-[10px] md:text-xs font-bold hover:bg-brand-green transition-all uppercase tracking-widest shadow-lg"
-              >
-                Sign In
-              </button>
-            )}
-
             <a href="#partner" className="hidden sm:inline-flex bg-brand-green text-white px-5 md:px-6 py-2 md:py-2.5 rounded-full text-[10px] md:text-xs font-bold hover:bg-brand-ink transition-all uppercase tracking-widest shadow-lg shadow-brand-green/20">
               Partner With Us
             </a>
@@ -1700,29 +1667,10 @@ function LandingPage({ user }: { user: User | null }) {
 }
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setAuthLoading(false);
-    });
-    return unsub;
-  }, []);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-brand-paper flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-brand-green animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage user={user} />} />
+        <Route path="/" element={<LandingPage user={null} />} />
         <Route path="/dss" element={<BambooSenseDSS />} />
       </Routes>
     </BrowserRouter>

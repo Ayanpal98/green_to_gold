@@ -19,62 +19,26 @@ import {
   TrendingUp,
   MapPin
 } from "lucide-react";
-import { GoogleGenAI } from "@google/genai";
-import { db, auth } from "../lib/firebase";
-import { 
-  collection, 
-  query, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  doc, 
-  where, 
-  orderBy,
-  onSnapshot,
-  Timestamp 
-} from "firebase/firestore";
 
-// Error Scaling for Firestore (per Integration Instructions)
-enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
+// Mock Data for Prototype
+const MOCK_RESOURCES: DistrictResource[] = [
+  { id: "1", district: "Unakoti", bamboo_stock_t: 35000, coverage_pct: 75, status: 'Healthy', fibre_stock_t: 2500, next_harvest_date: "Oct 2026" },
+  { id: "2", district: "North Tripura", bamboo_stock_t: 28000, coverage_pct: 62, status: 'Healthy', fibre_stock_t: 1800, next_harvest_date: "Oct 2026" },
+  { id: "3", district: "Dhalai", bamboo_stock_t: 12000, coverage_pct: 45, status: 'Critical', fibre_stock_t: 900, next_harvest_date: "Hold" },
+  { id: "4", district: "Sepahijala", bamboo_stock_t: 42000, coverage_pct: 88, status: 'Healthy', fibre_stock_t: 3200, next_harvest_date: "Sep 2026" },
+  { id: "5", district: "Gomati", bamboo_stock_t: 19000, coverage_pct: 55, status: 'Monitor', fibre_stock_t: 1200, next_harvest_date: "Nov 2026" },
+];
 
-interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId?: string | null;
-    email?: string | null;
-    emailVerified?: boolean | null;
-    isAnonymous?: boolean | null;
-  }
-}
+const MOCK_ACTIVITIES: SHGActivity[] = [
+  { id: "a1", cooperative_name: "Unakoti Bamboo Crafts", district: "Unakoti", last_harvest_date: "Apr 2026", volume_t: 240, income_inr: 450000, status: 'Active' },
+  { id: "a2", cooperative_name: "Dhalai Green Builders", district: "Dhalai", last_harvest_date: "Mar 2026", volume_t: 110, income_inr: 210000, status: 'Pending' },
+  { id: "a3", cooperative_name: "Gomati Tableware SHG", district: "Gomati", last_harvest_date: "May 2026", volume_t: 320, income_inr: 580000, status: 'Active' },
+];
 
-const handleFirestoreError = (error: unknown, operationType: OperationType, path: string | null) => {
-  const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
-    authInfo: {
-      userId: auth.currentUser?.uid,
-      email: auth.currentUser?.email,
-      emailVerified: auth.currentUser?.emailVerified,
-      isAnonymous: auth.currentUser?.isAnonymous,
-    },
-    operationType,
-    path
-  };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  // In prototype mode, showing a clear toast/alert for permission issues
-  if (errInfo.error.includes("permission-denied")) {
-    console.warn("Permission Denied: Ensure rules are deployed and Firestore is in standard mode.");
-  }
-  return null; // Return null to allow graceful failing in UI
-};
+const MOCK_ALERTS: DSSAlert[] = [
+  { id: "e1", title: "Bamboosa Tulda Depletion", severity: 'Critical', description: "Excessive harvesting detected in Dhalai buffer zones. Immediate hold recommended.", district: "Dhalai", detected_at: new Date(), action: "Pause All Permits", resolved: false },
+  { id: "e2", title: "Pest Outbreak: Bamboo Blight", severity: 'Warning', description: "Early signs of blight in Unakoti north quadrant.", district: "Unakoti", detected_at: new Date(), action: "Apply Organic Biocide", resolved: false },
+];
 
 // Types
 interface DistrictResource {
@@ -103,7 +67,7 @@ interface DSSAlert {
   severity: 'Critical' | 'Warning' | 'Info';
   description: string;
   district: string;
-  detected_at: Timestamp;
+  detected_at: Date;
   action: string;
   resolved: boolean;
 }
@@ -121,9 +85,9 @@ interface HarvestRec {
 
 const BambooSenseDSS = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const [resources, setResources] = useState<DistrictResource[]>([]);
-  const [activities, setActivities] = useState<SHGActivity[]>([]);
-  const [alerts, setAlerts] = useState<DSSAlert[]>([]);
+  const [resources, setResources] = useState<DistrictResource[]>(MOCK_RESOURCES);
+  const [activities, setActivities] = useState<SHGActivity[]>(MOCK_ACTIVITIES);
+  const [alerts, setAlerts] = useState<DSSAlert[]>(MOCK_ALERTS);
   const [recommendations, setRecommendations] = useState<HarvestRec[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -139,30 +103,9 @@ const BambooSenseDSS = () => {
   const [engineLoading, setEngineLoading] = useState(false);
 
   useEffect(() => {
-    // Real-time listeners
-    const unsubResources = onSnapshot(collection(db, "district_resources"), (snapshot) => {
-      setResources(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DistrictResource)));
-    }, (error) => handleFirestoreError(error, OperationType.GET, "district_resources"));
-
-    const unsubActivities = onSnapshot(collection(db, "shg_activity"), (snapshot) => {
-      setActivities(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SHGActivity)));
-    }, (error) => handleFirestoreError(error, OperationType.GET, "shg_activity"));
-
-    const unsubAlerts = onSnapshot(query(collection(db, "dss_alerts"), orderBy("detected_at", "desc")), (snapshot) => {
-      setAlerts(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DSSAlert)));
-    }, (error) => handleFirestoreError(error, OperationType.GET, "dss_alerts"));
-
-    const unsubRecs = onSnapshot(query(collection(db, "harvest_recommendations"), orderBy("created_at", "desc")), (snapshot) => {
-      setRecommendations(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as HarvestRec)));
-      setLoading(false);
-    }, (error) => handleFirestoreError(error, OperationType.GET, "harvest_recommendations"));
-
-    return () => {
-      unsubResources();
-      unsubActivities();
-      unsubAlerts();
-      unsubRecs();
-    };
+    // Simulate loading delay for prototype feel
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleAdvisorSubmit = async (e: React.FormEvent) => {
@@ -170,49 +113,39 @@ const BambooSenseDSS = () => {
     setEngineLoading(true);
     setEngineResult(null);
 
-    try {
-      const genAI = new GoogleGenAI(process.env.GEMINI_API_KEY!);
-      const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
-        systemInstruction: "You are BambooSense, a sustainable bamboo harvest advisor for Green-to-Gold, Tripura, Northeast India. Return recommendations in 4 sections: Recommended Harvest Volume, Optimal Harvest Window, Replanting Trigger (Yes/Hold/No with reason), Forest Dept Note. Keep each section to 1-2 sentences. Be specific and practical.",
-      });
+    // Simulated AI Logic for Prototype
+    setTimeout(() => {
+      const volume = engineForm.status === 'Critical' ? 0 : Math.floor(engineForm.density * 0.15);
+      const isReplant = engineForm.age > 3 ? "Yes" : "Hold";
+      
+      const simulatedRec = `
+        **Recommended Harvest Volume:** ${volume} tonnes per hectare. This remains within sustainable yield limits for ${engineForm.species} in ${engineForm.district}.
+        
+        **Optimal Harvest Window:** Early ${engineForm.season} (weeks 1-4). Weather stability in ${engineForm.district} during this window is ideal for culm extraction.
+        
+        **Replanting Trigger:** ${isReplant}. Reason: Clump age of ${engineForm.age} years ${isReplant === "Yes" ? "requires enrichment planting to maintain long-term density." : "is too young for significant replanting intervention."}
+        
+        **Forest Dept Note:** Ensure all culms are marked by the local range officer before 6:00 AM on the day of activities.
+      `;
 
-      const prompt = `Provide a harvest recommendation for:
-            District: ${engineForm.district}
-            Species: ${engineForm.species}
-            Clump Age: ${engineForm.age} years
-            Current Season: ${engineForm.season}
-            Density: ${engineForm.density} culms/hectare`;
-
-      const result = await model.generateContent(prompt);
-      const recommendationText = result.response.text() || "No recommendation generated.";
-      setEngineResult(recommendationText);
-
-      // Save to history
-      try {
-        await addDoc(collection(db, "harvest_recommendations"), {
-          ...engineForm,
-          recommendation_text: recommendationText,
-          created_at: new Date().toISOString()
-        });
-      } catch (err) {
-        handleFirestoreError(err, OperationType.WRITE, "harvest_recommendations");
-      }
-    } catch (error: any) {
-      console.error("Gemini AI Error:", error);
-      alert("Failed to get AI recommendation. Please try again.");
-    } finally {
+      setEngineResult(simulatedRec);
+      
+      const newRec: HarvestRec = {
+        id: Math.random().toString(),
+        ...engineForm,
+        age_years: engineForm.age,
+        recommendation_text: simulatedRec,
+        created_at: new Date().toISOString()
+      };
+      setRecommendations(prev => [newRec, ...prev]);
       setEngineLoading(false);
-    }
+    }, 1500);
   };
 
-  const resolveAlert = async (id: string) => {
-    try {
-      await updateDoc(doc(db, "dss_alerts", id), { resolved: true });
-    } catch (error) {
-      handleFirestoreError(error, OperationType.UPDATE, `dss_alerts/${id}`);
-    }
+  const resolveAlert = (id: string) => {
+    setAlerts(prev => prev.map(a => a.id === id ? { ...a, resolved: true } : a));
   };
+
 
   const tabs = [
     "Resource Intelligence",
@@ -742,7 +675,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
               {alert.severity} Alert
             </span>
             <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">
-              {alert.district} • Detected {new Date(alert.detected_at.toDate()).toLocaleDateString()}
+              {alert.district} • Detected {new Date(alert.detected_at).toLocaleDateString()}
             </span>
           </div>
           <h3 className="text-2xl font-serif text-brand-ink">{alert.title}</h3>
