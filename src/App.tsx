@@ -287,15 +287,26 @@ function LandingPage({ user }: { user: any }) {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 px-4 md:px-6 py-4" aria-label="Main navigation">
         <div className="max-w-7xl mx-auto flex justify-between items-center glass-card px-4 md:px-8 py-3 md:py-4">
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-brand-green rounded-full flex items-center justify-center shadow-lg" aria-hidden="true">
-              <Leaf className="text-white w-5 h-5 md:w-6 md:h-6" />
+          <Link to="/" className="flex items-center gap-3 flex-shrink-0 group">
+            <div className="relative">
+              <img 
+                src="/logo.png" 
+                alt="Green-to-Gold Logo" 
+                className="h-10 md:h-14 w-auto object-contain transition-all group-hover:scale-105"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                }}
+                referrerPolicy="no-referrer"
+              />
+              <div className="hidden h-10 w-10 md:h-14 md:w-14 bg-gradient-to-br from-brand-green to-brand-orange rounded-xl flex items-center justify-center text-white font-serif text-2xl font-bold shadow-lg">G</div>
+              <div className="absolute inset-0 bg-brand-green/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col">
               <span className="font-serif text-lg md:text-xl font-bold tracking-tight text-brand-green leading-none">Green-to-Gold</span>
               <span className="text-[8px] md:text-[10px] uppercase tracking-widest font-bold opacity-40 mt-0.5">by ATSFY Technologies</span>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <div className="hidden xl:flex items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-brand-green/70">

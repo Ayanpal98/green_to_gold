@@ -17,8 +17,22 @@ import {
   Loader2,
   Trees,
   TrendingUp,
-  MapPin
+  MapPin,
+  Edit,
+  Trash2,
+  X
 } from "lucide-react";
+
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Cell
+} from "recharts";
 
 // Mock Data for Prototype
 const MOCK_RESOURCES: DistrictResource[] = [
@@ -33,11 +47,13 @@ const MOCK_ACTIVITIES: SHGActivity[] = [
   { id: "a1", cooperative_name: "Unakoti Bamboo Crafts", district: "Unakoti", last_harvest_date: "Apr 2026", volume_t: 240, income_inr: 450000, status: 'Active' },
   { id: "a2", cooperative_name: "Dhalai Green Builders", district: "Dhalai", last_harvest_date: "Mar 2026", volume_t: 110, income_inr: 210000, status: 'Pending' },
   { id: "a3", cooperative_name: "Gomati Tableware SHG", district: "Gomati", last_harvest_date: "May 2026", volume_t: 320, income_inr: 580000, status: 'Active' },
+  { id: "a4", cooperative_name: "Khowai Artisans Collective", district: "West Tripura", last_harvest_date: "Jul 2025", volume_t: 15, income_inr: 8500, status: 'Inactive' },
 ];
 
 const MOCK_ALERTS: DSSAlert[] = [
-  { id: "e1", title: "Bamboosa Tulda Depletion", severity: 'Critical', description: "Excessive harvesting detected in Dhalai buffer zones. Immediate hold recommended.", district: "Dhalai", detected_at: new Date(), action: "Pause All Permits", resolved: false },
-  { id: "e2", title: "Pest Outbreak: Bamboo Blight", severity: 'Warning', description: "Early signs of blight in Unakoti north quadrant.", district: "Unakoti", detected_at: new Date(), action: "Apply Organic Biocide", resolved: false },
+  { id: "e1", title: "Bamboosa Tulda Depletion", severity: 'Critical', description: "Excessive harvesting detected in Dhalai buffer zones. Immediate hold recommended.", district: "Dhalai", detected_at: new Date(Date.now() - 3600000 * 2), action: "Pause All Permits", resolved: false },
+  { id: "e2", title: "Pest Outbreak: Bamboo Blight", severity: 'Warning', description: "Early signs of blight in Unakoti north quadrant.", district: "Unakoti", detected_at: new Date(Date.now() - 3600000 * 48), action: "Apply Organic Biocide", resolved: false },
+  { id: "e3", title: "Infrastructure Expansion Impact", severity: 'Info', description: "New highway construction near Sepahijala sanctuary may impact haulage routes.", district: "Sepahijala", detected_at: new Date(), action: "Reroute SHG Logistics", resolved: false },
 ];
 
 // Types
@@ -99,6 +115,7 @@ const BambooSenseDSS = () => {
     season: "Winter",
     density: 2000
   });
+  const [engineErrors, setEngineErrors] = useState<Record<string, string>>({});
   const [engineResult, setEngineResult] = useState<string | null>(null);
   const [engineLoading, setEngineLoading] = useState(false);
 
@@ -110,6 +127,20 @@ const BambooSenseDSS = () => {
 
   const handleAdvisorSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
+    const errors: Record<string, string> = {};
+    if (!engineForm.district) errors.district = "District selection required";
+    if (!engineForm.species) errors.species = "Species selection required";
+    if (!engineForm.age || engineForm.age <= 0) errors.age = "Age must be > 0";
+    if (engineForm.age > 60) errors.age = "Age usually < 60y";
+    if (!engineForm.season) errors.season = "Season required";
+    if (!engineForm.density || engineForm.density <= 0) errors.density = "Density must be > 0";
+    if (engineForm.density > 25000) errors.density = "Unrealistic density";
+
+    setEngineErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
     setEngineLoading(true);
     setEngineResult(null);
 
@@ -177,22 +208,47 @@ const BambooSenseDSS = () => {
             </p>
           </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-3 text-brand-orange font-bold uppercase tracking-[0.3em] text-[10px] mb-4"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                Strategic Decision Support System
-              </motion.div>
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-5xl md:text-7xl font-serif text-brand-green"
-              >
-                BambooSense <span className="italic">DSS</span>
-              </motion.h1>
+            <div className="flex items-center gap-6">
+              <div className="relative group">
+                <img 
+                  src="/logo.png" 
+                  alt="Green-to-Gold" 
+                  className="h-16 md:h-20 w-auto object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  }}
+                  referrerPolicy="no-referrer"
+                />
+                <div className="hidden h-16 w-16 md:h-20 md:w-20 bg-gradient-to-br from-brand-green to-brand-orange rounded-2xl flex items-center justify-center text-white font-serif text-4xl font-bold shadow-xl">G</div>
+              </div>
+              <div className="h-12 w-px bg-brand-green/10" />
+              <div>
+                <motion.div 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex items-center gap-3 text-brand-orange font-bold uppercase tracking-[0.3em] text-[10px] mb-2"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  Strategic Decision Support System
+                </motion.div>
+                <div className="flex flex-col">
+                  <motion.h1 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-3xl md:text-4xl font-serif text-brand-green font-bold"
+                  >
+                    Green-to-Gold
+                  </motion.h1>
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-[0.2em] mt-1"
+                  >
+                    BambooSense <span className="text-brand-orange italic">Alpha v1.0</span>
+                  </motion.div>
+                </div>
+              </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right hidden md:block">
@@ -237,13 +293,14 @@ const BambooSenseDSS = () => {
                 <HarvestEngine 
                   form={engineForm} 
                   setForm={setEngineForm} 
+                  errors={engineErrors}
                   loading={engineLoading} 
                   result={engineResult} 
                   submit={handleAdvisorSubmit}
                   history={recommendations}
                 />
               )}
-              {activeTab === 2 && <SHGActivitySection activities={activities} />}
+              {activeTab === 2 && <SHGActivitySection activities={activities} setActivities={setActivities} />}
               {activeTab === 3 && <CarbonReplantingSection resources={resources} />}
               {activeTab === 4 && <AlertsSection alerts={alerts} onResolve={resolveAlert} />}
             </motion.div>
@@ -327,24 +384,61 @@ const ResourceIntelligence = ({ resources }: { resources: DistrictResource[] }) 
 
     <div className="glass-card overflow-hidden border-brand-green/5">
       <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02]">
-        <h3 className="text-2xl font-serif text-brand-green">Pineapple Fibre Availability</h3>
+        <h3 className="text-2xl font-serif text-brand-green">Pineapple Fibre Availability (Tonnes)</h3>
       </div>
-      <div className="p-8 grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-        {resources.map(r => (
-          <div key={r.id} className="p-6 bg-brand-paper rounded-2xl border border-brand-green/5 shadow-sm">
-            <div className="text-[9px] uppercase font-bold text-brand-ink/40 mb-3">{r.district}</div>
-            <div className="text-xl font-serif text-brand-green mb-4">{r.fibre_stock_t} t</div>
-            <div className="w-full bg-brand-green/10 h-24 rounded-lg flex items-end overflow-hidden p-2">
-              <div className="w-full bg-brand-orange rounded-md" style={{ height: `${(r.fibre_stock_t / 5000) * 100}%` }} />
-            </div>
-          </div>
-        ))}
+      <div className="p-8 h-[400px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={resources}
+            margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+            <XAxis 
+              dataKey="district" 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 10, fontWeight: 700, fill: '#1B3129', opacity: 0.6 }}
+              dy={10}
+              angle={-45}
+              textAnchor="end"
+            />
+            <YAxis 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 10, fontWeight: 700, fill: '#1B3129', opacity: 0.6 }}
+            />
+            <Tooltip 
+              cursor={{ fill: '#004225', opacity: 0.05 }}
+              contentStyle={{ 
+                borderRadius: '16px', 
+                border: 'none', 
+                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                padding: '12px'
+              }}
+              itemStyle={{ fontSize: '12px', fontWeight: 700, color: '#004225' }}
+              labelStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#1B3129', opacity: 0.4, marginBottom: '4px' }}
+            />
+            <Bar 
+              dataKey="fibre_stock_t" 
+              name="Fibre Stock" 
+              radius={[8, 8, 0, 0]}
+              barSize={40}
+            >
+              {resources.map((_entry, index) => (
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={index % 2 === 0 ? '#004225' : '#F59E0B'} 
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   </div>
 );
 
-const HarvestEngine = ({ form, setForm, loading, result, submit, history }: any) => (
+const HarvestEngine = ({ form, setForm, errors = {}, loading, result, submit, history }: any) => (
   <div className="grid lg:grid-cols-3 gap-12">
     <div className="lg:col-span-1">
       <form onSubmit={submit} className="glass-card p-10 border-brand-green/5 flex flex-col gap-8">
@@ -355,12 +449,18 @@ const HarvestEngine = ({ form, setForm, loading, result, submit, history }: any)
 
         <div className="space-y-6">
           <div className="space-y-2">
-            <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">District</label>
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">District</label>
+              {errors.district && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.district}</span>}
+            </div>
             <select 
-              className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+              className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                errors.district ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+              }`}
               value={form.district}
               onChange={(e) => setForm({ ...form, district: e.target.value })}
             >
+              <option value="">Select District</option>
               <option>Unakoti</option>
               <option>North Tripura</option>
               <option>Dhalai</option>
@@ -370,12 +470,18 @@ const HarvestEngine = ({ form, setForm, loading, result, submit, history }: any)
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Species</label>
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Species</label>
+              {errors.species && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.species}</span>}
+            </div>
             <select 
-              className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+              className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                errors.species ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+              }`}
               value={form.species}
               onChange={(e) => setForm({ ...form, species: e.target.value })}
             >
+              <option value="">Select Species</option>
               <option>Muli</option>
               <option>Bari</option>
               <option>Kanak Kaich</option>
@@ -385,21 +491,32 @@ const HarvestEngine = ({ form, setForm, loading, result, submit, history }: any)
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Clump Age</label>
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Clump Age</label>
+                {errors.age && <span className="text-[8px] text-red-500 font-bold uppercase">{errors.age}</span>}
+              </div>
               <input 
                 type="number"
-                className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                  errors.age ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                }`}
                 value={form.age}
                 onChange={(e) => setForm({ ...form, age: parseInt(e.target.value) })}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Season</label>
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Season</label>
+                {errors.season && <span className="text-[8px] text-red-500 font-bold uppercase">{errors.season}</span>}
+              </div>
               <select 
-                className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                  errors.season ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                }`}
                 value={form.season}
                 onChange={(e) => setForm({ ...form, season: e.target.value })}
               >
+                <option value="">Select Season</option>
                 <option>Winter</option>
                 <option>Monsoon</option>
                 <option>Summer</option>
@@ -409,10 +526,15 @@ const HarvestEngine = ({ form, setForm, loading, result, submit, history }: any)
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Density (culms/hc)</label>
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Density (culms/hc)</label>
+              {errors.density && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.density}</span>}
+            </div>
             <input 
               type="number"
-              className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+              className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                errors.density ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+              }`}
               value={form.density}
               onChange={(e) => setForm({ ...form, density: parseInt(e.target.value) })}
             />
@@ -499,21 +621,108 @@ const HarvestEngine = ({ form, setForm, loading, result, submit, history }: any)
   </div>
 );
 
-const SHGActivitySection = ({ activities }: { activities: SHGActivity[] }) => {
+const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActivity[], setActivities: React.Dispatch<React.SetStateAction<SHGActivity[]>> }) => {
   const [filterDistrict, setFilterDistrict] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingActivity, setEditingActivity] = useState<SHGActivity | null>(null);
 
-  const filtered = activities.filter(a => 
+  const calculateStatus = (lastHarvest: string, income: number): 'Active' | 'Pending' | 'Inactive' => {
+    // Current date for prototype evaluation is May 2026
+    const now = new Date(2026, 4, 9); // May 9, 2026
+    
+    const [month, year] = lastHarvest.split(' ');
+    const monthMap: Record<string, number> = {
+      'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+      'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+    };
+    
+    const harvestDate = new Date(parseInt(year), monthMap[month] || 0, 1);
+    
+    // Calculate difference in months
+    const diffMonths = (now.getFullYear() - harvestDate.getFullYear()) * 12 + (now.getMonth() - harvestDate.getMonth());
+
+    if (diffMonths > 6 && income < 10000) {
+      return 'Inactive';
+    }
+    
+    if (diffMonths <= 2 && income > 100000) return 'Active';
+    return 'Pending';
+  };
+
+  const processedActivities = activities.map(a => ({
+    ...a,
+    status: calculateStatus(a.last_harvest_date, a.income_inr)
+  }));
+
+  const filtered = processedActivities.filter(a => 
     (filterDistrict === "All" || a.district === filterDistrict) &&
     (filterStatus === "All" || a.status === filterStatus)
   );
 
+  const handleDelete = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this record?")) {
+      setActivities(prev => prev.filter(a => a.id !== id));
+    }
+  };
+
+  const handleEdit = (activity: SHGActivity) => {
+    setEditingActivity(activity);
+    setIsModalOpen(true);
+  };
+
+  const [form, setForm] = useState({
+    cooperative_name: "",
+    district: "Unakoti",
+    last_harvest_date: "May 2026",
+    volume_t: 0,
+    income_inr: 0
+  });
+
+  useEffect(() => {
+    if (editingActivity) {
+      setForm({
+        cooperative_name: editingActivity.cooperative_name,
+        district: editingActivity.district,
+        last_harvest_date: editingActivity.last_harvest_date,
+        volume_t: editingActivity.volume_t,
+        income_inr: editingActivity.income_inr
+      });
+    } else {
+      setForm({
+        cooperative_name: "",
+        district: "Unakoti",
+        last_harvest_date: "May 2026",
+        volume_t: 0,
+        income_inr: 0
+      });
+    }
+  }, [editingActivity, isModalOpen]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newStatus = calculateStatus(form.last_harvest_date, form.income_inr);
+    
+    if (editingActivity) {
+      setActivities(prev => prev.map(a => a.id === editingActivity.id ? { ...a, ...form, status: newStatus } : a));
+    } else {
+      const newActivity: SHGActivity = {
+        id: Math.random().toString(36).substr(2, 9),
+        ...form,
+        status: newStatus
+      };
+      setActivities(prev => [newActivity, ...prev]);
+    }
+    setIsModalOpen(false);
+    setEditingActivity(null);
+  };
+
   return (
     <div className="space-y-12">
       <div className="grid md:grid-cols-3 gap-8">
-        <MetricCard title="Active SHGs" value={activities.filter(a => a.status === 'Active').length} icon={Users} />
-        <MetricCard title="Total Volume Logged" value={`${activities.reduce((acc, a) => acc + a.volume_t, 0)} t`} icon={Leaf} />
-        <MetricCard title="Income Generated" value={`₹ ${activities.reduce((acc, a) => acc + a.income_inr, 0).toLocaleString()}`} icon={TrendingUp} color="brand-orange" />
+        <MetricCard title="Active SHGs" value={processedActivities.filter(a => a.status === 'Active').length} icon={Users} />
+        <MetricCard title="Total Volume Logged" value={`${processedActivities.reduce((acc, a) => acc + a.volume_t, 0)} t`} icon={Leaf} />
+        <MetricCard title="Income Generated" value={`₹ ${processedActivities.reduce((acc, a) => acc + a.income_inr, 0).toLocaleString()}`} icon={TrendingUp} color="brand-orange" />
       </div>
 
       <div className="glass-card border-brand-green/5 overflow-hidden">
@@ -533,9 +742,26 @@ const SHGActivitySection = ({ activities }: { activities: SHGActivity[] }) => {
                 <option>Dhalai</option>
                 <option>Sepahijala</option>
                 <option>Gomati</option>
+                <option>West Tripura</option>
               </select>
             </div>
-            <button className="px-6 py-2.5 bg-brand-green text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-brand-ink transition-all">
+            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-brand-green/10">
+              <ShieldCheck className="w-4 h-4 text-brand-green" />
+              <select 
+                className="text-xs font-bold bg-transparent outline-none uppercase tracking-widest cursor-pointer"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+              >
+                <option>All Status</option>
+                <option>Active</option>
+                <option>Pending</option>
+                <option>Inactive</option>
+              </select>
+            </div>
+            <button 
+              onClick={() => { setEditingActivity(null); setIsModalOpen(true); }}
+              className="px-6 py-2.5 bg-brand-green text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-brand-ink transition-all"
+            >
               <Plus className="w-4 h-4" /> Log New Entry
             </button>
           </div>
@@ -550,11 +776,12 @@ const SHGActivitySection = ({ activities }: { activities: SHGActivity[] }) => {
                 <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Volume (t)</th>
                 <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Income (₹)</th>
                 <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Status</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-green/5">
               {filtered.map((a) => (
-                <tr key={a.id} className="hover:bg-brand-green/[0.02]">
+                <tr key={a.id} className="hover:bg-brand-green/[0.02] group/row transition-all">
                   <td className="px-8 py-6 font-bold text-brand-ink flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-brand-green/10 flex items-center justify-center text-brand-green">
                       {a.cooperative_name[0]}
@@ -574,12 +801,153 @@ const SHGActivitySection = ({ activities }: { activities: SHGActivity[] }) => {
                       {a.status}
                     </span>
                   </td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2 opacity-0 group-hover/row:opacity-100 transition-opacity">
+                      <button 
+                        onClick={() => handleEdit(a)}
+                        className="p-2 text-brand-ink/40 hover:text-brand-green hover:bg-brand-green/5 rounded-lg transition-all"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(a.id)}
+                        className="p-2 text-brand-ink/40 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Entry Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-brand-ink/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-lg bg-white rounded-[40px] shadow-2xl overflow-hidden"
+            >
+              <div className="p-8 bg-brand-green flex justify-between items-center text-white">
+                <div>
+                  <h3 className="text-2xl font-serif">{editingActivity ? "Update" : "Log New"} Entry</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Cooperative Activity Ledger</p>
+                </div>
+                <button 
+                  onClick={() => setIsModalOpen(false)}
+                  className="p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-all"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <form onSubmit={handleSubmit} className="p-10 space-y-8">
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Cooperative Name</label>
+                    <input 
+                      required
+                      type="text"
+                      className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                      value={form.cooperative_name}
+                      onChange={(e) => setForm({ ...form, cooperative_name: e.target.value })}
+                      placeholder="e.g. Unakoti Bamboo Crafts"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">District</label>
+                      <select 
+                        className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                        value={form.district}
+                        onChange={(e) => setForm({ ...form, district: e.target.value })}
+                      >
+                        <option>Unakoti</option>
+                        <option>North Tripura</option>
+                        <option>Dhalai</option>
+                        <option>Sepahijala</option>
+                        <option>Gomati</option>
+                        <option>West Tripura</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Last Harvest Date</label>
+                      <input 
+                        required
+                        type="text"
+                        className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                        value={form.last_harvest_date}
+                        onChange={(e) => setForm({ ...form, last_harvest_date: e.target.value })}
+                        placeholder="e.g. May 2026"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Volume (tonnes)</label>
+                      <input 
+                        required
+                        type="number"
+                        className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                        value={form.volume_t}
+                        onChange={(e) => setForm({ ...form, volume_t: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Income Generated (₹)</label>
+                      <input 
+                        required
+                        type="number"
+                        className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                        value={form.income_inr}
+                        onChange={(e) => setForm({ ...form, income_inr: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 bg-brand-green/5 rounded-[24px] border border-brand-green/5">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Auto-Calculated Status</div>
+                      <div className="text-lg font-serif text-brand-green">Preview</div>
+                    </div>
+                    <span className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      calculateStatus(form.last_harvest_date, form.income_inr) === 'Active' ? 'bg-brand-green text-white' :
+                      calculateStatus(form.last_harvest_date, form.income_inr) === 'Pending' ? 'bg-amber-100 text-amber-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {calculateStatus(form.last_harvest_date, form.income_inr)}
+                    </span>
+                  </div>
+                </div>
+
+                <button 
+                  type="submit"
+                  className="w-full py-5 bg-brand-green text-white rounded-2xl font-bold uppercase tracking-widest text-xs shadow-xl shadow-brand-green/20 hover:bg-brand-ink transition-all"
+                >
+                  {editingActivity ? "Save Changes" : "Create Entry"}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -655,8 +1023,39 @@ const CarbonReplantingSection = ({ resources }: { resources: DistrictResource[] 
 };
 
 const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (id: string) => void }) => {
-  const unresolved = alerts.filter(a => !a.resolved);
-  const resolved = alerts.filter(a => a.resolved);
+  const [filterDistrict, setFilterDistrict] = useState("All");
+  const [filterSeverity, setFilterSeverity] = useState("All");
+  const [sortBy, setSortBy] = useState<"date" | "severity">("date");
+
+  const districts = ["All", ...Array.from(new Set(alerts.map(a => a.district)))];
+  const severities = ["All", "Critical", "Warning", "Info"];
+
+  const getSeverityWeight = (s: string) => {
+    switch (s) {
+      case 'Critical': return 3;
+      case 'Warning': return 2;
+      case 'Info': return 1;
+      default: return 0;
+    }
+  };
+
+  const processedAlerts = [...alerts]
+    .filter(a => 
+      (filterDistrict === "All" || a.district === filterDistrict) &&
+      (filterSeverity === "All" || a.severity === filterSeverity)
+    )
+    .sort((a, b) => {
+      if (sortBy === "date") {
+        return new Date(b.detected_at).getTime() - new Date(a.detected_at).getTime();
+      } else {
+        const weightDiff = getSeverityWeight(b.severity) - getSeverityWeight(a.severity);
+        if (weightDiff !== 0) return weightDiff;
+        return new Date(b.detected_at).getTime() - new Date(a.detected_at).getTime();
+      }
+    });
+
+  const unresolved = processedAlerts.filter(a => !a.resolved);
+  const resolved = processedAlerts.filter(a => a.resolved);
 
   const AlertCard = ({ alert, onResolve }: { alert: DSSAlert, onResolve?: any, key?: string }) => (
     <div className={`p-8 bg-white rounded-[32px] border-l-[12px] shadow-sm relative overflow-hidden group transition-all hover:shadow-xl ${
@@ -675,7 +1074,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
               {alert.severity} Alert
             </span>
             <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">
-              {alert.district} • Detected {new Date(alert.detected_at).toLocaleDateString()}
+              {alert.district} • {new Date(alert.detected_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
             </span>
           </div>
           <h3 className="text-2xl font-serif text-brand-ink">{alert.title}</h3>
@@ -705,6 +1104,62 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
 
   return (
     <div className="space-y-12">
+      {/* Filter Controls */}
+      <div className="glass-card p-6 border-brand-green/5 flex flex-wrap items-center gap-6">
+        <div className="flex items-center gap-3">
+          <Filter className="w-4 h-4 text-brand-orange" />
+          <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Filter By</span>
+        </div>
+        
+        <div className="flex items-center gap-4 flex-wrap">
+          <select 
+            value={filterDistrict}
+            onChange={(e) => setFilterDistrict(e.target.value)}
+            className="bg-brand-paper border border-brand-green/10 rounded-xl px-4 py-2 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-brand-green transition-all cursor-pointer"
+          >
+            {districts.map(d => <option key={d} value={d}>District: {d}</option>)}
+          </select>
+
+          <select 
+            value={filterSeverity}
+            onChange={(e) => setFilterSeverity(e.target.value)}
+            className="bg-brand-paper border border-brand-green/10 rounded-xl px-4 py-2 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-brand-green transition-all cursor-pointer"
+          >
+            {severities.map(s => <option key={s} value={s}>Severity: {s}</option>)}
+          </select>
+
+          {(filterDistrict !== "All" || filterSeverity !== "All") && (
+            <button 
+              onClick={() => { setFilterDistrict("All"); setFilterSeverity("All"); }}
+              className="text-[10px] font-bold text-brand-orange hover:text-brand-orange-dark uppercase tracking-widest transition-colors"
+            >
+              Clear Filters
+            </button>
+          )}
+        </div>
+
+        <div className="h-4 w-px bg-brand-green/10 hidden md:block" />
+
+        <div className="flex items-center gap-3 ml-auto">
+          <TrendingUp className="w-4 h-4 text-brand-green" />
+          <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Sort By</span>
+          <div className="flex bg-brand-paper border border-brand-green/10 rounded-xl overflow-hidden">
+            <button 
+              onClick={() => setSortBy("date")}
+              className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === "date" ? "bg-brand-green text-white" : "text-brand-ink/40 hover:bg-brand-green/5"}`}
+            >
+              Date
+            </button>
+            <button 
+              onClick={() => setSortBy("severity")}
+              className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === "severity" ? "bg-brand-green text-white" : "text-brand-ink/40 hover:bg-brand-green/5"}`}
+            >
+              Severity
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="space-y-8">
         <div className="flex items-center gap-4">
           <h3 className="text-2xl font-serif text-brand-green">Active Alerts</h3>
@@ -712,7 +1167,14 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
           <span className="px-4 py-1.5 bg-red-500 text-white rounded-full text-[10px] font-bold">{unresolved.length} UNRESOLVED</span>
         </div>
         <div className="grid gap-6">
-          {unresolved.map(a => <AlertCard key={a.id} alert={a} onResolve={onResolve} />)}
+          {unresolved.length > 0 ? (
+            unresolved.map(a => <AlertCard key={a.id} alert={a} onResolve={onResolve} />)
+          ) : (
+            <div className="p-12 text-center glass-card border-brand-green/5 opacity-50">
+              <CheckCircle2 className="w-8 h-8 text-brand-green mx-auto mb-4" />
+              <p className="text-xs font-bold uppercase tracking-widest">No active alerts matching filters</p>
+            </div>
+          )}
         </div>
       </div>
 
