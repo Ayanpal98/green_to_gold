@@ -23,6 +23,7 @@ import {
   X
 } from "lucide-react";
 import { Navbar } from "./Navbar";
+import { useLanguage } from "../context/LanguageContext";
 
 import { 
   BarChart, 
@@ -101,19 +102,29 @@ interface HarvestRec {
 }
 
 const BioSenseDSS = () => {
+  const { t, language } = useLanguage();
   const tabs = [
-    "Resource Intelligence",
-    "Rice DSS",
-    "Sugarcane DSS",
-    "Rubber DSS",
-    "Agarwood DSS",
-    "Betelnut DSS",
-    "Jute DSS",
-    "Bamboo Advisor",
-    "SHG Activity Tracker",
-    "Carbon & Replanting",
-    "Alerts"
+    t("common.resourceIntel"),
+    `${t("common.rice")} DSS`,
+    `${t("common.sugarcane")} DSS`,
+    `${t("common.rubber")} DSS`,
+    `${t("common.agarwood")} DSS`,
+    `${t("common.betelnut")} DSS`,
+    `${t("common.jute")} DSS`,
+    `${t("common.bamboo")} Advisor`,
+    t("common.shgAct"),
+    t("common.carbonTracker"),
+    t("sidebar.activeAlerts")
   ];
+  const cropMap: Record<number, string> = {
+    1: "Rice",
+    2: "Sugarcane",
+    3: "Rubber",
+    4: "Agarwood",
+    5: "Betelnut",
+    6: "Jute",
+    7: "Bamboo"
+  };
   const [activeTab, setActiveTab] = useState(0);
   const [resources, setResources] = useState<DistrictResource[]>(MOCK_RESOURCES);
   const [activities, setActivities] = useState<SHGActivity[]>(MOCK_ACTIVITIES);
@@ -149,10 +160,12 @@ const BioSenseDSS = () => {
 
   useEffect(() => {
     if (activeTab >= 1 && activeTab <= 7) {
-      const cropName = tabs[activeTab].split(' ')[0];
-      setEngineForm(prev => ({ ...prev, crop: cropName, species: "" }));
-      setEngineResult(null);
-      setEngineErrors({});
+      const cropName = cropMap[activeTab];
+      if (cropName) {
+        setEngineForm(prev => ({ ...prev, crop: cropName, species: "" }));
+        setEngineResult(null);
+        setEngineErrors({});
+      }
     }
   }, [activeTab]);
 
@@ -241,7 +254,11 @@ const BioSenseDSS = () => {
               <Zap className="w-4 h-4" />
             </div>
             <p className="text-xs font-bold text-brand-orange-dark uppercase tracking-widest leading-relaxed">
-              System Note: This is an AI-powered prototype. Harvest algorithms and recommendations are indicative and part of the BioSense Bio-Alpha phase.
+              {language === 'bn' 
+                ? "সিস্টেম নোট: এটি একটি এআই-চালিত প্রোটোটাইপ। ফসল কাটার অ্যালগরিদম ও সুপারিশগুলি পরীক্ষামূলক এবং বায়োসেন্স ফেজের অংশ।"
+                : language === 'kok'
+                ? "System Note: Bhaithang bo AI prototype sanmung aungo. BioSense Bio-Alpha phase nikhai kahm phola mung aungo."
+                : "System Note: This is an AI-powered prototype. Harvest algorithms and recommendations are indicative and part of the BioSense Bio-Alpha phase."}
             </p>
           </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -253,7 +270,7 @@ const BioSenseDSS = () => {
                   className="flex items-center gap-3 text-brand-orange font-bold uppercase tracking-[0.3em] text-[10px] mb-2"
                 >
                   <ShieldCheck className="w-4 h-4" />
-                  Strategic Bio-Decision Support System
+                  {t("common.dssDashboard")}
                 </motion.div>
                 <div className="flex flex-col">
                   <motion.h1 
@@ -358,296 +375,301 @@ const MetricCard = ({ title, value, icon: Icon, color = "brand-green" }: any) =>
   </div>
 );
 
-const ResourceIntelligence = ({ resources }: { resources: DistrictResource[] }) => (
-  <div className="space-y-12">
-    <div className="grid md:grid-cols-3 gap-8">
-      <MetricCard title="Total Bamboo Stock" value={`${resources.reduce((acc, r) => acc + r.bamboo_stock_t, 0).toLocaleString()} t`} icon={Trees} />
-      <MetricCard title="Harvest-Ready Zones" value={resources.filter(r => r.status === 'Healthy').length} icon={CheckCircle2} />
-      <MetricCard title="Depletion Risk Zones" value={resources.filter(r => r.status === 'Critical').length} icon={AlertTriangle} color="brand-orange" />
-    </div>
-
-    <div className="glass-card overflow-hidden border-brand-green/5">
-      <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02]">
-        <h3 className="text-2xl font-serif text-brand-green">Regional Bamboo Stock Inventory</h3>
+const ResourceIntelligence = ({ resources }: { resources: DistrictResource[] }) => {
+  const { t } = useLanguage();
+  return (
+    <div className="space-y-12">
+      <div className="grid md:grid-cols-3 gap-8">
+        <MetricCard title={t("dss.totalBambooStock")} value={`${resources.reduce((acc, r) => acc + r.bamboo_stock_t, 0).toLocaleString()} t`} icon={Trees} />
+        <MetricCard title={t("dss.harvestReadyZones")} value={resources.filter(r => r.status === 'Healthy').length} icon={CheckCircle2} />
+        <MetricCard title={t("dss.depletionRiskZones")} value={resources.filter(r => r.status === 'Critical').length} icon={AlertTriangle} color="brand-orange" />
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-left">
-          <thead className="bg-brand-green/[0.04]">
-            <tr>
-              <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">District</th>
-              <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Stock (tonnes)</th>
-              <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Coverage</th>
-              <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Status</th>
-              <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Next Harvest</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-brand-green/5">
-            {resources.map((r) => (
-              <tr key={r.id} className="hover:bg-brand-green/[0.02] transition-colors">
-                <td className="px-8 py-6 font-bold text-brand-ink">{r.district}</td>
-                <td className="px-8 py-6 text-brand-ink/70">{(r.bamboo_stock_t / 1000).toFixed(1)}k t</td>
-                <td className="px-8 py-6">
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1 h-1.5 bg-brand-green/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-brand-green" style={{ width: `${r.coverage_pct}%` }} />
-                    </div>
-                    <span className="text-xs font-bold text-brand-green">{r.coverage_pct}%</span>
-                  </div>
-                </td>
-                <td className="px-8 py-6">
-                  <span className={`px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
-                    r.status === 'Healthy' ? 'bg-green-100 text-green-700' :
-                    r.status === 'Monitor' ? 'bg-amber-100 text-amber-700' :
-                    'bg-red-100 text-red-700'
-                  }`}>
-                    {r.status}
-                  </span>
-                </td>
-                <td className="px-8 py-6 text-brand-ink/50 text-xs font-bold">{r.next_harvest_date}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div className="glass-card overflow-hidden border-brand-green/5">
-      <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02]">
-        <h3 className="text-2xl font-serif text-brand-green">Pineapple Fibre Availability (Tonnes)</h3>
-      </div>
-      <div className="p-8 h-[400px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={resources}
-            margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-            <XAxis 
-              dataKey="district" 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 10, fontWeight: 700, fill: '#1B3129', opacity: 0.6 }}
-              dy={10}
-              angle={-45}
-              textAnchor="end"
-            />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 10, fontWeight: 700, fill: '#1B3129', opacity: 0.6 }}
-            />
-            <Tooltip 
-              cursor={{ fill: '#004225', opacity: 0.05 }}
-              contentStyle={{ 
-                borderRadius: '16px', 
-                border: 'none', 
-                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-                padding: '12px'
-              }}
-              itemStyle={{ fontSize: '12px', fontWeight: 700, color: '#004225' }}
-              labelStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#1B3129', opacity: 0.4, marginBottom: '4px' }}
-            />
-            <Bar 
-              dataKey="fibre_stock_t" 
-              name="Fibre Stock" 
-              radius={[8, 8, 0, 0]}
-              barSize={40}
-            >
-              {resources.map((_entry, index) => (
-                <Cell 
-                  key={`cell-${index}`} 
-                  fill={index % 2 === 0 ? '#004225' : '#F59E0B'} 
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  </div>
-);
-
-const HarvestEngine = ({ form, setForm, errors = {}, loading, result, submit, history, getSpeciesForCrop }: any) => (
-  <div className="grid lg:grid-cols-3 gap-12">
-    <div className="lg:col-span-1">
-      <form onSubmit={submit} className="glass-card p-10 border-brand-green/5 flex flex-col gap-8">
-        <div>
-          <h3 className="text-2xl font-serif text-brand-green mb-2">Engine Parameters</h3>
-          <p className="text-xs text-brand-ink/40 font-bold uppercase tracking-widest">Optimising Product Yield</p>
-        </div>
-
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Crop type</label>
-              {errors.crop && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.crop}</span>}
-            </div>
-            <select 
-              className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
-                errors.crop ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
-              }`}
-              value={form.crop}
-              onChange={(e) => setForm({ ...form, crop: e.target.value })}
-            >
-              <option>Bamboo</option>
-              <option>Arecanut</option>
-              <option>Rubber</option>
-              <option>Agarwood</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">District</label>
-              {errors.district && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.district}</span>}
-            </div>
-            <select 
-              className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
-                errors.district ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
-              }`}
-              value={form.district}
-              onChange={(e) => setForm({ ...form, district: e.target.value })}
-            >
-              <option value="">Select District</option>
-              <option>Unakoti</option>
-              <option>North Tripura</option>
-              <option>Dhalai</option>
-              <option>Sepahijala</option>
-              <option>Gomati</option>
-            </select>
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Species</label>
-              {errors.species && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.species}</span>}
-            </div>
-            <select 
-              className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
-                errors.species ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
-              }`}
-              value={form.species}
-              onChange={(e) => setForm({ ...form, species: e.target.value })}
-            >
-              <option value="">Select Variety</option>
-              {getSpeciesForCrop(form.crop).map((s: string) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">
-                  {form.crop === 'Bamboo' ? 'Clump Age' : form.crop === 'Agarwood' ? 'Tree Age' : 'Planted Year'}
-                </label>
-                {errors.age && <span className="text-[8px] text-red-500 font-bold uppercase">{errors.age}</span>}
-              </div>
-              <input 
-                type="number"
-                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
-                  errors.age ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
-                }`}
-                value={form.age}
-                onChange={(e) => setForm({ ...form, age: parseInt(e.target.value) })}
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Season</label>
-                {errors.season && <span className="text-[8px] text-red-500 font-bold uppercase">{errors.season}</span>}
-              </div>
-              <select 
-                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
-                  errors.season ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
-                }`}
-                value={form.season}
-                onChange={(e) => setForm({ ...form, season: e.target.value })}
-              >
-                <option value="">Select Season</option>
-                <option>Winter</option>
-                <option>Monsoon</option>
-                <option>Summer</option>
-                <option>Pre-Monsoon</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Density (culms/hc)</label>
-              {errors.density && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.density}</span>}
-            </div>
-            <input 
-              type="number"
-              className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
-                errors.density ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
-              }`}
-              value={form.density}
-              onChange={(e) => setForm({ ...form, density: parseInt(e.target.value) })}
-            />
-          </div>
-        </div>
-
-        <button 
-          type="submit"
-          disabled={loading}
-          className="w-full py-5 bg-brand-green text-white rounded-2xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-brand-ink transition-all disabled:opacity-50"
-        >
-          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
-          Get AI Recommendation
-        </button>
-      </form>
-    </div>
-
-    <div className="lg:col-span-2 space-y-12">
-      {result ? (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="glass-card p-12 border-brand-orange/20 border-l-[12px] border-l-brand-orange bg-brand-orange/[0.02]"
-        >
-          <div className="flex items-center gap-3 mb-8">
-            <div className="p-3 bg-brand-orange text-white rounded-2xl">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-3xl font-serif text-brand-ink">Strategy Analysis</h3>
-              <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Gemini 3 Flash Insight</p>
-            </div>
-          </div>
-          <div className="prose prose-sm text-brand-ink/70 max-w-none space-y-6">
-            {result.split('\n\n').map((para, i) => (
-              <p key={i} className="text-lg leading-relaxed font-medium">{para}</p>
-            ))}
-          </div>
-        </motion.div>
-      ) : (
-        <div className="h-full flex flex-col items-center justify-center glass-card border-brand-green/5 p-12 text-center opacity-40">
-          <div className="p-6 bg-brand-green/10 rounded-full mb-6">
-            <BarChart3 className="w-12 h-12 text-brand-green" />
-          </div>
-          <h3 className="text-2xl font-serif">Awaiting Input</h3>
-          <p className="text-xs font-bold uppercase tracking-widest mt-2">Adjust parameters to generate harvest advice</p>
-        </div>
-      )}
 
       <div className="glass-card overflow-hidden border-brand-green/5">
-        <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02] flex justify-between items-center">
-          <h3 className="text-2xl font-serif text-brand-green">Recommendation History</h3>
+        <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02]">
+          <h3 className="text-2xl font-serif text-brand-green">{t("dss.regionalInventory")}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-brand-green/[0.04]">
               <tr>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Timestamp</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">District</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Parameters</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Insight Snippet</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("common.district")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("dss.stockTonnes")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("dss.coverage")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("common.status")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("dss.nextHarvest")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-green/5">
+              {resources.map((r) => (
+                <tr key={r.id} className="hover:bg-brand-green/[0.02] transition-colors">
+                  <td className="px-8 py-6 font-bold text-brand-ink">{r.district}</td>
+                  <td className="px-8 py-6 text-brand-ink/70">{(r.bamboo_stock_t / 1000).toFixed(1)}k t</td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-4">
+                      <div className="flex-1 h-1.5 bg-brand-green/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-brand-green" style={{ width: `${r.coverage_pct}%` }} />
+                      </div>
+                      <span className="text-xs font-bold text-brand-green">{r.coverage_pct}%</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <span className={`px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
+                      r.status === 'Healthy' ? 'bg-green-100 text-green-700' :
+                      r.status === 'Monitor' ? 'bg-amber-100 text-amber-700' :
+                      'bg-red-100 text-red-700'
+                    }`}>
+                      {r.status}
+                    </span>
+                  </td>
+                  <td className="px-8 py-6 text-brand-ink/50 text-xs font-bold">{r.next_harvest_date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="glass-card overflow-hidden border-brand-green/5">
+        <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02]">
+          <h3 className="text-2xl font-serif text-brand-green">{t("dss.pineappleFibre")}</h3>
+        </div>
+        <div className="p-8 h-[400px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={resources}
+              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+              <XAxis 
+                dataKey="district" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 10, fontWeight: 700, fill: '#1B3129', opacity: 0.6 }}
+                dy={10}
+                angle={-45}
+                textAnchor="end"
+              />
+              <YAxis 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 10, fontWeight: 700, fill: '#1B3129', opacity: 0.6 }}
+              />
+              <Tooltip 
+                cursor={{ fill: '#004225', opacity: 0.05 }}
+                contentStyle={{ 
+                  borderRadius: '16px', 
+                  border: 'none', 
+                  boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                  padding: '12px'
+                }}
+                itemStyle={{ fontSize: '12px', fontWeight: 700, color: '#004225' }}
+                labelStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: '#1B3129', opacity: 0.4, marginBottom: '4px' }}
+              />
+              <Bar 
+                dataKey="fibre_stock_t" 
+                name="Fibre Stock" 
+                radius={[8, 8, 0, 0]}
+                barSize={40}
+              >
+                {resources.map((_entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={index % 2 === 0 ? '#004225' : '#F59E0B'} 
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HarvestEngine = ({ form, setForm, errors = {}, loading, result, submit, history, getSpeciesForCrop }: any) => {
+  const { t, language } = useLanguage();
+  return (
+    <div className="grid lg:grid-cols-3 gap-12">
+      <div className="lg:col-span-1">
+        <form onSubmit={submit} className="glass-card p-10 border-brand-green/5 flex flex-col gap-8">
+          <div>
+            <h3 className="text-2xl font-serif text-brand-green mb-2">{t("dss.engineParameters")}</h3>
+            <p className="text-xs text-brand-ink/40 font-bold uppercase tracking-widest">{t("dss.optimiseProductYield")}</p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{t("dss.cropType")}</label>
+                {errors.crop && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.crop}</span>}
+              </div>
+              <select 
+                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                  errors.crop ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                }`}
+                value={form.crop}
+                onChange={(e) => setForm({ ...form, crop: e.target.value })}
+              >
+                <option>Bamboo</option>
+                <option>Arecanut</option>
+                <option>Rubber</option>
+                <option>Agarwood</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{t("common.district")}</label>
+                {errors.district && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.district}</span>}
+              </div>
+              <select 
+                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                  errors.district ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                }`}
+                value={form.district}
+                onChange={(e) => setForm({ ...form, district: e.target.value })}
+              >
+                <option value="">{t("dss.districtSelect")}</option>
+                <option>Unakoti</option>
+                <option>North Tripura</option>
+                <option>Dhalai</option>
+                <option>Sepahijala</option>
+                <option>Gomati</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{t("dss.species")}</label>
+                {errors.species && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.species}</span>}
+              </div>
+              <select 
+                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                  errors.species ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                }`}
+                value={form.species}
+                onChange={(e) => setForm({ ...form, species: e.target.value })}
+              >
+                <option value="">{language === 'bn' ? "জাত নির্বাচন করুন" : language === 'kok' ? "Buphang variety phiadi" : "Select Variety"}</option>
+                {getSpeciesForCrop(form.crop).map((s: string) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">
+                    {form.crop === 'Bamboo' ? (language === 'bn' ? 'বাঁশের বয়স' : language === 'kok' ? 'Wa Bisi' : 'Clump Age') : form.crop === 'Agarwood' ? (language === 'bn' ? 'গাছের বয়স' : language === 'kok' ? 'Buphang Bisi' : 'Tree Age') : (language === 'bn' ? 'রোপণ বছর' : language === 'kok' ? 'Bagwkma Bisi' : 'Planted Year')}
+                  </label>
+                  {errors.age && <span className="text-[8px] text-red-500 font-bold uppercase">{errors.age}</span>}
+                </div>
+                <input 
+                  type="number"
+                  className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                    errors.age ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                  }`}
+                  value={form.age}
+                  onChange={(e) => setForm({ ...form, age: parseInt(e.target.value) })}
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{t("dss.season")}</label>
+                  {errors.season && <span className="text-[8px] text-red-500 font-bold uppercase">{errors.season}</span>}
+                </div>
+                <select 
+                  className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                    errors.season ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                  }`}
+                  value={form.season}
+                  onChange={(e) => setForm({ ...form, season: e.target.value })}
+                >
+                  <option value="">{language === 'bn' ? "ঋতু নির্বাচন" : language === 'kok' ? "Halok phiadi" : "Select Season"}</option>
+                  <option>Winter</option>
+                  <option>Monsoon</option>
+                  <option>Summer</option>
+                  <option>Pre-Monsoon</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{language === 'bn' ? "রোপণের ঘনত্ব (প্রতি হেক্টর)" : language === 'kok' ? "Bagwkma density (ha)" : "Density (culms/hc)"}</label>
+                {errors.density && <span className="text-[10px] text-red-500 font-bold uppercase">{errors.density}</span>}
+              </div>
+              <input 
+                type="number"
+                className={`w-full p-4 bg-brand-green/5 border rounded-2xl text-sm font-bold text-brand-ink outline-none transition-all ${
+                  errors.density ? 'border-red-500 bg-red-50' : 'border-brand-green/10 focus:border-brand-green'
+                }`}
+                value={form.density}
+                onChange={(e) => setForm({ ...form, density: parseInt(e.target.value) })}
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit"
+            disabled={loading}
+            className="w-full py-5 bg-brand-green text-white rounded-2xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-brand-ink transition-all disabled:opacity-50"
+          >
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
+            {t("common.optimize")}
+          </button>
+        </form>
+      </div>
+
+      <div className="lg:col-span-2 space-y-12">
+        {result ? (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="glass-card p-12 border-brand-orange/20 border-l-[12px] border-l-brand-orange bg-brand-orange/[0.02]"
+          >
+            <div className="flex items-center gap-3 mb-8">
+              <div className="p-3 bg-brand-orange text-white rounded-2xl">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-3xl font-serif text-brand-ink">{t("dss.recommendation")}</h3>
+                <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Gemini 1.5 Flash Insight</p>
+              </div>
+            </div>
+            <div className="prose prose-sm text-brand-ink/70 max-w-none space-y-6">
+              {result.split('\n\n').map((para, i) => (
+                <p key={i} className="text-lg leading-relaxed font-medium">{para}</p>
+              ))}
+            </div>
+          </motion.div>
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center glass-card border-brand-green/5 p-12 text-center opacity-40">
+            <div className="p-6 bg-brand-green/10 rounded-full mb-6">
+              <BarChart3 className="w-12 h-12 text-brand-green" />
+            </div>
+            <h3 className="text-2xl font-serif">{language === 'bn' ? "ইনপুটের জন্য অপেক্ষা করা হচ্ছে" : language === 'kok' ? "Param hwi naidi" : "Awaiting Input"}</h3>
+            <p className="text-xs font-bold uppercase tracking-widest mt-2">{language === 'bn' ? "পরামর্শ পেতে প্যারামিটারগুলি সামঞ্জস্য করুন" : language === 'kok' ? "Adjust parameters to generate harvest advice" : "Adjust parameters to generate harvest advice"}</p>
+          </div>
+        )}
+
+        <div className="glass-card overflow-hidden border-brand-green/5">
+          <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02] flex justify-between items-center">
+            <h3 className="text-2xl font-serif text-brand-green">{t("dss.recentHistory")}</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="bg-brand-green/[0.04]">
+                <tr>
+                  <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{language === 'bn' ? "সময়কাল" : "Timestamp"}</th>
+                  <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("common.district")}</th>
+                  <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{language === 'bn' ? "প্যারামিটারসমূহ" : "Parameters"}</th>
+                  <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{language === 'bn' ? "পর্যবেক্ষণ" : "Insight Snippet"}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-brand-green/5">
               {history.map((h: any) => (
                 <tr key={h.id} className="hover:bg-brand-green/[0.02]">
                   <td className="px-8 py-6 text-xs text-brand-ink/50 leading-tight">
@@ -670,34 +692,30 @@ const HarvestEngine = ({ form, setForm, errors = {}, loading, result, submit, hi
         </div>
       </div>
     </div>
-  </div>
-);
+    </div>
+  );
+};
 
 const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActivity[], setActivities: React.Dispatch<React.SetStateAction<SHGActivity[]>> }) => {
+  const { t, language } = useLanguage();
   const [filterDistrict, setFilterDistrict] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingActivity, setEditingActivity] = useState<SHGActivity | null>(null);
 
   const calculateStatus = (lastHarvest: string, income: number): 'Active' | 'Pending' | 'Inactive' => {
-    // Current date for prototype evaluation is May 2026
     const now = new Date(2026, 4, 9); // May 9, 2026
-    
     const [month, year] = lastHarvest.split(' ');
     const monthMap: Record<string, number> = {
       'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
       'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
     };
-    
     const harvestDate = new Date(parseInt(year), monthMap[month] || 0, 1);
-    
-    // Calculate difference in months
     const diffMonths = (now.getFullYear() - harvestDate.getFullYear()) * 12 + (now.getMonth() - harvestDate.getMonth());
 
     if (diffMonths > 6 && income < 10000) {
       return 'Inactive';
     }
-    
     if (diffMonths <= 2 && income > 100000) return 'Active';
     return 'Pending';
   };
@@ -713,7 +731,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
   );
 
   const handleDelete = (id: string) => {
-    if (window.confirm("Are you sure you want to delete this record?")) {
+    if (window.confirm(language === 'bn' ? "আপনি কি নিশ্চিত যে এই রেকর্ডটি ডিলিট করতে চান?" : language === 'kok' ? "Bhaithang record kakna bagwi nang tongdi?" : "Are you sure you want to delete this record?")) {
       setActivities(prev => prev.filter(a => a.id !== id));
     }
   };
@@ -772,14 +790,14 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
   return (
     <div className="space-y-12">
       <div className="grid md:grid-cols-3 gap-8">
-        <MetricCard title="Active SHGs" value={processedActivities.filter(a => a.status === 'Active').length} icon={Users} />
-        <MetricCard title="Total Volume Logged" value={`${processedActivities.reduce((acc, a) => acc + a.volume_t, 0)} t`} icon={Leaf} />
-        <MetricCard title="Income Generated" value={`₹ ${processedActivities.reduce((acc, a) => acc + a.income_inr, 0).toLocaleString()}`} icon={TrendingUp} color="brand-orange" />
+        <MetricCard title={language === 'bn' ? "সক্রিয় স্বনির্ভর গোষ্ঠী" : language === 'kok' ? "Active SHG cooperatives" : "Active SHGs"} value={processedActivities.filter(a => a.status === 'Active').length} icon={Users} />
+        <MetricCard title={language === 'bn' ? "মোট সংগৃহীত পরিমাণ" : language === 'kok' ? "Total wa logged" : "Total Volume Logged"} value={`${processedActivities.reduce((acc, a) => acc + a.volume_t, 0)} t`} icon={Leaf} />
+        <MetricCard title={t("common.totalEarnings")} value={`₹ ${processedActivities.reduce((acc, a) => acc + a.income_inr, 0).toLocaleString()}`} icon={TrendingUp} color="brand-orange" />
       </div>
 
       <div className="glass-card border-brand-green/5 overflow-hidden">
         <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02] flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <h3 className="text-2xl font-serif text-brand-green">Cooperative Activity Ledger</h3>
+          <h3 className="text-2xl font-serif text-brand-green">{t("common.shgAct")}</h3>
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-brand-green/10">
               <Filter className="w-4 h-4 text-brand-orange" />
@@ -788,13 +806,12 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
                 value={filterDistrict}
                 onChange={(e) => setFilterDistrict(e.target.value)}
               >
-                <option>All</option>
+                <option value="All">{language === 'bn' ? "সব জেলা" : language === 'kok' ? "Khor rok" : "All"}</option>
                 <option>Unakoti</option>
                 <option>North Tripura</option>
                 <option>Dhalai</option>
                 <option>Sepahijala</option>
                 <option>Gomati</option>
-                <option>West Tripura</option>
               </select>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-brand-green/10">
@@ -804,7 +821,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
               >
-                <option>All Status</option>
+                <option value="All">{language === 'bn' ? "সব অবস্থা" : language === 'kok' ? "Aungmung rok" : "All Status"}</option>
                 <option>Active</option>
                 <option>Pending</option>
                 <option>Inactive</option>
@@ -814,7 +831,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
               onClick={() => { setEditingActivity(null); setIsModalOpen(true); }}
               className="px-6 py-2.5 bg-brand-green text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-brand-ink transition-all"
             >
-              <Plus className="w-4 h-4" /> Log New Entry
+              <Plus className="w-4 h-4" /> {t("common.addActivity")}
             </button>
           </div>
         </div>
@@ -822,16 +839,16 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
           <table className="w-full text-left">
             <thead className="bg-brand-green/[0.04]">
               <tr>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Cooperative</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">District</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Last Harvest</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Volume (t)</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Income (₹)</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">Status</th>
-                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40 text-right">Actions</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("dss.cooperativeName")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("common.district")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{language === 'bn' ? "সর্বশেষ ফসল কাটা" : language === 'kok' ? "Next harvest" : "Last Harvest"}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("common.volume")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("common.income")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40">{t("common.status")}</th>
+                <th className="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-brand-ink/40 text-right">{t("common.actions")}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-brand-green/5">
+            <tbody className="divide-y divide-brand-green/3 border-brand-green/5">
               <AnimatePresence initial={false}>
                 {filtered.map((a) => (
                   <motion.tr 
@@ -843,7 +860,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
                     className="hover:bg-brand-green/[0.02] group/row transition-all"
                   >
                     <td className="px-8 py-6 font-bold text-brand-ink flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-brand-green/10 flex items-center justify-center text-brand-green">
+                      <div className="w-8 h-8 rounded-lg bg-brand-green/10 flex items-center justify-center text-brand-green font-serif">
                         {a.cooperative_name[0]}
                       </div>
                       {a.cooperative_name}
@@ -883,7 +900,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-8 py-20 text-center text-brand-ink/40 text-xs font-bold uppercase tracking-widest">
-                    No activities found matching filters
+                    {language === 'bn' ? "আকাঙ্ক্ষিত ফিল্টারে কোনো তথ্য মেলেনি" : "No activities found matching filters"}
                   </td>
                 </tr>
               )}
@@ -895,37 +912,37 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
       {/* Entry Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-brand-ink/40 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsModalOpen(false)}
-              className="absolute inset-0 bg-brand-ink/60 backdrop-blur-sm"
+              className="absolute inset-0"
             />
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-lg bg-white rounded-[40px] shadow-2xl overflow-hidden"
+              className="relative w-full max-w-lg bg-white rounded-[40px] shadow-2xl overflow-hidden z-20"
             >
               <div className="p-8 bg-brand-green flex justify-between items-center text-white">
                 <div>
-                  <h3 className="text-2xl font-serif">{editingActivity ? "Update" : "Log New"} Entry</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Cooperative Activity Ledger</p>
+                  <h3 className="text-2xl font-serif">{editingActivity ? (language === 'bn' ? "তথ্য পরিবর্তন" : language === 'kok' ? "Mukhra tuchodi" : "Update") : (language === 'bn' ? "নতুন তথ্য" : language === 'kok' ? "Log gwdan" : "Log New")}</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">{t("common.shgAct")}</p>
                 </div>
                 <button 
                   onClick={() => setIsModalOpen(false)}
-                  className="p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-all"
+                   className="p-3 bg-white/10 rounded-2xl hover:bg-white/20 transition-all text-white border-none"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-6 h-6 animate-pulse" />
                 </button>
               </div>
               
-              <form onSubmit={handleSubmit} className="p-10 space-y-8">
+              <form onSubmit={handleSubmit} className="p-10 space-y-8 max-h-[80vh] overflow-y-auto">
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Cooperative Name</label>
+                    <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{t("dss.cooperativeName")}</label>
                     <input 
                       required
                       type="text"
@@ -938,7 +955,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
 
                   <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">District</label>
+                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{t("common.district")}</label>
                       <select 
                         className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
                         value={form.district}
@@ -949,11 +966,10 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
                         <option>Dhalai</option>
                         <option>Sepahijala</option>
                         <option>Gomati</option>
-                        <option>West Tripura</option>
                       </select>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Last Harvest Date</label>
+                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{language === 'bn' ? "ফসল সংগ্রহের তারিখ" : language === 'kok' ? "Bagwkmung jora" : "Last Harvest Date"}</label>
                       <input 
                         required
                         type="text"
@@ -967,7 +983,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
 
                   <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Volume (tonnes)</label>
+                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{language === 'bn' ? "পরিমাণ (টন)" : language === 'kok' ? "Kotor Volume (t)" : "Volume (tonnes)"}</label>
                       <input 
                         required
                         type="number"
@@ -977,14 +993,14 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Income Generated (₹)</label>
-                      <input 
-                        required
-                        type="number"
-                        className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
-                        value={form.income_inr}
-                        onChange={(e) => setForm({ ...form, income_inr: parseInt(e.target.value) || 0 })}
-                      />
+                       <label className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{t("common.income")}</label>
+                       <input 
+                         required
+                         type="number"
+                         className="w-full p-4 bg-brand-green/5 border border-brand-green/10 rounded-2xl text-sm font-bold text-brand-ink outline-none focus:border-brand-green transition-all"
+                         value={form.income_inr}
+                         onChange={(e) => setForm({ ...form, income_inr: parseInt(e.target.value) || 0 })}
+                       />
                     </div>
                   </div>
                 </div>
@@ -992,8 +1008,8 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
                 <div className="p-6 bg-brand-green/5 rounded-[24px] border border-brand-green/5">
                   <div className="flex justify-between items-center">
                     <div>
-                      <div className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">Auto-Calculated Status</div>
-                      <div className="text-lg font-serif text-brand-green">Preview</div>
+                      <div className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">{language === 'bn' ? "স্বয়ংক্রিয়ভাবে গণনা অবস্থা" : "Auto-Calculated Status"}</div>
+                      <div className="text-lg font-serif text-brand-green">{language === 'bn' ? "প্রাকদর্শন" : "Preview"}</div>
                     </div>
                     <span className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                       calculateStatus(form.last_harvest_date, form.income_inr) === 'Active' ? 'bg-brand-green text-white' :
@@ -1009,7 +1025,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
                   type="submit"
                   className="w-full py-5 bg-brand-green text-white rounded-2xl font-bold uppercase tracking-widest text-xs shadow-xl shadow-brand-green/20 hover:bg-brand-ink transition-all"
                 >
-                  {editingActivity ? "Save Changes" : "Create Entry"}
+                  {editingActivity ? (language === 'bn' ? "পরিবর্তনগুলো সংরক্ষণ করুন" : language === 'kok' ? "Romdi key" : "Save Changes") : (language === 'bn' ? "রেকর্ড সংরক্ষণ করুন" : language === 'kok' ? "Log key" : "Create Entry")}
                 </button>
               </form>
             </motion.div>
@@ -1021,6 +1037,7 @@ const SHGActivitySection = ({ activities, setActivities }: { activities: SHGActi
 };
 
 const CarbonReplantingSection = ({ resources, activities }: { resources: DistrictResource[], activities: SHGActivity[] }) => {
+  const { t, language } = useLanguage();
   const totalHarvested = activities.reduce((acc, a) => acc + a.volume_t, 0);
   const totalReplanted = totalHarvested * 1.25; // Target ratio 1:1.25
   const co2Sequestered = totalHarvested * 0.1; // 10% estimation
@@ -1039,17 +1056,17 @@ const CarbonReplantingSection = ({ resources, activities }: { resources: Distric
   return (
     <div className="space-y-12">
       <div className="grid md:grid-cols-4 gap-8">
-        <MetricCard title="Total Harvested" value={`${totalHarvested.toLocaleString()} t`} icon={Download} />
-        <MetricCard title="Total Replanted" value={`${totalReplanted.toLocaleString()} t`} icon={Trees} color="brand-green" />
-        <MetricCard title="Compliance %" value="125 %" icon={ShieldCheck} />
-        <MetricCard title="CO₂ Sequestered" value={`${co2Sequestered.toLocaleString()} t`} icon={Loader2} color="brand-orange" />
+        <MetricCard title={language === 'bn' ? "মোট সংগৃহীত পরিমাণ" : language === 'kok' ? "Bahaithang wa" : "Total Harvested"} value={`${totalHarvested.toLocaleString()} t`} icon={Download} />
+        <MetricCard title={language === 'bn' ? "মোট পুনরুৎপাদিত" : language === 'kok' ? "Replanted wa" : "Total Replanted"} value={`${totalReplanted.toLocaleString()} t`} icon={Trees} color="brand-green" />
+        <MetricCard title={language === 'bn' ? "পালন শতকরা" : language === 'kok' ? "Compliance kotor" : "Compliance %"} value="125 %" icon={ShieldCheck} />
+        <MetricCard title={language === 'bn' ? "আবদ্ধ কার্বন ডাই অক্সাইড" : language === 'kok' ? "CO₂ Sequestered" : "CO₂ Sequestered"} value={`${co2Sequestered.toLocaleString()} t`} icon={Loader2} color="brand-orange" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 glass-card p-10 border-brand-green/5">
           <div className="flex justify-between items-center mb-8">
-            <h3 className="text-2xl font-serif text-brand-green">District Replanting Compliance</h3>
-            <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em]">Live Tracking</p>
+            <h3 className="text-2xl font-serif text-brand-green">{language === 'bn' ? "জেলা ভিত্তিক পুনরুৎপাদন বিন্যাস" : "District Replanting Compliance"}</h3>
+            <p className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-[0.2em]">{language === 'bn' ? "সরাসরি পর্যবেক্ষণ" : "Live Tracking"}</p>
           </div>
           <div className="space-y-8">
             {districtStats.map(r => (
@@ -1059,10 +1076,10 @@ const CarbonReplantingSection = ({ resources, activities }: { resources: Distric
                     <div className="text-xs font-bold text-brand-ink">{r.district}</div>
                     <div className="flex gap-4 mt-1">
                       <div className="text-[9px] text-brand-ink/40 font-bold uppercase tracking-widest">
-                        Harvested: <span className="text-brand-ink">{r.harvested}t</span>
+                        {language === 'bn' ? "সংগৃহীত" : "Harvested"}: <span className="text-brand-ink">{r.harvested}t</span>
                       </div>
                       <div className="text-[9px] text-brand-ink/40 font-bold uppercase tracking-widest">
-                        Replanted: <span className="text-brand-green">{r.replanted.toFixed(0)}t</span>
+                        {language === 'bn' ? "পুনরুৎপাদিত" : "Replanted"}: <span className="text-brand-green">{r.replanted.toFixed(0)}t</span>
                       </div>
                     </div>
                   </div>
@@ -1090,28 +1107,28 @@ const CarbonReplantingSection = ({ resources, activities }: { resources: Distric
         </div>
 
         <div className="lg:col-span-1 glass-card p-10 border-brand-orange/20 bg-brand-orange/[0.02]">
-          <h3 className="text-2xl font-serif text-brand-green mb-6">Carbon Credit Estimate</h3>
+          <h3 className="text-2xl font-serif text-brand-green mb-6">{language === 'bn' ? "কার্বন ক্রেডিট প্রাক্কলন" : "Carbon Credit Estimate"}</h3>
           <div className="p-8 bg-white rounded-3xl border border-brand-orange/10 mb-8">
-            <div className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest mb-2">Total Credits (FY26)</div>
+            <div className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest mb-2">{language === 'bn' ? "মোট ক্রেডিট (অর্থবছর ২৬)" : "Total Credits (FY26)"}</div>
             <div className="text-5xl font-serif text-brand-orange mb-4">{credits.toLocaleString()}</div>
             <div className="text-[10px] font-bold text-brand-ink leading-relaxed">
-              Based on sequestration formula: <br />
+              {language === 'bn' ? "কার্বন স্থায়ীকরণ সূত্র:" : "Based on sequestration formula:"} <br />
               <span className="opacity-40 italic">CO₂ t ÷ 10 = Credits</span>
             </div>
           </div>
           <div className="space-y-6">
             <div>
-              <div className="text-[9px] uppercase font-bold text-brand-ink/40 tracking-widest mb-1">Estimated Market Value</div>
+              <div className="text-[9px] uppercase font-bold text-brand-ink/40 tracking-widest mb-1">{language === 'bn' ? "আনুমানিক বাজার মূল্য" : "Estimated Market Value"}</div>
               <div className="text-3xl font-serif text-brand-green">₹ {creditValue.toLocaleString()}</div>
             </div>
             <p className="text-[11px] text-brand-ink/50 font-medium italic">
-              "Indicative only. Formal audit required for monetisation."
+              {language === 'bn' ? "\"শুধুমাত্র নির্দেশক। মুদ্রীকরণের জন্য আনুষ্ঠানিক নিরীক্ষা প্রয়োজন।\"" : "\"Indicative only. Formal audit required for monetisation.\""}
             </p>
             <button 
               onClick={() => window.print()}
               className="w-full py-4 border-2 border-brand-green text-brand-green rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-brand-green hover:text-white transition-all flex items-center justify-center gap-2"
             >
-              <Download className="w-4 h-4" /> Download Carbon Report
+              <Download className="w-4 h-4" /> {language === 'bn' ? "কার্বন রিপোর্ট ডাউনলোড করুন" : language === 'kok' ? "Report download di" : "Download Carbon Report"}
             </button>
           </div>
         </div>
@@ -1201,6 +1218,7 @@ const CarbonReplantingSection = ({ resources, activities }: { resources: Distric
 };
 
 const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (id: string) => void }) => {
+  const { t, language } = useLanguage();
   const [filterDistrict, setFilterDistrict] = useState("All");
   const [filterSeverity, setFilterSeverity] = useState("All");
   const [sortBy, setSortBy] = useState<"date" | "severity">("date");
@@ -1249,7 +1267,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
               alert.severity === 'Warning' ? 'bg-amber-100 text-amber-700' :
               'bg-brand-green/10 text-brand-green'
             }`}>
-              {alert.severity} Alert
+              {alert.severity} {language === 'bn' ? "সতর্কতা" : "Alert"}
             </span>
             <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">
               {alert.district} • {new Date(alert.detected_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
@@ -1259,7 +1277,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
           <p className="text-sm text-brand-ink/80 leading-relaxed max-w-2xl">{alert.description}</p>
           <div className="flex items-center gap-3 p-4 bg-brand-green/[0.03] rounded-2xl w-fit">
             <Info className="w-4 h-4 text-brand-orange" />
-            <span className="text-xs font-bold text-brand-green">Action: {alert.action}</span>
+            <span className="text-xs font-bold text-brand-green">{language === 'bn' ? "পদক্ষেপ" : "Action"}: {alert.action}</span>
           </div>
         </div>
         {!alert.resolved && (
@@ -1267,7 +1285,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
             onClick={() => onResolve(alert.id)}
             className="self-end md:self-center px-8 py-4 bg-brand-green text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-brand-green/20 hover:bg-brand-ink transition-all"
           >
-            Mark Resolved
+            {language === 'bn' ? "সমাধান করা হয়েছে চিহ্নিত করুন" : "Mark Resolved"}
           </button>
         )}
       </div>
@@ -1286,7 +1304,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
       <div className="glass-card p-6 border-brand-green/5 flex flex-wrap items-center gap-6">
         <div className="flex items-center gap-3">
           <Filter className="w-4 h-4 text-brand-orange" />
-          <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Filter By</span>
+          <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">{language === 'bn' ? "ফিল্টার করুন" : language === 'kok' ? "Khubdi" : "Filter By"}</span>
         </div>
         
         <div className="flex items-center gap-4 flex-wrap">
@@ -1295,7 +1313,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
             onChange={(e) => setFilterDistrict(e.target.value)}
             className="bg-brand-paper border border-brand-green/10 rounded-xl px-4 py-2 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-brand-green transition-all cursor-pointer"
           >
-            {districts.map(d => <option key={d} value={d}>District: {d}</option>)}
+            {districts.map(d => <option key={d} value={d}>{language === 'bn' ? `জেলা: ${d}` : `District: ${d}`}</option>)}
           </select>
 
           <select 
@@ -1303,7 +1321,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
             onChange={(e) => setFilterSeverity(e.target.value)}
             className="bg-brand-paper border border-brand-green/10 rounded-xl px-4 py-2 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-brand-green transition-all cursor-pointer"
           >
-            {severities.map(s => <option key={s} value={s}>Severity: {s}</option>)}
+            {severities.map(s => <option key={s} value={s}>{language === 'bn' ? `গুরুত্ব: ${s}` : `Severity: ${s}`}</option>)}
           </select>
 
           {(filterDistrict !== "All" || filterSeverity !== "All") && (
@@ -1311,7 +1329,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
               onClick={() => { setFilterDistrict("All"); setFilterSeverity("All"); }}
               className="text-[10px] font-bold text-brand-orange hover:text-brand-orange-dark uppercase tracking-widest transition-colors"
             >
-              Clear Filters
+              {language === 'bn' ? "ফিল্টার মুছে ফেলুন" : "Clear Filters"}
             </button>
           )}
         </div>
@@ -1320,19 +1338,19 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
 
         <div className="flex items-center gap-3 ml-auto">
           <TrendingUp className="w-4 h-4 text-brand-green" />
-          <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">Sort By</span>
+          <span className="text-[10px] font-bold text-brand-ink/40 uppercase tracking-widest">{language === 'bn' ? "ক্রমানুসার" : language === 'kok' ? "Phaidi lai" : "Sort By"}</span>
           <div className="flex bg-brand-paper border border-brand-green/10 rounded-xl overflow-hidden">
             <button 
               onClick={() => setSortBy("date")}
               className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === "date" ? "bg-brand-green text-white" : "text-brand-ink/40 hover:bg-brand-green/5"}`}
             >
-              Date
+              {language === 'bn' ? "তারিখ" : "Date"}
             </button>
             <button 
               onClick={() => setSortBy("severity")}
               className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${sortBy === "severity" ? "bg-brand-green text-white" : "text-brand-ink/40 hover:bg-brand-green/5"}`}
             >
-              Severity
+              {language === 'bn' ? "গুরুত্ব" : "Severity"}
             </button>
           </div>
         </div>
@@ -1340,9 +1358,9 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
 
       <div className="space-y-8">
         <div className="flex items-center gap-4">
-          <h3 className="text-2xl font-serif text-brand-green">Active Alerts</h3>
+          <h3 className="text-2xl font-serif text-brand-green">{language === 'bn' ? "সক্রিয় সতর্কবার্তা" : "Active Alerts"}</h3>
           <div className="h-px flex-1 bg-brand-green/10" />
-          <span className="px-4 py-1.5 bg-red-500 text-white rounded-full text-[10px] font-bold">{unresolved.length} UNRESOLVED</span>
+          <span className="px-4 py-1.5 bg-red-500 text-white rounded-full text-[10px] font-bold">{unresolved.length} {language === 'bn' ? "অমীমাংসিত" : "UNRESOLVED"}</span>
         </div>
         <div className="grid gap-6">
           {unresolved.length > 0 ? (
@@ -1350,7 +1368,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
           ) : (
             <div className="p-12 text-center glass-card border-brand-green/5 opacity-50">
               <CheckCircle2 className="w-8 h-8 text-brand-green mx-auto mb-4" />
-              <p className="text-xs font-bold uppercase tracking-widest">No active alerts matching filters</p>
+              <p className="text-xs font-bold uppercase tracking-widest">{language === 'bn' ? "ফিল্টারের সাথে মেলে এমন কোনো সতর্কবার্তা পাওয়া যায়নি" : "No active alerts matching filters"}</p>
             </div>
           )}
         </div>
@@ -1359,7 +1377,7 @@ const AlertsSection = ({ alerts, onResolve }: { alerts: DSSAlert[], onResolve: (
       {resolved.length > 0 && (
         <div className="pt-12 space-y-8">
           <div className="flex items-center gap-4">
-            <h3 className="text-2xl font-serif text-brand-ink/40">Resolved Log</h3>
+            <h3 className="text-2xl font-serif text-brand-ink/40">{language === 'bn' ? "সমাধানকৃত নথি" : "Resolved Log"}</h3>
             <div className="h-px flex-1 bg-brand-green/10" />
           </div>
           <div className="grid gap-6 opacity-60 grayscale">
