@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 650" width="100%" height="100%">
+  <!-- Definitions for gradients and shadows -->
+  <defs>
+    <!-- Organic subtle shadows for a premium layered feel -->
+    <filter id="subtle-shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#141414" flood-opacity="0.06" />
+    </filter>
+  </defs>
+
+  <!-- Centered Logo Group -->
+  <g transform="translate(10, 15)" filter="url(#subtle-shadow)">
+    
+    <!-- 1. THE GREEN BAMBOO STALK & LEAVES (Left & Center) -->
+    <!-- Deep Brand Green: #2D593E -->
+    <g fill="#2D593E">
+      <!-- Upper Bamboo Segment -->
+      <path d="M 338,105 
+               C 338,101, 342,98, 350,98 
+               C 358,98, 362,101, 362,105 
+               L 362,180 
+               C 362,185, 358,188, 350,188 
+               C 342,188, 338,185, 338,180 
+               Z" />
+      
+      <!-- Middle Bamboo Segment -->
+      <path d="M 338,197 
+               C 338,193, 342,190, 350,190 
+               C 358,190, 362,193, 362,197 
+               L 362,272 
+               C 362,277, 358,280, 350,280 
+               C 342,280, 338,277, 338,272 
+               Z" />
+               
+      <!-- Bottom Bamboo Segment -->
+      <path d="M 338,289 
+               C 338,285, 342,282, 350,282 
+               C 358,282, 362,285, 362,289 
+               L 362,364 
+               C 362,369, 358,372, 350,372 
+               C 342,372, 338,369, 338,364 
+               Z" />
+
+      <!-- Node Joints (The horizontal ridge details on the bamboo) -->
+      <!-- Node Joint 1 (Upper-Middle intersection) -->
+      <path d="M 334,188 
+               C 334,184, 366,184, 366,188 
+               C 366,192, 334,192, 334,188 
+               Z" />
+      <!-- Node Joint 2 (Middle-Bottom intersection) -->
+      <path d="M 334,280 
+               C 334,276, 366,276, 366,280 
+               C 366,284, 334,284, 334,280 
+               Z" />
+
+      <!-- Top Nodes Leaf Growth (Symmetric Crown flaring out) -->
+      <!-- Upper Left Leaf (Pointing up-left) -->
+      <path d="M 342,112 
+               C 328,95, 305,75, 275,70 
+               C 270,69, 268,73, 272,77 
+               C 292,97, 318,125, 344,138 
+               C 346,139, 348,138, 348,135 
+               Z" />
+
+      <!-- Upper Right Leaf (Pointing up-right) -->
+      <path d="M 358,112 
+               C 372,95, 395,75, 425,70 
+               C 430,69, 432,73, 428,77 
+               C 408,97, 382,125, 356,138 
+               C 354,139, 352,138, 352,135 
+               Z" />
+
+      <!-- Middle Node Leaf (Pointing left-up) -->
+      <path d="M 342,204 
+               C 328,187, 305,167, 275,162 
+               C 270,161, 268,165, 272,169 
+               C 292,189, 318,217, 344,230 
+               C 346,231, 348,230, 348,227 
+               Z" />
+
+      <!-- Outer Swivel/Crescent Sweep (Completes the circular frame on the bottom-left) -->
+      <!-- Starts near middle-left node joint, sweeps down, forms dynamic crescent -->
+      <path d="M 336,290 
+               C 285,290, 262,350, 315,410 
+               C 334,432, 364,438, 364,438 
+               C 364,438, 336,432, 318,405 
+               C 296,372, 305,315, 336,290 
+               Z" />
+    </g>
+
+    <!-- 2. THE GOLDEN RECYCLING MOAT / LOOP (Right half) -->
+    <!-- Warm Corporate Gold: #C59B4B -->
+    <g fill="#C59B4B">
+      <!-- Upper Gold Arrowhead (Pointing down-inward and completing top portion of loop) -->
+      <path d="M 436,132 
+               L 410,182 
+               L 435,178 
+               C 410,215, 380,240, 380,240 
+               C 380,240, 435,215, 452,175 
+               L 472,184 
+               Z" />
+      
+      <!-- Main Swirling Recycle Arrow Ribbon -->
+      <!-- Sweeps from upper right loop around to the bottom -->
+      <path d="M 454,176 
+               C 498,220, 514,285, 478,340 
+               C 455,375, 412,408, 360,408 
+               C 395,394, 436,368, 452,328 
+               C 475,272, 465,218, 436,178 
+               C 440,177, 448,176, 454,176 
+               Z" />
+
+      <!-- Bottom Gold Arrow (Pointing left towards the base of the bamboo stalk) -->
+      <!-- Completes the circle beautifully -->
+      <path d="M 360,408 
+               L 404,368 
+               L 404,392 
+               C 440,392, 460,360, 460,360 
+               C 460,360, 436,412, 396,412 
+               L 396,436 
+               Z" />
+    </g>
+  </g>
+
+  <!-- 3. BRAND TYPOGRAPHY -->
+  <!-- Set in prominent Sans-Serif tracking, centered below the logo circle -->
+  <text x="400" y="555" font-family="'Inter', system-ui, -apple-system, sans-serif" font-weight="800" font-size="52" letter-spacing="2" text-anchor="middle">
+    <tspan fill="#2D593E">GREEN-TO-</tspan><tspan fill="#C59B4B">GOLD</tspan>
+  </text>
+</svg>

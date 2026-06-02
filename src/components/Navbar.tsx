@@ -63,7 +63,7 @@ export const Navbar = () => {
         <Link to="/" className="flex items-center gap-3 flex-shrink-0 group">
           <div className="relative">
             <img 
-               src="/logo.png" 
+              src="/logo.svg" 
               alt="Green-to-Gold Logo" 
               className="h-10 md:h-14 w-auto object-contain transition-all group-hover:scale-105"
               onError={(e) => {
