@@ -380,7 +380,116 @@ const LP_TRANSLATIONS = {
     pPackagingUses: ["Electronics Packing", "Luxury Fragrance Boxes", "Wine Shippers"],
     pFilmsFeats: ["High Tensile Strength", "Low-Cost Extrusion", "Non-Toxic Residue"],
     pFilmsComp: "Potato Starch, PBAT blands with bamboo micro-cellulose",
-    pFilmsUses: ["E-commerce Mailers", "Fruit & Veg Wraps", "Garment Bags"]
+    pFilmsUses: ["E-commerce Mailers", "Fruit & Veg Wraps", "Garment Bags"],
+    valueProposition: "The Value Proposition",
+    costSavings: "Cost Savings",
+    importedPlywoodLabel: "Imported Plywood",
+    greenToGoldLabel: "Green-to-Gold",
+    costSavingsDetail: "* 54% reduction in construction material costs for Tripura.",
+    carbonImpactLabel: "Carbon Impact",
+    co2PerBoard: "CO2e per Board",
+    carbonImpactDetail: "Net-negative carbon footprint by sequestering bamboo & pineapple waste into durable construction boards.",
+    netZeroPledge: "* Supporting India's Net Zero 2070 pledge through local action.",
+    tonnesWasteSaved: "Tonnes Waste Saved",
+    jobsPerFactory: "Jobs per Mini-Factory",
+    roadmapBadge: "Execution",
+    roadmapTitle: "The Scale Roadmap",
+    roadmapSteps: [
+      {
+        phase: "Phase 1: Validation",
+        title: "Pilot Unit",
+        time: "Current — Month 12",
+        items: ["Unakoti district pilot", "Bio-composite boards focus", "Revenue: ₹3.5–5.5L/month", "18–25 community jobs"]
+      },
+      {
+        phase: "Phase 2: Expansion",
+        title: "Product Growth",
+        time: "Months 6–18",
+        items: ["Moulded tableware addition", "PALF table covers", "Paper pulping feasibility", "ONDC marketplace entry"]
+      },
+      {
+        phase: "Phase 3: Replication",
+        title: "Pan-Tripura",
+        time: "Months 18–36",
+        items: ["One unit per district (8 total)", "Revenue Potential: ₹35–50L/mo", "180–250 direct community jobs", "Bangladesh export gateway"]
+      },
+      {
+        phase: "Phase 4: Global Scale",
+        title: "Export & Furniture",
+        time: "2027 Onwards",
+        items: ["Bamboo laminated lumber", "Full Kraft paper production", "Verified carbon credit tokens", "IKEA supply chain targeting"]
+      }
+    ],
+    processBadge: "Confidential Process Document",
+    processManualTitle: "Complete Industrial Execution Manual",
+    viewPdfMode: "View PDF Mode",
+    manualTOC: "Table of Contents",
+    tcChapters: [
+      "I. Executive Summary",
+      "II. Material Science",
+      "III. Manufacturing",
+      "IV. Standards & ESG"
+    ],
+    revRuralText: "Revolutionizing rural industry.",
+    blueprintText: "This manual serves as the operational blueprint for all farm-gate units under ATSFY Technologies.",
+    pdfTitle: "Execution_Manual_v1.pdf",
+    ofText: "of",
+    confidentialLabel: "Confidential Industrial Manual",
+    page1Title: "I. Executive Summary & Market Mechanics",
+    page1P1: "Tripura operates under a severe \"Plywood Paradox\": importing construction materials at ₹102/sqft from 1,500km away while burning its own raw wealth in the fields.",
+    page1SiliLabel: "Siliguri Corridor Import",
+    page1FarmLabel: "Farm-Gate Production",
+    page1P2: "Our model collapses this contradiction by establishing modular, low-energy manufacturing units at the farm gate. By converting agricultural surplus (pineapple leaf, rice husk, bamboo) into durable bio-composites, we create a circular economy that exports high-value products instead of importing waste costs.",
+    page2Title: "II. Material Science & Bio-Metrics",
+    page2ThType: "Material Type",
+    page2ThCellulose: "Cellulose Content",
+    page2ThRole: "Structural Role",
+    page2ExtractTitle: "Extraction Protocols",
+    page2ExtractText: "Decortication at 500 RPM ensures maximum fibre yield without cellular degradation. Washing at pH 7.2 removes pectins. Solar drying must reach critical 12% moisture limit before binder infusion.",
+    page3Title: "III. Industrial Manufacturing Stages",
+    page3HotPress: "Hot Press Parameters",
+    page3Temp: "TEMP",
+    page3Press: "PRESS",
+    page3Time: "TIME",
+    page3MatForming: "Mat Forming",
+    page3MatFormingText: "Cross-directional layering ensures dimensional stability. We use a graduated density profile (GDP) with higher density surface layers for water resistance.",
+    page3Stages: [
+      { s: "01", t: "Binder Blending", d: "Rotary drum blending with atomized resin spray. Loading 8-12% by weight." },
+      { s: "02", t: "Mould Casting", d: "Cast into heated male-female moulds at 130°C for tableware products." },
+      { s: "03", t: "Final Trimming", d: "Precision cutting using diamond-tipped saws to standard 8x4ft dimensions." }
+    ],
+    page4Title: "IV. Standards, Compliance & Social ESG",
+    page4ComplianceTitle: "Industrial Compliance",
+    page4ComplianceItems: ["IS:12406 (Bio-Composite)", "IS:15778 (Heat Resistance)", "FSSAI Food-Safe Certified", "CARB Phase 2 (Zero-Formaldehyde)"],
+    page4SocialTitle: "Social Ownership",
+    page4Quote: "Ownership is the best catalyst for quality.",
+    page4Participation: "SHG Participation",
+    page4Tribal: "Tribal Youth Leads",
+    page4Equity: "Community Equity",
+    page4Verified: "Verified",
+    visionBadge: "Vision 2030",
+    visionCards: [
+      {
+        title: "Agro-Waste Valorization",
+        desc: "Beyond construction, we're ramping up to produce bio-enzymes, organic fertilizers, and biochar soil amendments.",
+        details: "Leveraging NABARD climate funds to reduce chemical import dependency while healing Tripura's acidic soils."
+      },
+      {
+        title: "Renewable Energy Hubs",
+        desc: "Establishing community biogas plants (SATAT Scheme) and solar-drying units for farm produce.",
+        details: "Powering rural micro-grids and cutting LPG imports to fuel Tripura's 12.46% GSDP growth targets."
+      },
+      {
+        title: "Skill & Market Linkages",
+        desc: "SHG-led micro-factories for rubber products and bamboo handicrafts with direct B2B export pipelines.",
+        details: "ONDC e-commerce integration targeting Bangladesh markets, boosting 'Lakhpati Didi' numbers beyond 1 lakh."
+      },
+      {
+        title: "Water & Irrigation Boost",
+        desc: "Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030, per SDG Vision.",
+        details: "Utilizing agro-waste mulches to conserve soil moisture for year-round horticultural self-reliance."
+      }
+    ]
   },
   bn: {
     heroBadge: "ত্রিপুরায় টেকসই তিসি বর্জ্যভিত্তিক বায়ার ম্যানুফ্যাকচারিং",
@@ -479,7 +588,116 @@ const LP_TRANSLATIONS = {
     pPackagingUses: ["ইলেকট্রনিক্স সরঞ্জাম মোড়ক", "সুগন্ধি বিলাসবহুল বক্স", "কাঁচ বা তরল পাত্র"],
     pFilmsFeats: ["উচ্চ প্রসার্য শক্তি", "সাশ্রয়ী মানের এক্সট্রুশন", "সম্পূর্ণ বিষাক্ত উপাদান মুক্ত"],
     pFilmsComp: "আলুর স্টার্চ এবং বাঁশের মাইক্রো-সেলুলোজ সংমিশ্রণ",
-    pFilmsUses: ["ই-কমার্স মেলিং প্যাকেট", "ফল ও সবজির মোড়ক", "পোশাকের ব্যাগ"]
+    pFilmsUses: ["ই-কমার্স মেলিং প্যাকেট", "ফল ও সবজির মোড়ক", "পোশাকের ব্যাগ"],
+    valueProposition: "মূল্য প্রস্তাবনা",
+    costSavings: "খরচ সাশ্রয়",
+    importedPlywoodLabel: "আমদানিকৃত প্লাইউড",
+    greenToGoldLabel: "গ্রিন-টু-গোল্ড",
+    costSavingsDetail: "* ত্রিপুরার জন্য নির্মাণ সামগ্রীর খরচ ৫৪% হ্রাস।",
+    carbonImpactLabel: "কার্বন প্রভাব",
+    co2PerBoard: "প্রতি বোর্ডে CO2e",
+    carbonImpactDetail: "টেকসই নির্মাণ বোর্ডে বাঁশ এবং আনারসের বর্জ্য ধরে রেখে নেট-নেতিবাচক কার্বন ফুটপ্রিন্ট তৈরি করা।",
+    netZeroPledge: "* স্থানীয় পদক্ষেপের মাধ্যমে ভারতের নেট জিরো ২০৭০ প্রতিশ্রুতিকে সমর্থন করা।",
+    tonnesWasteSaved: "টন বর্জ্য বাঁচানো হয়েছে",
+    jobsPerFactory: "প্রতিটি ক্ষুদ্র কারখানায় কর্মসংস্থান",
+    roadmapBadge: "পরিকল্পিত বাস্তবায়ন",
+    roadmapTitle: "ক্রমপ্রসারণ রোডম্যাপ",
+    roadmapSteps: [
+      {
+        phase: "পর্যায় ১: যাচাইকরণ",
+        title: "পাইলট ইউনিট",
+        time: "বর্তমান — ১২ মাস",
+        items: ["ঊনকোটি জেলা পাইলট ইউনিট", "জৈব-মিশ্র বোর্ডে বিশেষ গুরুত্ব", "রাজস্ব: ৩.৫-৫.৫ লক্ষ/মাস", "১৮-২৫টি গ্রামীণ কর্মসংস্থান"]
+      },
+      {
+        phase: "পর্যায় ২: সম্প্রসারণ",
+        title: "পণ্য বৃদ্ধি",
+        time: "৬-১৮ মাস",
+        items: ["পচনশীল থালা-বাসন ও কাটলারী সংযোজন", "আনারস ফাইবারের টেবিল কভার", "কাগজ তৈরির সম্ভাব্যতা যাচাই", "ওএনডিসি (ONDC) বাজারে প্রবেশ"]
+      },
+      {
+        phase: "পর্যায় ৩: অনুলিপি করণ",
+        title: "সমগ্র ত্রিপুরা জুড়ে",
+        time: "১৮-৩৬ মাস",
+        items: ["প্রতি জেলায় একটি করে ইউনিট (মোট ৮টি)", "সম্ভাব্য রাজস্ব: ৩৫-৫০ লক্ষ/মাস", "১৮০-২৫০টি সরাসরি কাজের সুযোগ", "বাংলাদেশ রপ্তানির করিডোর"]
+      },
+      {
+        phase: "পর্যায় ৪: আন্তর্জাতিক প্রসার",
+        title: "রপ্তানি ও আসবাবপত্র",
+        time: "২০২৭ পরবর্তী",
+        items: ["বাঁশের স্তরিত কাঠ উৎপাদন", "সম্পূর্ণ ক্রাফট পেপার উৎপাদন", "যাচাইকৃত কার্বন ক্রেডিট টোকেন", "আইকেয়া (IKEA) সরবরাহ শৃঙ্খল লক্ষ্য"]
+      }
+    ],
+    processBadge: "গোপনীয় প্রক্রিয়াকরণ নথি",
+    processManualTitle: "সম্পূর্ণ শিল্প বাস্তবায়ন নির্দেশিকা",
+    viewPdfMode: "পিডিএফ ভিউ মোড",
+    manualTOC: "সূচিপত্র",
+    tcChapters: [
+      "I. কার্যনির্বাহী সারসংক্ষেপ",
+      "II. উপাদান বিজ্ঞান",
+      "III. উত্পাদন পর্যায়সমূহ",
+      "IV. মান ও পরিবেশ সামাজিক শাসন (ESG)"
+    ],
+    revRuralText: "গ্রামীণ শিল্পের এক অভূতপূর্ব রূপান্তর।",
+    blueprintText: "এই নির্দেশিকাটি এটিএসএফওয়াই টেকনোলজিসের অধীনে সমস্ত খামার-ভিত্তিক ক্ষুদ্র কারখানার পরিচালনা নীলনকশা হিসাবে কাজ করে।",
+    pdfTitle: "বাস্তবায়ন_নির্দেশিকা_v1.pdf",
+    ofText: "এর মধ্যে",
+    confidentialLabel: "গোপনীয় শিল্প নির্দেশিকা নথি",
+    page1Title: "I. কার্যনির্বাহী সারসংক্ষেপ ও বাজারের কার্যপ্রণালী",
+    page1P1: "ত্রিপুরা এক জটিল 'প্লাইউড প্যারাডক্স'-এর অধীনে কাজ করে: ১,৫০০ কিমি দূরে থেকে বর্গফুটে ১০২ টাকা দরে নির্মাণ সামগ্রী আমদানি করার সাথে সাথেই নিজের মাঠে উৎপাদিত কাঁচা সম্পদ পুড়িয়ে ফেলে।",
+    page1SiliLabel: "শিলিগুড়ি করিডোর আমদানি",
+    page1FarmLabel: "খামার-ভিত্তিক উৎপাদন",
+    page1P2: "আমাদের মডেল খামারের গেটে মডুলার, স্বল্প-শক্তি উৎপাদন ইউনিট স্থাপন করে এই বৈপরীত্যকে ভেঙে দেয়। আনারসের পাতা, ধানের তুষ ও বাঁশের মতো কৃষি বর্জ্যকে টেকসই জৈব-মিশ্র নির্মাণ সামগ্রীতে রূপান্তর করার মাধ্যমে আমরা একটি বৃত্তাকার অর্থনীতি তৈরি করি যা বর্জ্য আমদানির পরিবর্তে উচ্চ-মূল্যের পণ্য রপ্তানি করে।",
+    page2Title: "II. উপাদান বিজ্ঞান ও জৈব-পরিমাপ",
+    page2ThType: "উপাদানের ধরণ",
+    page2ThCellulose: "সেলুলোজের পরিমাণ",
+    page2ThRole: "কাঠামোগত ভূমিকা",
+    page2ExtractTitle: "নিষ্কাশন বিধি",
+    page2ExtractText: "৫০০ আরপিএম (RPM) গতিতে ডিকর্টিকেশন কোষের ক্ষতি ছাড়াই সর্বাধিক ফাইবার ফলন নিশ্চিত করে। ৭.২ পিএইচ (pH) মাত্রায় ধোয়ার ফলে পেক্টিন দূর হয়। বাইন্ডার মিশ্রণের আগে সৌর শুষ্করণে ১২% স্বাভাবিক আর্দ্রতা সীমায় পৌঁছাতে হবে।",
+    page3Title: "III. শিল্প উত্পাদন পর্যায়সমূহ",
+    page3HotPress: "তপ্ত চাপ পরামিতি",
+    page3Temp: "তাপমাত্রা",
+    page3Press: "চাপ",
+    page3Time: "সময়",
+    page3MatForming: "ম্যাট গঠন",
+    page3MatFormingText: "ক্রস-ডাইরেকショナル লেয়ারিং কাঠামোগত স্থিতিশীলতা নিশ্চিত করে। আমরা জল প্রতিরোধের জন্য উচ্চ ঘনত্বের পৃষ্ঠতলের সঙ্গে গ্রাজুয়েটেড ডেনসিটি প্রোফাইল (GDP) ব্যবহার করি।",
+    page3Stages: [
+      { s: "০১", t: "বাইন্ডার মিশ্রণ", d: "অ্যাটমাইজড রেজিন স্প্রে সহ ঘূর্ণায়মান ড্রাম ব্লেন্ডিং। ওজনে ৮-১২% মিশ্রণ।" },
+      { s: "০২", t: "ছাঁচ ঢালাই", d: "থালা-বাসন ও পাত্রের জন্য ১৩০°C তাপমাত্রায় উত্তপ্ত ছাঁচে ঢালাই।" },
+      { s: "০৩", t: "চূড়ান্ত ট্রিম", d: "সাধারণ ৮x৪ ফুট আকারে ডায়মন্ড-টিপড করাত ব্যবহার করে সূক্ষ্ম কাটিং।" }
+    ],
+    page4Title: "IV. মান, কমপ্লায়েন্স ও পরিবেশ সামাজিক শাসন (ESG)",
+    page4ComplianceTitle: "শিল্প কমপ্লায়েন্স",
+    page4ComplianceItems: ["IS:১২৪০৬ (বায়ো-কম্পোজিট)", "IS:১৫৭থ৮ (তাপ প্রতিরোধ)", "এফএসএসএআই (FSSAI) নিরাপদ প্রত্যয়িত", "CARB পর্যায় ২ (শূন্য-ফরমালডিহাইড)"],
+    page4SocialTitle: "সামাজিক মালিকানা",
+    page4Quote: "মালিকানাই হলো গুণের জন্য সবচেয়ে বড় অনুঘটক।",
+    page4Participation: "স্বনির্ভর গোষ্ঠী (SHG) অংশীদারিত্ব",
+    page4Tribal: "উপজাতীয় যুব নেতৃত্ব",
+    page4Equity: "সামাজিক সাম্য বা ইকুইটি",
+    page4Verified: "যাচাইকৃত",
+    visionBadge: "ভিশন ২০৩০",
+    visionCards: [
+      {
+        title: "কৃষি বর্জ্য মূল্যায়ন",
+        desc: "নির্মাণের বাইরেও, আমরা জৈব-এনজাইম, জৈব সার এবং বায়োচার মৃত্তিকা সংশোধনী উত্পাদন করতে বৃদ্ধি করছি।",
+        details: "ত্রিপুরার অম্লীয় মৃত্তিকা নিরাময়ের সময় রাসায়নিক আমদানি নির্ভরতা কমাতে নাবার্ড (NABARD) জলবায়ু তহবিল ব্যবহার করা।"
+      },
+      {
+        title: "নবায়নযোগ্য শক্তি কেন্দ্র",
+        desc: "কৃষি পণ্যের জন্য সম্প্রদায়ভিত্তিক বায়োগ্যাস প্ল্যান্ট (SATAT স্কিম) এবং সৌর-শুকানোর ইউনিট স্থাপন করা।",
+        details: "ত্রিপুরার ১২.৪৬% জিএসডিপি বৃদ্ধির লক্ষ্যমাত্রাকে ত্বরান্বিত করতে গ্রামীণ মাইক্রো-গ্রিড চালিত করা এবং এলপিজি আমদানি কমানো।"
+      },
+      {
+        title: "দক্ষতা ও বাজারের সংযোগ",
+        desc: "সরাসরি বি২বি (B2B) রপ্তানি পাইপলাইন সহ রাবার পণ্য এবং বাঁশের হস্তশিল্পের জন্য স্বনির্ভর গোষ্ঠী পরিচালিত ক্ষুদ্র কারখানা।",
+        details: "ওএনডিসি (ONDC) ই-কমার্স সংহতকরণ যা বাংলাদেশের বাজারকে লক্ষ্য করে 'লখপতি দিদি'-র সংখ্যা ১ লক্ষ ছাড়িয়ে যাবে।"
+      },
+      {
+        title: "জল ও সেচ বৃদ্ধি",
+        desc: "এসডিজি ভিশন অনুসারে ২০৩০ সালের মধ্যে ৪৫% টিএসপি কাভারেজ সম্পন্ন করতে মাইক্রো-সেচ এবং বৃষ্টির জল সংগ্রহ করা।",
+        details: "সারা বছর উদ্যানপালন স্বনির্ভরতার জন্য মাটির আর্দ্রতা রক্ষা করতে কৃষি-বর্জ্য ব্যবহার করা।"
+      }
+    ]
   },
   kok: {
     heroBadge: "Tripura ni Phola-Haste Thungmung Swk",
@@ -578,7 +796,116 @@ const LP_TRANSLATIONS = {
     pPackagingUses: ["Agara luxury boxes", "Electronics boxes", "Fragile bottles"],
     pFilmsFeats: ["High strength films", "Low cost retail wrappers", "Residual non toxic"],
     pFilmsComp: "Potato starch and PLA blend micro-cellulose",
-    pFilmsUses: ["Farming wraps", "Courier custom wrap", "Garment bag retail"]
+    pFilmsUses: ["Farming wraps", "Courier custom wrap", "Garment bag retail"],
+    valueProposition: "Value Proposition",
+    costSavings: "Rang Chom",
+    importedPlywoodLabel: "Imported Plywood",
+    greenToGoldLabel: "Green-to-Gold",
+    costSavingsDetail: "* 54% construction material cost Tripura haste rang chom.",
+    carbonImpactLabel: "Carbon Offset Impact",
+    co2PerBoard: "CO2e per Board",
+    carbonImpactDetail: "Net-negative carbon offset by capturing bamboo and pineapple organic waste into composite boards.",
+    netZeroPledge: "* Net Zero 2070 local alignment support.",
+    tonnesWasteSaved: "Kotor Waste Saved",
+    jobsPerFactory: "Jobs per Factory",
+    roadmapBadge: "Khunchi-Lama",
+    roadmapTitle: "The Scale Roadmap",
+    roadmapSteps: [
+      {
+        phase: "Phase 1: Validation",
+        title: "Pilot Unit",
+        time: "Current — Month 12",
+        items: ["Unakoti district pilot", "Bio-composite boards focus", "Revenue: ₹3.5–5.5L/month", "18–25 community jobs"]
+      },
+      {
+        phase: "Phase 2: Expansion",
+        title: "Product Growth",
+        time: "Months 6–18",
+        items: ["Moulded tableware addition", "PALF table covers", "Paper pulping feasibility", "ONDC marketplace entry"]
+      },
+      {
+        phase: "Phase 3: Replication",
+        title: "Pan-Tripura",
+        time: "Months 18–36",
+        items: ["One unit per district (8 total)", "Revenue Potential: ₹35–50L/mo", "180–250 direct community jobs", "Bangladesh export gateway"]
+      },
+      {
+        phase: "Phase 4: Global Scale",
+        title: "Export & Furniture",
+        time: "2027 Onwards",
+        items: ["Bamboo laminated lumber", "Full Kraft paper production", "Verified carbon credit tokens", "IKEA supply chain targeting"]
+      }
+    ],
+    processBadge: "Dokhumenti Khasrang Swr",
+    processManualTitle: "Munsli Samung Phola manual",
+    viewPdfMode: "PDF bo nina mode",
+    manualTOC: "Sini list",
+    tcChapters: [
+      "I. Executive Summary (Kok kotor)",
+      "II. Material Science Science",
+      "III. Samung Tangmung",
+      "IV. Standards & ESG"
+    ],
+    revRuralText: "Rural munsli samung tanglai.",
+    blueprintText: "Bo manual ba farm-gate samung bagwi kotor bising ATSFY Technologies rigo",
+    pdfTitle: "Execution_Manual_v1.pdf",
+    ofText: "ni",
+    confidentialLabel: "Khasrang Swr Industrial Manual",
+    page1Title: "I. Executive Summary & Market Mechanics",
+    page1P1: "Tripura operates under a severe \"Plywood Paradox\": importing construction materials at ₹102/sqft from 1,500km away while burning its own raw wealth in the fields.",
+    page1SiliLabel: "Siliguri Corridor Import",
+    page1FarmLabel: "Farm-Gate Production",
+    page1P2: "Our model collapses this contradiction by establishing modular, low-energy manufacturing units at the farm gate. By converting agricultural surplus (pineapple leaf, rice husk, bamboo) into durable bio-composites, we create a circular economy that exports high-value products instead of importing waste costs.",
+    page2Title: "II. Material Science & Bio-Metrics",
+    page2ThType: "Material Type",
+    page2ThCellulose: "Cellulose Content",
+    page2ThRole: "Structural Role",
+    page2ExtractTitle: "Extraction Protocols",
+    page2ExtractText: "Decortication at 500 RPM ensures maximum fibre yield without cellular degradation. Washing at pH 7.2 removes pectins. Solar drying must reach critical 12% moisture limit before binder infusion.",
+    page3Title: "III. Industrial Manufacturing Stages",
+    page3HotPress: "Hot Press Parameters",
+    page3Temp: "TEMP",
+    page3Press: "PRESS",
+    page3Time: "TIME",
+    page3MatForming: "Mat Forming",
+    page3MatFormingText: "Cross-directional layering ensures dimensional stability. We use a graduated density profile (GDP) with higher density surface layers for water resistance.",
+    page3Stages: [
+      { s: "01", t: "Binder Blending", d: "Rotary drum blending with atomized resin spray. Loading 8-12% by weight." },
+      { s: "02", t: "Mould Casting", d: "Cast into heated male-female moulds at 130°C for tableware products." },
+      { s: "03", t: "Final Trimming", d: "Precision cutting using diamond-tipped saws to standard 8x4ft dimensions." }
+    ],
+    page4Title: "IV. Standards, Compliance & Social ESG",
+    page4ComplianceTitle: "Industrial Compliance",
+    page4ComplianceItems: ["IS:12406 (Bio-Composite)", "IS:15778 (Heat Resistance)", "FSSAI Food-Safe Certified", "CARB Phase 2 (Zero-Formaldehyde)"],
+    page4SocialTitle: "Social Ownership",
+    page4Quote: "Ownership is the best catalyst for quality.",
+    page4Participation: "SHG Participation",
+    page4Tribal: "Tribal Youth Leads",
+    page4Equity: "Community Equity",
+    page4Verified: "Verified",
+    visionBadge: "Vision 2030",
+    visionCards: [
+      {
+        title: "Agro-Waste Valorization",
+        desc: "Beyond construction, we're ramping up to produce bio-enzymes, organic fertilizers, and biochar soil amendments.",
+        details: "Leveraging NABARD climate funds to reduce chemical import dependency while healing Tripura's acidic soils."
+      },
+      {
+        title: "Renewable Energy Hubs",
+        desc: "Establishing community biogas plants (SATAT Scheme) and solar-drying units for farm produce.",
+        details: "Powering rural micro-grids and cutting LPG imports to fuel Tripura's 12.46% GSDP growth targets."
+      },
+      {
+        title: "Skill & Market Linkages",
+        desc: "SHG-led micro-factories for rubber products and bamboo handicrafts with direct B2B export pipelines.",
+        details: "ONDC e-commerce integration targeting Bangladesh markets, boosting 'Lakhpati Didi' numbers beyond 1 lakh."
+      },
+      {
+        title: "Water & Irrigation Boost",
+        desc: "Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030, per SDG Vision.",
+        details: "Utilizing agro-waste mulches to conserve soil moisture for year-round horticultural self-reliance."
+      }
+    ]
   }
 };
 
@@ -1149,31 +1476,30 @@ function LandingPage({ user }: { user: any }) {
         {/* Impact Section */}
         <section id="impact" className="py-24 px-6 bg-brand-paper relative" aria-labelledby="impact-title">
           <div className="max-w-7xl mx-auto">
-            <SectionTitle id="impact-title" subtitle="The Triple Win">Impact at the Core</SectionTitle>
+            <SectionTitle id="impact-title" subtitle={lp.impactBadge}>{lp.impactTitle}</SectionTitle>
             
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-12">
                 {[
                   {
                     icon: <TrendingUp className="w-8 h-8" />,
-                    title: "Farmer Income +20%",
-                    desc: "Waste revenue adds ₹2,000–₹2,700/month directly to average farmer households. 26,400 ha of farmland already primed.",
+                    title: lp.farmerIncomeTitle,
+                    desc: lp.farmerIncomeDesc,
                     color: "bg-brand-light-green/10 text-brand-light-green"
                   },
                   {
                     icon: <Users className="w-8 h-8" />,
-                    title: "Community-Run Units",
-                    desc: "Partnering with Self-Help Groups (SHGs) and tribal youth cooperatives. Each unit creates 8–12 direct jobs inside villages.",
+                    title: lp.communityTitle,
+                    desc: lp.communityDesc,
                     color: "bg-brand-orange/10 text-brand-orange"
                   },
                   {
                     icon: <ShieldCheck className="w-8 h-8" />,
-                    title: "Zero Burn, Zero Methane",
-                    desc: "Eliminating field burning and sequestering carbon in durable boards. Supporting India's Net Zero 2070 pledge.",
+                    title: lp.zeroBurnTitle,
+                    desc: lp.zeroBurnDesc,
                     color: "bg-brand-green/10 text-brand-green"
                   }
-                ].map((item, i) => (
-                  <motion.div 
+                ].map((item, i) => (<motion.div 
                     key={i}
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -1205,20 +1531,20 @@ function LandingPage({ user }: { user: any }) {
                     <div className="p-2 bg-white/10 rounded-lg">
                       <BarChart3 className="w-6 h-6 text-brand-orange" />
                     </div>
-                    <h3 className="text-3xl font-serif">The Value Proposition</h3>
+                    <h3 className="text-3xl font-serif">{lp.valueProposition}</h3>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+ 
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Cost Savings Infographic */}
                     <div className="space-y-6">
                       <div className="flex items-center gap-2 mb-2">
                         <Coins className="w-4 h-4 text-brand-orange" />
-                        <span className="text-xs uppercase tracking-widest opacity-60 font-bold">Cost Savings</span>
+                        <span className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.costSavings}</span>
                       </div>
                       <div className="space-y-4">
                         <div className="relative">
                           <div className="flex justify-between text-[10px] uppercase tracking-tighter mb-1 opacity-40">
-                            <span>Imported Plywood</span>
+                            <span>{lp.importedPlywoodLabel}</span>
                             <span>₹102</span>
                           </div>
                           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -1233,7 +1559,7 @@ function LandingPage({ user }: { user: any }) {
                         </div>
                         <div className="relative">
                           <div className="flex justify-between text-[10px] uppercase tracking-tighter mb-1 text-brand-orange font-bold">
-                            <span>Green-to-Gold</span>
+                            <span>{lp.greenToGoldLabel}</span>
                             <span>₹48</span>
                           </div>
                           <div className="h-4 bg-white/10 rounded-full overflow-hidden">
@@ -1248,15 +1574,15 @@ function LandingPage({ user }: { user: any }) {
                         </div>
                       </div>
                       <p className="text-[11px] leading-relaxed opacity-60 italic">
-                        * 54% reduction in construction material costs for Tripura.
+                        {lp.costSavingsDetail}
                       </p>
                     </div>
-
+ 
                     {/* Carbon Sequestration Infographic */}
                     <div className="space-y-6">
                       <div className="flex items-center gap-2 mb-2">
                         <Cloud className="w-4 h-4 text-brand-light-green" />
-                        <span className="text-xs uppercase tracking-widest opacity-60 font-bold">Carbon Impact</span>
+                        <span className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.carbonImpactLabel}</span>
                       </div>
                       <div className="bg-white/5 rounded-2xl p-6 border border-white/10 relative group">
                         <div className="flex items-center justify-between mb-4">
@@ -1265,9 +1591,9 @@ function LandingPage({ user }: { user: any }) {
                             <Leaf className="w-5 h-5 text-brand-light-green" />
                           </div>
                         </div>
-                        <div className="text-sm font-medium mb-1">CO2e per Board</div>
+                        <div className="text-sm font-medium mb-1">{lp.co2PerBoard}</div>
                         <p className="text-[10px] opacity-60 leading-tight">
-                          Net-negative carbon footprint by sequestering bamboo & pineapple waste into durable construction boards.
+                          {lp.carbonImpactDetail}
                         </p>
                         
                         {/* Decorative Carbon Particles */}
@@ -1294,20 +1620,20 @@ function LandingPage({ user }: { user: any }) {
                         </div>
                       </div>
                       <p className="text-[11px] leading-relaxed opacity-60 italic">
-                        * Supporting India's Net Zero 2070 pledge through local action.
+                        {lp.netZeroPledge}
                       </p>
                     </div>
                   </div>
-
+ 
                   {/* Bottom Stats */}
                   <div className="mt-10 pt-8 border-t border-white/10 grid grid-cols-2 gap-4">
                     <div className="text-center">
                       <div className="text-2xl font-serif text-brand-orange">100k+</div>
-                      <div className="text-[9px] uppercase tracking-widest opacity-40">Tonnes Waste Saved</div>
+                      <div className="text-[9px] uppercase tracking-widest opacity-40">{lp.tonnesWasteSaved}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-serif text-brand-light-green">8-12</div>
-                      <div className="text-[9px] uppercase tracking-widest opacity-40">Jobs per Mini-Factory</div>
+                      <div className="text-[9px] uppercase tracking-widest opacity-40">{lp.jobsPerFactory}</div>
                     </div>
                   </div>
                 </div>
@@ -1319,60 +1645,31 @@ function LandingPage({ user }: { user: any }) {
         {/* Roadmap Section */}
         <section id="roadmap" className="py-24 px-6 overflow-hidden" aria-labelledby="roadmap-title">
           <div className="max-w-7xl mx-auto">
-            <SectionTitle id="roadmap-title" subtitle="Execution">The Scale Roadmap</SectionTitle>
+            <SectionTitle id="roadmap-title" subtitle={lp.roadmapBadge}>{lp.roadmapTitle}</SectionTitle>
             
             <div className="relative">
               {/* Timeline Line */}
               <div className="absolute top-0 left-8 md:left-1/2 w-px h-full bg-brand-ink/10 -translate-x-1/2 hidden md:block" aria-hidden="true" />
               
               <div className="space-y-24">
-                {[
-                  {
-                    phase: "Phase 1: Validation",
-                    title: "Pilot Unit",
-                    time: "Current — Month 12",
-                    items: ["Unakoti district pilot", "Bio-composite boards focus", "Revenue: ₹3.5–5.5L/month", "18–25 community jobs"],
-                    align: "left"
-                  },
-                  {
-                    phase: "Phase 2: Expansion",
-                    title: "Product Growth",
-                    time: "Months 6–18",
-                    items: ["Moulded tableware addition", "PALF table covers", "Paper pulping feasibility", "ONDC marketplace entry"],
-                    align: "right"
-                  },
-                  {
-                    phase: "Phase 3: Replication",
-                    title: "Pan-Tripura",
-                    time: "Months 18–36",
-                    items: ["One unit per district (8 total)", "Revenue Potential: ₹35–50L/mo", "180–250 direct community jobs", "Bangladesh export gateway"],
-                    align: "left"
-                  },
-                  {
-                    phase: "Phase 4: Global Scale",
-                    title: "Export & Furniture",
-                    time: "2027 Onwards",
-                    items: ["Bamboo laminated lumber", "Full Kraft paper production", "Verified carbon credit tokens", "IKEA supply chain targeting"],
-                    align: "right"
-                  }
-                ].map((step, i) => (
-                  <div key={i} className={`flex flex-col md:flex-row gap-8 md:gap-0 items-center ${step.align === 'right' ? 'md:flex-row-reverse' : ''}`}>
+                {(lp.roadmapSteps || []).map((step, i) => (
+                  <div key={i} className={`flex flex-col md:flex-row gap-8 md:gap-0 items-center ${i % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
                     <div className="w-full md:w-1/2 px-8">
-                      <motion.div 
-                        initial={{ opacity: 0, x: step.align === 'left' ? -30 : 30 }}
+                       <motion.div 
+                        initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className={`glass-card p-10 ${step.align === 'right' ? 'text-right shadow-xl border-brand-orange/10' : 'shadow-lg'}`}
+                        className={`glass-card p-10 ${i % 2 === 1 ? 'text-right shadow-xl border-brand-orange/10' : 'shadow-lg'}`}
                       >
                         <span className="text-brand-orange-dark font-bold uppercase tracking-widest text-xs mb-2 block">{step.phase}</span>
                         <h3 className="text-3xl font-serif mb-1">{step.title}</h3>
                         <span className="text-brand-ink/40 text-[10px] uppercase font-bold tracking-wider mb-6 block">{step.time}</span>
-                        <ul className={`space-y-3 ${step.align === 'right' ? 'flex flex-col items-end' : ''}`}>
+                        <ul className={`space-y-3 ${i % 2 === 1 ? 'flex flex-col items-end' : ''}`}>
                           {step.items.map((item, j) => (
                             <li key={j} className="flex items-center gap-3 text-brand-ink/70 text-sm">
-                              {step.align === 'left' && <CheckCircle2 className="w-4 h-4 text-brand-light-green" aria-hidden="true" />}
+                              {i % 2 === 0 && <CheckCircle2 className="w-4 h-4 text-brand-light-green" aria-hidden="true" />}
                               {item}
-                              {step.align === 'right' && <CheckCircle2 className="w-4 h-4 text-brand-light-green" aria-hidden="true" />}
+                              {i % 2 === 1 && <CheckCircle2 className="w-4 h-4 text-brand-light-green" aria-hidden="true" />}
                             </li>
                           ))}
                         </ul>
@@ -1393,14 +1690,14 @@ function LandingPage({ user }: { user: any }) {
         <section id="process" className="py-24 px-6 bg-brand-paper/50 print:p-0 print:bg-white" aria-labelledby="process-title">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 print:hidden">
-              <SectionTitle id="process-title" subtitle="Confidential Process Document">Complete Industrial <br />Execution Manual</SectionTitle>
+              <SectionTitle id="process-title" subtitle={lp.processBadge}>{lp.processManualTitle}</SectionTitle>
               <div className="flex gap-4 mb-6 md:mb-16">
                 <button 
                   onClick={handleDownloadPDF}
                   className="flex items-center gap-3 px-8 py-4 bg-brand-ink text-white rounded-2xl hover:bg-brand-ink/90 transition-all font-medium uppercase tracking-tight text-sm shadow-lg"
                 >
                   <FileText className="w-5 h-5" />
-                  View PDF Mode
+                  {lp.viewPdfMode || "View PDF Mode"}
                 </button>
               </div>
             </div>
@@ -1409,13 +1706,13 @@ function LandingPage({ user }: { user: any }) {
               {/* Sidebar Navigation - Hidden in Print */}
               <div className="lg:col-span-3 space-y-4 print:hidden">
                 <div className="mb-8">
-                  <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-ink/40 mb-4">Table of Contents</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-ink/40 mb-4">{lp.manualTOC || "Table of Contents"}</h4>
                   <div className="space-y-1">
                     {[
-                      { id: 1, title: 'I. Executive Summary', icon: <BookOpen className="w-4 h-4" /> },
-                      { id: 2, title: 'II. Material Science', icon: <FlaskConical className="w-4 h-4" /> },
-                      { id: 3, title: 'III. Manufacturing', icon: <Factory className="w-4 h-4" /> },
-                      { id: 4, title: 'IV. Standards & ESG', icon: <Scale className="w-4 h-4" /> }
+                      { id: 1, title: lp.tcChapters?.[0] || 'I. Executive Summary', icon: <BookOpen className="w-4 h-4" /> },
+                      { id: 2, title: lp.tcChapters?.[1] || 'II. Material Science', icon: <FlaskConical className="w-4 h-4" /> },
+                      { id: 3, title: lp.tcChapters?.[2] || 'III. Manufacturing', icon: <Factory className="w-4 h-4" /> },
+                      { id: 4, title: lp.tcChapters?.[3] || 'IV. Standards & ESG', icon: <Scale className="w-4 h-4" /> }
                     ].map((tab) => (
                       <button
                         key={tab.id}
@@ -1517,31 +1814,31 @@ function LandingPage({ user }: { user: any }) {
                         <div className="p-12 md:p-20 flex-1 flex flex-col">
                           <div className="flex justify-between items-center mb-12 opacity-40">
                             <div className="text-[9px] uppercase tracking-[0.3em] font-bold">ATSFY / Green-To-Gold</div>
-                            <div className="text-[9px] uppercase tracking-[0.3em] font-bold">Confidential Industrial Manual</div>
+                            <div className="text-[9px] uppercase tracking-[0.3em] font-bold">{lp.confidentialLabel || "Confidential Industrial Manual"}</div>
                           </div>
 
                           {activePage === 1 && (
                             <div className="space-y-12">
                               <div className="space-y-4">
-                                <h2 className="text-4xl md:text-5xl font-serif text-brand-green leading-tight">I. Executive Summary & Market Mechanics</h2>
+                                <h2 className="text-4xl md:text-5xl font-serif text-brand-green leading-tight">{lp.page1Title}</h2>
                                 <div className="h-1 w-20 bg-brand-orange" />
                               </div>
                               <div className="prose prose-brand max-w-none text-brand-ink/80 space-y-8">
                                 <p className="text-xl font-medium leading-relaxed text-brand-ink">
-                                  Tripura operates under a severe "Plywood Paradox": importing construction materials at ₹102/sqft from 1,500km away while burning its own raw wealth in the fields.
+                                  {lp.page1P1}
                                 </p>
                                 <div className="grid grid-cols-2 gap-8 py-8">
                                   <div className="border-l-4 border-brand-ink/10 pl-6">
-                                    <span className="text-[10px] uppercase font-bold tracking-widest text-brand-ink/40">Siliguri Corridor Import</span>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-brand-ink/40">{lp.page1SiliLabel}</span>
                                     <div className="text-4xl font-serif text-brand-ink mt-2">₹102<span className="text-sm opacity-50">/sqft</span></div>
                                   </div>
                                   <div className="border-l-4 border-brand-orange pl-6">
-                                    <span className="text-[10px] uppercase font-bold tracking-widest text-brand-orange">Farm-Gate Production</span>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest text-brand-orange">{lp.page1FarmLabel}</span>
                                     <div className="text-4xl font-serif text-brand-orange mt-2">₹48<span className="text-sm opacity-50">/sqft</span></div>
                                   </div>
                                 </div>
                                 <p className="leading-relaxed">
-                                  Our model collapses this contradiction by establishing modular, low-energy manufacturing units at the farm gate. By converting agricultural surplus (pineapple leaf, rice husk, bamboo) into durable bio-composites, we create a circular economy that exports high-value products instead of importing waste costs.
+                                  {lp.page1P2}
                                 </p>
                               </div>
                             </div>
@@ -1550,24 +1847,24 @@ function LandingPage({ user }: { user: any }) {
                           {activePage === 2 && (
                             <div className="space-y-12">
                               <div className="space-y-4">
-                                <h2 className="text-4xl font-serif text-brand-green leading-tight">II. Material Science & Bio-Metrics</h2>
+                                <h2 className="text-4xl font-serif text-brand-green leading-tight">{lp.page2Title}</h2>
                                 <div className="h-1 w-20 bg-brand-orange" />
                               </div>
                               <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm">
                                   <thead>
                                     <tr className="border-b border-brand-green/20">
-                                      <th className="py-6 font-bold text-brand-green uppercase tracking-widest text-[10px]">Material Type</th>
-                                      <th className="py-6 font-bold text-brand-green uppercase tracking-widest text-[10px]">Cellulose Content</th>
-                                      <th className="py-6 font-bold text-brand-green uppercase tracking-widest text-[10px]">Structural Role</th>
+                                      <th className="py-6 font-bold text-brand-green uppercase tracking-widest text-[10px]">{lp.page2ThType}</th>
+                                      <th className="py-6 font-bold text-brand-green uppercase tracking-widest text-[10px]">{lp.page2ThCellulose}</th>
+                                      <th className="py-6 font-bold text-brand-green uppercase tracking-widest text-[10px]">{lp.page2ThRole}</th>
                                     </tr>
                                   </thead>
                                   <tbody className="divide-y divide-brand-green/10">
                                     {[
-                                      { name: "PALF (Pineapple)", metric: "70–82%", role: "Tensile Reinforcement" },
-                                      { name: "Bamboo Fibre", metric: "52–60%", role: "Core Structural Matrix" },
-                                      { name: "Rice Husk", metric: "20% Silica", role: "Fire & Heat Resistance" },
-                                      { name: "Bagasse", metric: "45–50%", role: "Tableware Filler" }
+                                      { name: language === "bn" ? "পিএএলএফ (আনারস)" : language === "kok" ? "PALF (Pineapple)" : "PALF (Pineapple)", metric: "70–82%", role: language === "bn" ? "প্রসার্য শক্তিবৃদ্ধি" : language === "kok" ? "Tensile Reinforcement" : "Tensile Reinforcement" },
+                                      { name: language === "bn" ? "বাঁশের ফাইবার" : language === "kok" ? "Bamboo Fibre" : "Bamboo Fibre", metric: "52–60%", role: language === "bn" ? "মূল কাঠামোগত ম্যাট্রিক্স" : language === "kok" ? "Core Structural Matrix" : "Core Structural Matrix" },
+                                      { name: language === "bn" ? "ধানের তুষ" : language === "kok" ? "Rice Husk" : "Rice Husk", metric: "20% Silica", role: language === "bn" ? "আগুন ও তাপ প্রতিরোধ" : language === "kok" ? "Fire & Heat Resistance" : "Fire & Heat Resistance" },
+                                      { name: language === "bn" ? "আঁশের বর্জ্য-ঝুল (Bagasse)" : language === "kok" ? "Bagasse" : "Bagasse", metric: "45–50%", role: language === "bn" ? "থালা-বাসনের ফিলার" : language === "kok" ? "Tableware Filler" : "Tableware Filler" }
                                     ].map((m, i) => (
                                       <tr key={i}>
                                         <td className="py-6 font-serif text-xl text-brand-green">{m.name}</td>
@@ -1581,10 +1878,10 @@ function LandingPage({ user }: { user: any }) {
                               <div className="bg-brand-paper p-10 rounded-2xl border border-brand-green/5">
                                 <h4 className="text-lg font-serif mb-4 flex items-center gap-3">
                                   <FlaskConical className="w-5 h-5 text-brand-orange" />
-                                  Extraction Protocols
+                                  {lp.page2ExtractTitle}
                                 </h4>
                                 <p className="text-sm text-brand-ink/60 leading-relaxed">
-                                  Decortication at 500 RPM ensures maximum fibre yield without cellular degradation. Washing at pH 7.2 removes pectins. Solar drying must reach critical 12% moisture limit before binder infusion.
+                                  {lp.page2ExtractText}
                                 </p>
                               </div>
                             </div>
@@ -1593,42 +1890,38 @@ function LandingPage({ user }: { user: any }) {
                           {activePage === 3 && (
                             <div className="space-y-12">
                               <div className="space-y-4">
-                                <h2 className="text-4xl font-serif text-brand-green leading-tight">III. Industrial Manufacturing Stages</h2>
+                                <h2 className="text-4xl font-serif text-brand-green leading-tight">{lp.page3Title}</h2>
                                 <div className="h-1 w-20 bg-brand-orange" />
                               </div>
                               <div className="grid md:grid-cols-2 gap-8">
                                 <div className="bg-brand-ink p-10 text-white rounded-[24px]">
                                   <Settings2 className="w-8 h-8 mb-6 text-brand-orange" />
-                                  <h4 className="text-xl font-serif mb-6">Hot Press Parameters</h4>
+                                  <h4 className="text-xl font-serif mb-6">{lp.page3HotPress}</h4>
                                   <div className="space-y-4 text-xs font-mono">
                                     <div className="flex justify-between border-b border-white/10 pb-2">
-                                      <span className="opacity-40">TEMP:</span>
+                                      <span className="opacity-40">{lp.page3Temp}:</span>
                                       <span className="text-brand-orange font-bold">140–180°C</span>
                                     </div>
                                     <div className="flex justify-between border-b border-white/10 pb-2">
-                                      <span className="opacity-40">PRESS:</span>
+                                      <span className="opacity-40">{lp.page3Press}:</span>
                                       <span className="text-brand-orange font-bold">2.0–4.0 MPa</span>
                                     </div>
                                     <div className="flex justify-between">
-                                      <span className="opacity-40">TIME:</span>
+                                      <span className="opacity-40">{lp.page3Time}:</span>
                                       <span className="text-brand-orange font-bold">8–15 MIN</span>
                                     </div>
                                   </div>
                                 </div>
                                 <div className="bg-brand-paper p-10 rounded-[24px] border border-brand-green/10">
                                   <Factory className="w-8 h-8 mb-6 text-brand-green" />
-                                  <h4 className="text-xl font-serif text-brand-green mb-4">Mat Forming</h4>
+                                  <h4 className="text-xl font-serif text-brand-green mb-4">{lp.page3MatForming}</h4>
                                   <p className="text-xs text-brand-ink/60 leading-relaxed shadow-sm">
-                                    Cross-directional layering ensures dimensional stability. We use a graduated density profile (GDP) with higher density surface layers for water resistance.
+                                    {lp.page3MatFormingText}
                                   </p>
                                 </div>
                               </div>
                               <div className="space-y-8 mt-12">
-                                {[
-                                  { s: "01", t: "Binder Blending", d: "Rotary drum blending with atomized resin spray. Loading 8-12% by weight." },
-                                  { s: "02", t: "Mould Casting", d: "Cast into heated male-female moulds at 130°C for tableware products." },
-                                  { s: "03", t: "Final Trimming", d: "Precision cutting using diamond-tipped saws to standard 8x4ft dimensions." }
-                                ].map((step, i) => (
+                                {lp.page3Stages.map((step, i) => (
                                   <div key={i} className="flex gap-6">
                                     <div className="text-3xl font-serif text-brand-orange/20 select-none">{step.s}</div>
                                     <div>
@@ -1644,15 +1937,15 @@ function LandingPage({ user }: { user: any }) {
                           {activePage === 4 && (
                             <div className="space-y-12">
                               <div className="space-y-4">
-                                <h2 className="text-4xl font-serif text-brand-green leading-tight">IV. Standards, Compliance & Social ESG</h2>
+                                <h2 className="text-4xl font-serif text-brand-green leading-tight">{lp.page4Title}</h2>
                                 <div className="h-1 w-20 bg-brand-orange" />
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                                 <div className="space-y-8">
                                   <div className="space-y-4">
-                                    <h4 className="text-xs font-bold uppercase tracking-widest text-brand-orange-dark">Industrial Compliance</h4>
+                                    <h4 className="text-xs font-bold uppercase tracking-widest text-brand-orange-dark">{lp.page4ComplianceTitle}</h4>
                                     <div className="space-y-3">
-                                      {["IS:12406 (Bio-Composite)", "IS:15778 (Heat Resistance)", "FSSAI Food-Safe Certified", "CARB Phase 2 (Zero-Formaldehyde)"].map((std, i) => (
+                                      {lp.page4ComplianceItems.map((std, i) => (
                                         <div key={i} className="flex items-center gap-3 text-sm text-brand-ink/70">
                                           <ShieldCheck className="w-4 h-4 text-brand-green" />
                                           {std}
@@ -1662,12 +1955,12 @@ function LandingPage({ user }: { user: any }) {
                                   </div>
                                 </div>
                                 <div className="p-8 bg-brand-paper rounded-2xl">
-                                  <h4 className="text-xs font-bold uppercase tracking-widest text-brand-ink/40 mb-4">Social Ownership</h4>
-                                  <p className="text-sm italic text-brand-ink/60 mb-6 leading-relaxed">"Ownership is the best catalyst for quality."</p>
+                                  <h4 className="text-xs font-bold uppercase tracking-widest text-brand-ink/40 mb-4">{lp.page4SocialTitle}</h4>
+                                  <p className="text-sm italic text-brand-ink/60 mb-6 leading-relaxed">"{lp.page4Quote}"</p>
                                   <div className="space-y-2 text-xs">
-                                     <div className="flex justify-between py-2 border-b border-brand-ink/5"><span>SHG Participation</span><span className="font-bold">60%+</span></div>
-                                     <div className="flex justify-between py-2 border-b border-brand-ink/5"><span>Tribal Youth Leads</span><span className="font-bold">85%</span></div>
-                                     <div className="flex justify-between py-2"><span>Community Equity</span><span className="font-bold">Verified</span></div>
+                                     <div className="flex justify-between py-2 border-b border-brand-ink/5"><span>{lp.page4Participation}</span><span className="font-bold">60%+</span></div>
+                                     <div className="flex justify-between py-2 border-b border-brand-ink/5"><span>{lp.page4Tribal}</span><span className="font-bold">85%</span></div>
+                                     <div className="flex justify-between py-2"><span>{lp.page4Equity}</span><span className="font-bold">{lp.page4Verified}</span></div>
                                   </div>
                                 </div>
                               </div>
@@ -1676,7 +1969,7 @@ function LandingPage({ user }: { user: any }) {
 
                           {/* Footer Info */}
                           <div className="mt-20 pt-12 border-t border-brand-ink/10 flex justify-between items-center opacity-30 text-[9px] uppercase tracking-widest font-bold">
-                            <span>Page {activePage} of 4</span>
+                            <span>Page {activePage} {lp.ofText} 4</span>
                             <span>© 2026 ATSFY &middot; Tripura Venture</span>
                           </div>
                         </div>
@@ -1702,59 +1995,46 @@ function LandingPage({ user }: { user: any }) {
           </div>
 
           <div className="max-w-7xl mx-auto relative z-10">
-            <SectionTitle id="vision-title" subtitle="Vision 2030" light>Integrated Future <br />Insights</SectionTitle>
+            <SectionTitle id="vision-title" subtitle={lp.visionBadge || "Vision 2030"} light>
+              {language === "bn" ? "সমন্বিত ভবিষ্যতের অন্তর্দৃষ্টি" : language === "kok" ? "Moichag Khasrang" : "Integrated Future Insights"}
+            </SectionTitle>
             
             <div className="grid md:grid-cols-2 gap-8">
-              {[
-                {
-                  title: "Agro-Waste Valorization",
-                  icon: <FlaskConical className="w-8 h-8" />,
-                  desc: "Beyond construction, we're ramping up to produce bio-enzymes, organic fertilizers, and biochar soil amendments.",
-                  details: "Leveraging NABARD climate funds to reduce chemical import dependency while healing Tripura's acidic soils.",
-                  color: "border-brand-light-green/20"
-                },
-                {
-                  title: "Renewable Energy Hubs",
-                  icon: <Sun className="w-8 h-8" />,
-                  desc: "Establishing community biogas plants (SATAT Scheme) and solar-drying units for farm produce.",
-                  details: "Powering rural micro-grids and cutting LPG imports to fuel Tripura's 12.46% GSDP growth targets.",
-                  color: "border-brand-orange/20"
-                },
-                {
-                  title: "Skill & Market Linkages",
-                  icon: <ShoppingBag className="w-8 h-8" />,
-                  desc: "SHG-led micro-factories for rubber products and bamboo handicrafts with direct B2B export pipelines.",
-                  details: "ONDC e-commerce integration targeting Bangladesh markets, boosting 'Lakhpati Didi' numbers beyond 1 lakh.",
-                  color: "border-white/10"
-                },
-                {
-                  title: "Water & Irrigation Boost",
-                  icon: <Droplets className="w-8 h-8" />,
-                  desc: "Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030, per SDG Vision.",
-                  details: "Utilizing agro-waste mulches to conserve soil moisture for year-round horticultural self-reliance.",
-                  color: "border-brand-light-green/30"
-                }
-              ].map((insight, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.15 }}
-                  className={`p-10 border ${insight.color} rounded-[32px] bg-white/5 hover:bg-white/10 transition-all group`}
-                >
-                  <div className="flex items-start justify-between mb-8">
-                    <div className="p-4 bg-white/10 rounded-2xl text-white group-hover:scale-110 transition-transform">
-                      {insight.icon}
+              {lp.visionCards.map((insight, i) => {
+                const visionIcons = [
+                  <FlaskConical className="w-8 h-8" />,
+                  <Sun className="w-8 h-8" />,
+                  <ShoppingBag className="w-8 h-8" />,
+                  <Droplets className="w-8 h-8" />
+                ];
+                const visionColors = [
+                  "border-brand-light-green/20",
+                  "border-brand-orange/20",
+                  "border-white/10",
+                  "border-brand-light-green/30"
+                ];
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.15 }}
+                    className={`p-10 border ${visionColors[i] || "border-white/15"} rounded-[32px] bg-white/5 hover:bg-white/10 transition-all group`}
+                  >
+                    <div className="flex items-start justify-between mb-8">
+                      <div className="p-4 bg-white/10 rounded-2xl text-white group-hover:scale-110 transition-transform">
+                        {visionIcons[i] || <FlaskConical className="w-8 h-8" />}
+                      </div>
                     </div>
-                  </div>
-                  <h3 className="text-3xl font-serif mb-4">{insight.title}</h3>
-                  <p className="text-white/80 mb-6 leading-relaxed">{insight.desc}</p>
-                  <div className="pt-6 border-t border-white/10">
-                    <p className="text-sm italic text-white/50">{insight.details}</p>
-                  </div>
-                </motion.div>
-              ))}
+                    <h3 className="text-3xl font-serif mb-4">{insight.title}</h3>
+                    <p className="text-white/80 mb-6 leading-relaxed">{insight.desc}</p>
+                    <div className="pt-6 border-t border-white/10">
+                      <p className="text-sm italic text-white/50">{insight.details}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
 
             <motion.div 
@@ -1763,10 +2043,10 @@ function LandingPage({ user }: { user: any }) {
               className="mt-16 p-8 rounded-[40px] border border-white/20 bg-gradient-to-br from-brand-orange/20 to-transparent flex flex-col md:flex-row items-center justify-between gap-8"
             >
               <div className="text-center md:text-left">
-                <h4 className="text-2xl font-serif mb-2">Our commitment to sustainable local growth</h4>
-                <p className="text-white/60">Aligning with National SDG targets for 2030.</p>
+                <h4 className="text-2xl font-serif mb-2">{lp.commitmentTitle || "Our commitment to sustainable local growth"}</h4>
+                <p className="text-white/60">{lp.commitmentDesc || "Aligning with National SDG targets for 2030."}</p>
               </div>
-              <div className="text-4xl font-serif text-brand-orange">Vision 2030</div>
+              <div className="text-4xl font-serif text-brand-orange">{lp.visionBadge || "Vision 2030"}</div>
             </motion.div>
           </div>
         </section>
@@ -1774,26 +2054,20 @@ function LandingPage({ user }: { user: any }) {
         {/* Moat Section */}
         <section className="py-24 px-6 bg-brand-ink text-white" aria-labelledby="moat-title">
           <div className="max-w-7xl mx-auto">
-            <SectionTitle id="moat-title" subtitle="Competitive Moat" light>Why This Is Hard to Copy</SectionTitle>
+            <SectionTitle id="moat-title" subtitle={lp.moatBadge || "Competitive Moat"} light>{lp.moatTitle || "Why This Is Hard to Copy"}</SectionTitle>
             
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <caption className="sr-only">Competitive comparison between Imported Plywood, Mutha Bamboowood, and Green-to-Gold</caption>
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th scope="col" className="py-6 px-4 font-serif text-xl">Factor</th>
-                    <th scope="col" className="py-6 px-4 font-serif text-xl opacity-40">Imported Plywood</th>
-                    <th scope="col" className="py-6 px-4 font-serif text-xl text-brand-orange">Green-to-Gold</th>
+                    <th scope="col" className="py-6 px-4 font-serif text-xl">{lp.factorHeader || "Factor"}</th>
+                    <th scope="col" className="py-6 px-4 font-serif text-xl opacity-40">{lp.importedPlywood || "Imported Plywood"}</th>
+                    <th scope="col" className="py-6 px-4 font-serif text-xl text-brand-orange">{lp.greenToGold || "Green-to-Gold"}</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm md:text-base">
-                  {[
-                    { factor: "Transport Cost", old: "30–40% Premium", new: "Zero — Farm-Gate" },
-                    { factor: "Biomass Sourcing", old: "External Raw Material", new: "Waste Stream (Near-Zero Cost)" },
-                    { factor: "Energy Model", old: "Grid-Dependent", new: "Self-Powered (Bio-Pellets)" },
-                    { factor: "Community Ownership", old: "None", new: "SHG-Operated Units" },
-                    { factor: "Carbon Benefit", old: "Negative (Transport)", new: "Positive (Sequesters Carbon)" }
-                  ].map((row, i) => (
+                  {lp.factors.map((row, i) => (
                     <tr key={i} className="border-b border-white/5 group hover:bg-white/5 transition-colors">
                       <th scope="row" className="py-6 px-4 font-medium">{row.factor}</th>
                       <td className="py-6 px-4 opacity-40">{row.old}</td>
@@ -1809,23 +2083,18 @@ function LandingPage({ user }: { user: any }) {
         {/* Partner Section */}
         <section id="partner" className="py-24 px-6 bg-brand-paper" aria-labelledby="partner-title">
           <div className="max-w-7xl mx-auto">
-            <SectionTitle id="partner-title" subtitle="Collaboration">Partner With Us</SectionTitle>
+            <SectionTitle id="partner-title" subtitle={lp.partnerBadge || "Collaboration"}>{lp.partnerTitle || "Partner With Us"}</SectionTitle>
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
                 <h3 className="text-4xl font-serif text-brand-green leading-tight">
-                  Let's Build the <br />
-                  <span className="italic text-brand-orange">Green Economy</span> Together.
+                  {language === "bn" ? "আসুন একসাথে গড়ে তুলি" : language === "kok" ? "Bo bini nogo teirog" : "Let's Build the"} <br />
+                  <span className="italic text-brand-orange">{language === "bn" ? "সবুজ অর্থনীতি" : language === "kok" ? "Green Economy" : "Green Economy"}</span> {language === "bn" ? "একত্রে" : language === "kok" ? "Choba wngwi" : "Together."}
                 </h3>
                 <p className="text-lg text-brand-ink/70 leading-relaxed">
-                  Whether you are an investor looking for high-impact opportunities, a farmer with biomass waste, or a distributor ready to bring sustainable materials to the market — we want to hear from you.
+                  {lp.partnerDesc || "Whether you are an investor looking for high-impact opportunities, a farmer with biomass waste, or a distributor ready to bring sustainable materials to the market — we want to hear from you."}
                 </p>
                 <div className="space-y-4">
-                  {[
-                    "Direct access to Tripura's vast biomass resources",
-                    "Impact-first investment with scalable returns",
-                    "Community-driven manufacturing model",
-                    "Zero-waste circular economy leadership"
-                  ].map((benefit, i) => (
+                  {lp.benefits.map((benefit, i) => (
                     <div key={i} className="flex items-center gap-3 text-brand-ink/80">
                       <CheckCircle2 className="w-5 h-5 text-brand-light-green" />
                       <span>{benefit}</span>
@@ -1849,29 +2118,29 @@ function LandingPage({ user }: { user: any }) {
             whileInView={{ opacity: 1, y: 0 }}
           >
             <h2 className="text-5xl md:text-7xl font-serif text-brand-green mb-8">
-              Building Tripura's Future <br />
-              <span className="italic text-brand-orange">From Its Own Soil.</span>
+              {lp.footerTitle1} <br />
+              <span className="italic text-brand-orange">{lp.footerTitle2}</span>
             </h2>
             <p className="text-xl text-brand-ink/60 max-w-2xl mx-auto mb-12">
-              Join us in building an independent, green manufacturing economy for India's Northeast.
+              {lp.footerSubtitleDetail}
             </p>
             
             <div className="grid md:grid-cols-4 gap-8 mb-16">
               <div>
                 <div className="text-brand-orange-dark font-serif text-4xl mb-2">₹1.5 Cr</div>
-                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">Seed Ask</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.seedAsk}</div>
               </div>
               <div>
                 <div className="text-brand-green font-serif text-4xl mb-2">20 Units</div>
-                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">By 2027</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.by2027}</div>
               </div>
               <div>
                 <div className="text-brand-green font-serif text-4xl mb-2">₹496L</div>
-                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">Y3 Revenue (Proj.)</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.y3Revenue}</div>
               </div>
               <div>
                 <div className="text-brand-green font-serif text-4xl mb-2">1,000+</div>
-                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">Farmers Impacted</div>
+                <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.farmersImpactedFooter}</div>
               </div>
             </div>
 
@@ -1890,21 +2159,21 @@ function LandingPage({ user }: { user: any }) {
               </div>
             </div>
             <div className="mt-12 pt-8 border-t border-brand-ink/5">
-              <span className="text-xs uppercase tracking-[0.3em] font-bold opacity-40">Under ATSFY Technologies</span>
+              <span className="text-xs uppercase tracking-[0.3em] font-bold opacity-40">{lp.underAtsfy}</span>
             </div>
           </motion.div>
         </div>
         
         <div className="max-w-7xl mx-auto mt-12 flex flex-col md:flex-row justify-between items-center text-xs uppercase tracking-[0.2em] font-bold opacity-40">
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-            <span>© 2026 Green-to-Gold Sustainable Manufacturing</span>
+            <span>{lp.copyright}</span>
             <span className="hidden md:inline">•</span>
-            <span>Under ATSFY Technologies</span>
+            <span>{lp.underAtsfy}</span>
           </div>
           <div className="flex gap-8 mt-4 md:mt-0">
-            <a href="#" className="hover:opacity-100 transition-opacity">Privacy</a>
-            <a href="#" className="hover:opacity-100 transition-opacity">Terms</a>
-            <a href="#" className="hover:opacity-100 transition-opacity">Investor Portal</a>
+            <a href="#" className="hover:opacity-100 transition-opacity">{lp.privacy}</a>
+            <a href="#" className="hover:opacity-100 transition-opacity">{lp.terms}</a>
+            <a href="#" className="hover:opacity-100 transition-opacity">{lp.investorPortal}</a>
           </div>
         </div>
       </footer>
