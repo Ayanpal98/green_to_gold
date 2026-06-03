@@ -56,7 +56,15 @@ import {
   ChevronUp,
   ChevronDown,
   Maximize2,
-  Menu
+  Menu,
+  Wrench,
+  Layers,
+  Wind,
+  RefreshCw,
+  Scissors,
+  Eye,
+  Activity,
+  Cpu
 } from "lucide-react";
 import { Navbar } from "./components/Navbar";
 import { PartnerForm } from "./components/PartnerForm";
@@ -489,7 +497,28 @@ const LP_TRANSLATIONS = {
         desc: "Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030, per SDG Vision.",
         details: "Utilizing agro-waste mulches to conserve soil moisture for year-round horticultural self-reliance."
       }
-    ]
+    ],
+    infraBadge: "Infrastructure",
+    infraTitle: "Farm-Gate Units & Heavy Machinery",
+    infraSub: "Each Green-to-Gold mini-factory is a modular, self-powered industrial unit deployable within 500m of the farm gate — no grid connection, no logistics bottleneck, no dependency on the Siliguri Corridor.",
+    infraPhase1: "Phase 1: Pilot Unit",
+    infraPhase2: "Phase 2: Expanded Unit",
+    infraPhase3: "Phase 3: District Hub",
+    infraCapacity: "Capacity",
+    infraPower: "Power",
+    infraOutput: "Output",
+    infraSellsSurplus: "Sells surplus",
+    infraRatio: "Binder ratio",
+    infraSize: "Board size",
+    infraMoisture: "Output moisture",
+    infraPressure: "Pressure",
+    infraTemp: "Temp",
+    infraFootprintTitle: "Mini-factory floor layout — Phase 1 (footprint: ~1,800 sq ft)",
+    infraFootprintP2: "Phase 2 additions — expanded floor (footprint: ~3,200 sq ft)",
+    infraFootprintP3: "Phase 3 — District hub model (one per district, 8 total by 2027)",
+    infraMetric1Label: "Unit capacity utilization (target, Month 6)",
+    infraMetric2Label: "Biomass feedstock from farm waste (vs purchased)",
+    infraMetric3Label: "Self-energy sufficiency via bio-pellet loop",
   },
   bn: {
     heroBadge: "ত্রিপুরায় টেকসই তিসি বর্জ্যভিত্তিক বায়ার ম্যানুফ্যাকচারিং",
@@ -697,7 +726,28 @@ const LP_TRANSLATIONS = {
         desc: "এসডিজি ভিশন অনুসারে ২০৩০ সালের মধ্যে ৪৫% টিএসপি কাভারেজ সম্পন্ন করতে মাইক্রো-সেচ এবং বৃষ্টির জল সংগ্রহ করা।",
         details: "সারা বছর উদ্যানপালন স্বনির্ভরতার জন্য মাটির আর্দ্রতা রক্ষা করতে কৃষি-বর্জ্য ব্যবহার করা।"
       }
-    ]
+    ],
+    infraBadge: "অবকাঠামো ও প্রযুক্তি",
+    infraTitle: "খামার-ভিত্তিক ইউনিট ও ভারী যন্ত্রপাতি",
+    infraSub: "প্রতিটি গ্রিন-টু-গোল্ড মিনি-ফ্যাক্টরি একটি মডুলার, স্ব-চালিত শিল্প ইউনিট যা খামারের ৫০০ মিটারের মধ্যে স্থাপন করা যায় — কোনও গ্রিড সংযোগ নেই, কোনও সরবরাহের সমস্যা নেই এবং শিলিগুড়ি করিডোরের উপর নির্ভরশীলতা নেই।",
+    infraPhase1: "ধাপ ১: পাইলট ইউনিট",
+    infraPhase2: "ধাপ ২: সম্প্রসারিত ইউনিট",
+    infraPhase3: "ধাপ ৩: জেলা হাব",
+    infraCapacity: "ক্ষমতা",
+    infraPower: "শক্তি",
+    infraOutput: "আউটপুট",
+    infraSellsSurplus: "উদ্বৃত্ত বিক্রি",
+    infraRatio: "বাইন্ডার অনুপাত",
+    infraSize: "বোর্ডের আকার",
+    infraMoisture: "আউটপুটের আর্দ্রতা",
+    infraPressure: "চাপ",
+    infraTemp: "তাপমাত্রা",
+    infraFootprintTitle: "মিনি-ফ্যাক্টরি মেঝে বিন্যাস — ধাপ ১ (আয়তন: ~১,৮০০ বর্গফুট)",
+    infraFootprintP2: "ধাপ ২ সংযোজন — সম্প্রসারিত বিন্যাস (আয়তন: ~৩,২০০ বর্গফুট)",
+    infraFootprintP3: "ধাপ ৩ — জেলা হাব মডেল (প্রতি জেলায় ১টি করে, ২০২৭ সালের মধ্যে মোট ৮টি)",
+    infraMetric1Label: "ইউনিট ব্যবহারের দক্ষতা (লক্ষ্যমাত্রা, মাস ৬)",
+    infraMetric2Label: "কৃষি বর্জ্য থেকে বায়োমাস ফিডস্টক (ক্রয়কৃত বর্জ্যের তুলনায়)",
+    infraMetric3Label: "বায়ো-পেল্যেট লুপের মাধ্যমে নিজস্ব শক্তি স্বনির্ভরতা",
   },
   kok: {
     heroBadge: "Tripura ni Phola-Haste Thungmung Swk",
@@ -905,7 +955,326 @@ const LP_TRANSLATIONS = {
         desc: "Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030, per SDG Vision.",
         details: "Utilizing agro-waste mulches to conserve soil moisture for year-round horticultural self-reliance."
       }
-    ]
+    ],
+    infraBadge: "Munsli No",
+    infraTitle: "Farm-Gate Phola & Heavy Machinery",
+    infraSub: "Each Green-to-Gold mini-factory ba modular, self-powered unit deployable within 500m of the farm gate — no grid connection, no logistics bottleneck.",
+    infraPhase1: "Phase 1: Pilot Unit",
+    infraPhase2: "Phase 2: Expanded Unit",
+    infraPhase3: "Phase 3: District Hub",
+    infraCapacity: "Borom (Capacity)",
+    infraPower: "Power",
+    infraOutput: "Output",
+    infraSellsSurplus: "Sells surplus",
+    infraRatio: "Resin blend ratio",
+    infraSize: "Board sizing",
+    infraMoisture: "Moisture MC",
+    infraPressure: "Pressure",
+    infraTemp: "Temp",
+    infraFootprintTitle: "Mini-factory floor layout — Phase 1 (footprint: ~1,800 sq ft)",
+    infraFootprintP2: "Phase 2 additions — expanded floor (footprint: ~3,200 sq ft)",
+    infraFootprintP3: "Phase 3 — District hub model (one per district, 8 total by 2027)",
+    infraMetric1Label: "Unit capacity utilization (target, Month 6)",
+    infraMetric2Label: "Biomass feedstock from farm waste (vs purchased)",
+    infraMetric3Label: "Self-energy sufficiency via bio-pellet loop",
+  }
+};
+
+interface MachineDetail {
+  id: string;
+  iconName: string;
+  name: string;
+  sub: string;
+  phase: "p1" | "p2" | "p3";
+  tag: string;
+  metricLabel: string;
+  metricVal: string;
+  powerLabel: string;
+  powerVal: string;
+  specs: { label: string; val: string }[];
+  desc: string;
+}
+
+const MachineIcon = ({ name, className = "w-6 h-6" }: { name: string; className?: string }) => {
+  switch (name) {
+    case "Wrench": return <Wrench className={className} />;
+    case "Layers": return <Layers className={className} />;
+    case "Wind": return <Wind className={className} />;
+    case "RefreshCw": return <RefreshCw className={className} />;
+    case "Scissors": return <Scissors className={className} />;
+    case "Cpu": return <Cpu className={className} />;
+    case "Eye": return <Eye className={className} />;
+    case "Activity": return <Activity className={className} />;
+    default: return <Wrench className={className} />;
+  }
+};
+
+const INFRA_MACHINES: Record<string, MachineDetail> = {
+  hammermill: {
+    id: "hammermill",
+    iconName: "Wrench",
+    name: "Hammermill Shredder",
+    sub: "Feedstock preparation — first machine in the line",
+    phase: "p1",
+    tag: "Feedstock Prep",
+    metricLabel: "Capacity",
+    metricVal: "500 kg/hr",
+    powerLabel: "Power",
+    powerVal: "15–22 kW diesel/biomass",
+    specs: [
+      { label: "Throughput", val: "500 kg/hr" },
+      { label: "Power source", val: "15–22 kW (biomass)" },
+      { label: "Output size", val: "5–25 mm chips" },
+      { label: "Operators", val: "1 SHG worker" }
+    ],
+    desc: "Shreds pineapple leaf (PALF), bamboo internodes, and rice husk into uniform chip sizes for downstream drying and blending. Runs on biomass-derived electricity from the pellet burner loop — zero grid dependency. Noise-enclosed housing to meet village siting requirements."
+  },
+  hotpress: {
+    id: "hotpress",
+    iconName: "Cpu",
+    name: "Hot Press (Hydraulic)",
+    sub: "Core machine — converts mat into board",
+    phase: "p1",
+    tag: "Board Formation",
+    metricLabel: "Pressure",
+    metricVal: "150–200 bar",
+    powerLabel: "Temp",
+    powerVal: "160–180 °C",
+    specs: [
+      { label: "Platen size", val: "4×8 ft (standard)" },
+      { label: "Pressure", val: "150–200 bar" },
+      { label: "Temperature", val: "160–180 °C" },
+      { label: "Cycle time", val: "8–12 min/board" }
+    ],
+    desc: "The heart of every Green-to-Gold unit. A single-daylight hydraulic press that bonds bio-fibre mats under heat and pressure using UF or MF resin binders. Produces boards ranging from 6mm to 25mm thickness across a single 4×8 ft platen — no retooling needed. Designed for 3-shift operation with SHG labour."
+  },
+  dryer: {
+    id: "dryer",
+    iconName: "Wind",
+    name: "Rotary Drum Dryer",
+    sub: "Moisture reduction to < 8% before pressing",
+    phase: "p1",
+    tag: "Moisture Control",
+    metricLabel: "Output moisture",
+    metricVal: "< 8%",
+    powerLabel: "Fuel",
+    powerVal: "Self-fired bio-pellets",
+    specs: [
+      { label: "Inlet moisture", val: "Up to 65%" },
+      { label: "Target output", val: "< 8% MC" },
+      { label: "Drum length", val: "6–8 m" },
+      { label: "Heat source", val: "Bio-pellet burner (self-fired)" }
+    ],
+    desc: "Reduces feedstock moisture from field-fresh levels (40–65%) to press-ready levels (<8%). Fired entirely by the on-site pellet press output — no external fuel cost. Variable residence time control ensures consistent moisture output regardless of seasonal variation in incoming biomass moisture content."
+  },
+  pellet: {
+    id: "pellet",
+    iconName: "Activity",
+    name: "Pellet Press",
+    sub: "Converts press cake and residue into fuel",
+    phase: "p1",
+    tag: "Fuel Loop",
+    metricLabel: "Output",
+    metricVal: "200 kg/hr pellets",
+    powerLabel: "Sells surplus",
+    powerVal: "₹4–6/kg",
+    specs: [
+      { label: "Output rate", val: "200 kg/hr" },
+      { label: "Pellet diameter", val: "6–8 mm" },
+      { label: "Calorific value", val: "4,200–4,800 kcal/kg" },
+      { label: "Surplus sell price", val: "₹4–6 per kg" }
+    ],
+    desc: "Converts press cake, sawdust, and fibre fines — all waste from the main board line — into dense fuel pellets. Enough to power the dryer and other thermal processes with a surplus of ~80–100 kg/day for external sale. This creates a second revenue stream (bio-fuel) from material that would otherwise be disposed of, directly funding operating costs."
+  },
+  mixer: {
+    id: "mixer",
+    iconName: "RefreshCw",
+    name: "Resin Blender / Mixer",
+    sub: "Uniform binder coating on fibre mat",
+    phase: "p1",
+    tag: "Binder Application",
+    metricLabel: "Binder ratio",
+    metricVal: "8–12% UF/MF resin",
+    powerLabel: "Batch size",
+    powerVal: "300 kg",
+    specs: [
+      { label: "Binder type", val: "UF / MF / bio-binder" },
+      { label: "Binder ratio", val: "8–12% by weight" },
+      { label: "Batch size", val: "300 kg per cycle" },
+      { label: "Mixing time", val: "4–6 minutes" }
+    ],
+    desc: "Ensures even distribution of urea-formaldehyde (UF) or melamine-formaldehyde (MF) resin across the shredded fibre before mat formation. Designed for future upgrade to bio-based binders (soy protein, tannin extract) to support full zero-formaldehyde certification as export markets demand it. Critical for board mechanical performance and IS 12406 compliance."
+  },
+  trimsaw: {
+    id: "trimsaw",
+    iconName: "Scissors",
+    name: "Trim Saw & Edge Sander",
+    sub: "Final board dimensioning and surface finish",
+    phase: "p1",
+    tag: "Finishing",
+    metricLabel: "Board size",
+    metricVal: "8×4 ft standard",
+    powerLabel: "Thickness",
+    powerVal: "6–25 mm range",
+    specs: [
+      { label: "Standard output", val: "8×4 ft boards" },
+      { label: "Thickness range", val: "6–25 mm" },
+      { label: "Surface finish", val: "F2 grade (sanded)" },
+      { label: "Throughput", val: "40–60 boards/shift" }
+    ],
+    desc: "Trims pressed boards to standard market dimensions and sands both faces to F2 surface grade — the minimum required for furniture-grade and PMAY-U construction use. Edge straightness is critical for local contractor acceptance. Dust extracted and fed back to the pellet press, maintaining zero-waste processing."
+  },
+  moulding: {
+    id: "moulding",
+    iconName: "Layers",
+    name: "Compression Moulding Press",
+    sub: "Tableware production line addition",
+    phase: "p2",
+    tag: "Tableware Production",
+    metricLabel: "Output",
+    metricVal: "2,000–3,000 units/hr",
+    powerLabel: "Material",
+    powerVal: "Rice husk + bagasse",
+    specs: [
+      { label: "Output rate", val: "2,000–3,000 units/hr" },
+      { label: "Pressure range", val: "100–150 bar" },
+      { label: "Material compatibility", val: "Rice husk / bagasse mix" },
+      { label: "Cycle time", val: "20–30 sec per cycle" }
+    ],
+    desc: "Compresses agro-waste fibre combined with biodegradable binders under high temperature and mechanical load to cast premium, water-resistant eco cutlery, tableware, and plates. Runs on bio-pellet thermal steam systems."
+  },
+  pulping: {
+    id: "pulping",
+    iconName: "Wind",
+    name: "Paper Pulping Unit",
+    sub: "Kraft paper production line addition",
+    phase: "p2",
+    tag: "Kraft Paper Stream",
+    metricLabel: "Pulp grade",
+    metricVal: "Semi-chemical",
+    powerLabel: "Water loop",
+    powerVal: "Closed-cycle (zero effluent)",
+    specs: [
+      { label: "Pulping grade", val: "Semi-chemical pulp" },
+      { label: "Raw inputs", val: "Bamboo chips / crop stalks" },
+      { label: "Water recycling", val: "98% closed loop" },
+      { label: "Output moisture", val: "12% standard" }
+    ],
+    desc: "Transforms bamboo chips and high-lignin straw residues into robust brown unbleached paper pulp. Includes a premium closed water loop that prevents toxic effluent runoff, satisfying stringent environmental protocols for village boundaries."
+  },
+  extractor: {
+    id: "extractor",
+    iconName: "Wrench",
+    name: "PALF Fibre Extractor",
+    sub: "Pineapple leaf fiber decorticator",
+    phase: "p2",
+    tag: "Pineapple Leaf Fibre",
+    metricLabel: "Fibre yield",
+    metricVal: "2.5–3% of leaf weight",
+    powerLabel: "Use",
+    powerVal: "Table covers, geotextiles",
+    specs: [
+      { label: "Fibre yield", val: "2.5% to 3.0% of leaf weight" },
+      { label: "Blade drum speed", val: "500–600 RPM" },
+      { label: "Waste by-product", val: "Bio-slurry (fertilizer feedstock)" },
+      { label: "Output moisture", val: "< 12% after solar prep" }
+    ],
+    desc: "High-speed rotary blade decorticator designed to scrape away outer pulp layers of agricultural pineapple leaves to harvest the high-performance cellulose fibers. Zero fiber breakage ensures peak tensile properties for mats."
+  },
+  laminator: {
+    id: "laminator",
+    iconName: "Layers",
+    name: "Multi-Layer Laminator",
+    sub: "Engineered board upgrades and surface finishing",
+    phase: "p2",
+    tag: "Board Upgrade",
+    metricLabel: "Layers",
+    metricVal: "Up to 5-ply",
+    powerLabel: "Application",
+    powerVal: "Structural panels, flooring",
+    specs: [
+      { label: "Ply range", val: "3-ply to 5-ply construction" },
+      { label: "Lamination width", val: "Up to 5 ft standard" },
+      { label: "Heat source", val: "Induction / Bio-mass oil thermal" },
+      { label: "Finished grade", val: "E1 low emissions" }
+    ],
+    desc: "Bonds premium high-tensile veneer sheaths or decorative faces onto core composite boards. Enables multi-use modular building panels, water-resistant structural subfloors, and heavy-duty architectural structures."
+  },
+  bamboo: {
+    id: "bamboo",
+    iconName: "Layers",
+    name: "Bamboo Laminated Lumber Line",
+    sub: "Structural engineered lumber for premium export",
+    phase: "p3",
+    tag: "Structural Export",
+    metricLabel: "Output",
+    metricVal: "High-density structural beams",
+    powerLabel: "Target",
+    powerVal: "IKEA supply chain spec",
+    specs: [
+      { label: "Tensile rating", val: "140–235 MPa" },
+      { label: "Glue pressure", val: "Over 250 bar hydraulic" },
+      { label: "Target certification", val: "IKEA supply chain specs" },
+      { label: "Dimensions", val: "Custom structural lengths" }
+    ],
+    desc: "High-density structural composite line. Presses cross-directional laminated bamboo splints into dimensional profiles that compete with tropical hardwoods. Extremely durable and carbon net-negative."
+  },
+  biogas: {
+    id: "biogas",
+    iconName: "Activity",
+    name: "Biogas Digester (SATAT)",
+    sub: "Off-grid organic utility energy system",
+    phase: "p3",
+    tag: "Renewable Energy Hub",
+    metricLabel: "Input",
+    metricVal: "Organic press cake + effluent",
+    powerLabel: "Output",
+    powerVal: "Biogas + digestate fertilizer",
+    specs: [
+      { label: "Methane yield", val: "60–65% concentration" },
+      { label: "Slurry output", val: "1,200 kg/day organic manure" },
+      { label: "Digester volume", val: "100 m³ capacity" },
+      { label: "Co-product", val: "Compressed Bio-Gas (CBG)" }
+    ],
+    desc: "Converts organic agricultural press-cakes, sizing wash-waters, and neighborhood farm waste into clean combustion gas. Feeds on-site power generators while yielding mineral-rich organic bio-fertilizer sold to local farms."
+  },
+  vision: {
+    id: "vision",
+    iconName: "Eye",
+    name: "AI Quality Vision System",
+    sub: "Automated inline quality assurance & control",
+    phase: "p3",
+    tag: "Inline QC",
+    metricLabel: "Defect detection",
+    metricVal: "Camera + ML model",
+    powerLabel: "Reject rate target",
+    powerVal: "< 2%",
+    specs: [
+      { label: "Inspection rate", val: "40 frames per second" },
+      { label: "Defect detection", val: "Edge cracks, delamination, void spaces" },
+      { label: "Reject rate bias", val: "< 1% false positive" },
+      { label: "Model latency", val: "12ms per panel" }
+    ],
+    desc: "Computer vision cameras combined with localized edge computing models analyze the top and bottom faces of every outgoing board. Instantly flags thickness standard anomalies and auto-diverts rejects, ensuring export compliance."
+  },
+  carbon: {
+    id: "carbon",
+    iconName: "Activity",
+    name: "Carbon Credit Metering",
+    sub: "Digital ledger tracking for carbon offset assets",
+    phase: "p3",
+    tag: "ESG Tokenization",
+    metricLabel: "Standard",
+    metricVal: "Verra VCS / Gold Standard",
+    powerLabel: "Revenue",
+    powerVal: "Verified carbon tokens",
+    specs: [
+      { label: "Standard spec", val: "Verra / Gold Standard methodology" },
+      { label: "Tracking factor", val: "Realtime telemetry IoT hubs" },
+      { label: "Net offset multiplier", val: "1.4t CO2e sequestered / tonne board" },
+      { label: "Asset yield", val: "Blockchain-backed ESG tokens" }
+    ],
+    desc: "IoT telemetry integrated directly across shredding and thermal processes continuously tracks energy consumption and raw straw weight indexes. Generates verifiable data logs to supply global green carbon asset trading platforms."
   }
 };
 
@@ -913,6 +1282,8 @@ function LandingPage({ user }: { user: any }) {
   const [isDocOpen, setIsDocOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [infraPhase, setInfraPhase] = useState<"p1" | "p2" | "p3">("p1");
+  const [selectedMachineId, setSelectedMachineId] = useState<string>("hammermill");
   const { language } = useLanguage();
   const lp = LP_TRANSLATIONS[language] || LP_TRANSLATIONS.en;
 
@@ -1472,6 +1843,272 @@ function LandingPage({ user }: { user: any }) {
             </div>
           )}
         </AnimatePresence>
+
+        {/* Infrastructure & Machinery Section */}
+        <section id="infrastructure" className="py-24 px-6 bg-white border-t border-brand-green/10" aria-labelledby="infrastructure-title">
+          <div className="max-w-7xl mx-auto">
+            <SectionTitle id="infrastructure-title" subtitle={lp.infraBadge || "Infrastructure"}>
+              {lp.infraTitle || "Farm-Gate Units & Heavy Machinery"}
+            </SectionTitle>
+            
+            <p className="text-brand-ink/65 text-lg max-w-3xl mb-12 -mt-4 leading-relaxed font-sans">
+              {lp.infraSub || "Each Green-to-Gold mini-factory is a modular, self-powered industrial unit deployable within 500m of the farm gate — no grid connection, no logistics bottleneck, no dependency on the Siliguri Corridor."}
+            </p>
+
+            {/* Phase Tabs */}
+            <div className="flex flex-wrap gap-2.5 mb-10 pb-2 border-b border-brand-green/5">
+              {[
+                { id: "p1", label: lp.infraPhase1 || "Phase 1: Pilot Unit" },
+                { id: "p2", label: lp.infraPhase2 || "Phase 2: Expanded Unit" },
+                { id: "p3", label: lp.infraPhase3 || "Phase 3: District Hub" }
+              ].map(phase => (
+                <button
+                  key={phase.id}
+                  onClick={() => {
+                    setInfraPhase(phase.id as "p1" | "p2" | "p3");
+                    if (phase.id === "p1") setSelectedMachineId("hammermill");
+                    if (phase.id === "p2") setSelectedMachineId("moulding");
+                    if (phase.id === "p3") setSelectedMachineId("bamboo");
+                  }}
+                  className={`text-sm font-medium px-5 py-2.5 rounded-xl transition-all cursor-pointer ${
+                    infraPhase === phase.id
+                      ? "bg-[#EAF3DE] text-[#3B6D11] border border-[#97C459] shadow-inner font-semibold"
+                      : "bg-brand-paper hover:bg-brand-green/5 text-brand-ink/70 hover:text-brand-ink"
+                  }`}
+                >
+                  {phase.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Machinery Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+              {Object.values(INFRA_MACHINES)
+                .filter(m => m.phase === infraPhase)
+                .map(machine => {
+                  const isSelected = selectedMachineId === machine.id;
+                  return (
+                    <motion.div
+                      key={machine.id}
+                      whileHover={{ y: -3, scale: 1.01 }}
+                      onClick={() => setSelectedMachineId(machine.id)}
+                      className={`card-interactive p-6 rounded-2xl cursor-pointer transition-all border ${
+                        isSelected 
+                          ? "border-[#97C459] bg-[#EAF3DE]/40 ring-1 ring-[#97C459]/50 shadow-md" 
+                          : "border-brand-green/10 bg-brand-paper/50 hover:bg-brand-paper"
+                      }`}
+                    >
+                      <div className={`p-3 w-fit rounded-xl mb-4 ${isSelected ? "bg-[#3B6D11] text-white" : "bg-brand-green/10 text-[#3B6D11]"}`}>
+                        <MachineIcon name={machine.iconName} className="w-6 h-6" />
+                      </div>
+                      <h4 className="text-base font-bold text-brand-ink mb-1">{machine.name}</h4>
+                      <span className="inline-block text-[10px] font-semibold tracking-wider text-brand-green bg-brand-green/10 px-2 py-0.5 rounded-full mb-4 uppercase">
+                        {machine.tag}
+                      </span>
+                      <div className="space-y-1.5 border-t border-brand-green/5 pt-3 text-[13px] text-brand-ink/70 font-sans">
+                        <div>
+                          <span className="font-semibold text-brand-ink">{machine.metricLabel}:</span> {machine.metricVal}
+                        </div>
+                        <div>
+                          <span className="font-semibold text-brand-ink">{machine.powerLabel}:</span> {machine.powerVal}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+            </div>
+
+            {/* Machine Detail Panel */}
+            <AnimatePresence mode="wait">
+              {selectedMachineId && INFRA_MACHINES[selectedMachineId] && (
+                <motion.div
+                  key={selectedMachineId}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-brand-paper border border-brand-green/15 rounded-3xl p-6 md:p-10 mb-12 shadow-sm"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                    <div className="flex items-center gap-4">
+                      <div className="p-4 bg-brand-green text-white rounded-2xl shadow-sm">
+                        <MachineIcon name={INFRA_MACHINES[selectedMachineId].iconName} className="w-8 h-8" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl md:text-2xl font-bold text-brand-ink">
+                          {INFRA_MACHINES[selectedMachineId].name}
+                        </h3>
+                        <p className="text-xs md:text-sm text-brand-ink/60 font-sans mt-0.5">
+                          {INFRA_MACHINES[selectedMachineId].sub}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-xs uppercase tracking-wider font-semibold text-brand-orange-dark bg-brand-orange/10 px-3.5 py-1.5 rounded-full self-start md:self-center">
+                      {INFRA_MACHINES[selectedMachineId].tag}
+                    </div>
+                  </div>
+
+                  {/* Specification grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    {INFRA_MACHINES[selectedMachineId].specs.map((spec, sidx) => (
+                      <div key={sidx} className="bg-white border border-brand-green/5 p-4 rounded-xl shadow-sm">
+                        <div className="text-[10px] uppercase font-semibold text-brand-ink/40 tracking-wider mb-1">
+                          {spec.label}
+                        </div>
+                        <div className="text-base font-bold text-brand-ink font-mono">
+                          {spec.val}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Description text */}
+                  <p className="text-base text-brand-ink/80 leading-relaxed font-sans max-w-4xl">
+                    {INFRA_MACHINES[selectedMachineId].desc}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Layout Diagrams and Footprint Loop metrics */}
+            <div className="bg-brand-paper/50 border border-brand-green/10 rounded-3xl p-6 md:p-10">
+              <h3 className="text-lg md:text-xl font-bold text-brand-ink mb-6 flex items-center gap-2">
+                <Factory className="w-5 h-5 text-brand-green" />
+                {infraPhase === "p1" && (lp.infraFootprintTitle || "Mini-factory floor layout — Phase 1 (footprint: ~1,800 sq ft)")}
+                {infraPhase === "p2" && (lp.infraFootprintP2 || "Phase 2 additions — expanded floor (footprint: ~3,200 sq ft)")}
+                {infraPhase === "p3" && (lp.infraFootprintP3 || "Phase 3 — District hub model (one per district, 8 total by 2027)")}
+              </h3>
+
+              {infraPhase === "p1" ? (
+                <div className="space-y-6">
+                  {/* Phase 1 Layout Stream */}
+                  <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between pb-8 border-b border-brand-green/5">
+                    <div className="flex-1 bg-white border border-[#97C459]/20 p-5 rounded-2xl flex flex-col justify-between shadow-sm hover:border-[#97C459]/50 transition-colors">
+                      <div className="text-xs font-semibold text-[#27500A] uppercase tracking-wider mb-2">Collection Bay</div>
+                      <div className="text-[13px] text-brand-ink/70">Biomass intake & weighing at village portal</div>
+                    </div>
+                    <div className="flex items-center justify-center text-brand-ink/30 rotate-90 lg:rotate-0">
+                      <ArrowRight className="w-6 h-6" />
+                    </div>
+
+                    <div className="flex-1 bg-white border border-[#85B7EB]/20 p-5 rounded-2xl flex flex-col justify-between shadow-sm hover:border-[#85B7EB]/50 transition-colors">
+                      <div className="text-xs font-semibold text-[#0C447C] uppercase tracking-wider mb-2">Shredder + Dryer</div>
+                      <div className="text-[13px] text-brand-ink/70">Fibre size reduction & automatic moisture adjustment</div>
+                    </div>
+                    <div className="flex items-center justify-center text-brand-ink/30 rotate-90 lg:rotate-0">
+                      <ArrowRight className="w-6 h-6" />
+                    </div>
+
+                    <div className="flex-1 bg-white border border-[#85B7EB]/20 p-5 rounded-2xl flex flex-col justify-between shadow-sm hover:border-[#85B7EB]/50 transition-colors">
+                      <div className="text-xs font-semibold text-[#0C447C] uppercase tracking-wider mb-2">Blender + Mat Former</div>
+                      <div className="text-[13px] text-brand-ink/70">Atomizer resin blend & multi-direction mat layup</div>
+                    </div>
+                    <div className="flex items-center justify-center text-brand-ink/30 rotate-90 lg:rotate-0">
+                      <ArrowRight className="w-6 h-6" />
+                    </div>
+
+                    <div className="flex-1 bg-white border border-[#85B7EB]/20 p-5 rounded-2xl flex flex-col justify-between shadow-sm hover:border-[#85B7EB]/50 transition-colors">
+                      <div className="text-xs font-semibold text-[#0C447C] uppercase tracking-wider mb-2">Hot Press</div>
+                      <div className="text-[13px] text-brand-ink/70">Unified platform panel heat composite formation</div>
+                    </div>
+                    <div className="flex items-center justify-center text-brand-ink/30 rotate-90 lg:rotate-0">
+                      <ArrowRight className="w-6 h-6" />
+                    </div>
+
+                    <div className="flex-1 bg-white border border-[#5DCAA5]/20 p-5 rounded-2xl flex flex-col justify-between shadow-sm hover:border-[#5DCAA5]/50 transition-colors">
+                      <div className="text-xs font-semibold text-[#085041] uppercase tracking-wider mb-2">Trim + Stack + QC</div>
+                      <div className="text-[13px] text-brand-ink/70">Finishing dimensioning, diamond saw trim & dispatch</div>
+                    </div>
+                  </div>
+
+                  {/* Power Generation Loop */}
+                  <div className="bg-white border border-[#EF9F27]/25 p-5 rounded-2xl max-w-md shadow-sm">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-[#FAEEDA] text-[#633806] rounded-xl font-bold text-xs uppercase">Energy Loop</div>
+                      <h4 className="text-sm font-bold text-brand-ink">Pellet Press & Thermal Burner</h4>
+                    </div>
+                    <p className="text-[13px] text-brand-ink/70 leading-relaxed">
+                      Converts processing crumbs and fines into biomass fuels (self-powered system utilizing 80% bio-pellet loops).
+                    </p>
+                  </div>
+                </div>
+              ) : infraPhase === "p2" ? (
+                <div className="space-y-6">
+                  <p className="text-sm md:text-base text-brand-ink/70 leading-relaxed font-sans max-w-4xl bg-white border border-brand-green/5 p-6 rounded-2xl shadow-sm">
+                    Phase 1 board line is fully retained with new custom product streams introduced in parallel processing bays. 
+                    The brand-new tableware moulding bay runs on independent schedules utilising low-cost rice husk & local sugarcane bagasse feedstock. 
+                    The custom PALF decorticator extractor furnishes both structural composites and textile loops without water debt, while 
+                    the closed-cycle industrial pulper intercepts any liquid outputs, maintaining safe forest-buffer siting boundaries.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <p className="text-sm md:text-base text-brand-ink/70 leading-relaxed font-sans max-w-4xl bg-white border border-brand-green/5 p-6 rounded-2xl shadow-sm">
+                    Our unique District Hub structures provide global supply chain finishing and lamination capabilities, serving 3 to 5 local 
+                    satellite units. Local workers feed primary composite boards directly into heavy laminators, and the camera-assisted 
+                    neural model ensures precise ISO-grade tolerances without complex laboratory setups. Low-impact SATAT digestors absorb on-site organic wastes 
+                    to create local heating fuels and nutrient-dense fertilisers distributed back to SHG cooperative farmers.
+                  </p>
+                </div>
+              )}
+
+              {/* Footprint loops / metrics bar */}
+              <div className="mt-10 pt-8 border-t border-brand-green/10 space-y-6 font-sans">
+                {/* Metric 1 */}
+                <div>
+                  <div className="flex justify-between items-center text-xs md:text-sm mb-2 text-brand-ink/80">
+                    <span className="font-semibold">{lp.infraMetric1Label || "Unit capacity utilization (target, Month 6)"}</span>
+                    <span className="font-bold text-brand-green text-right">75%</span>
+                  </div>
+                  <div className="h-2.5 w-full bg-brand-green/10 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "75%" }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      className="h-full bg-brand-green rounded-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Metric 2 */}
+                <div>
+                  <div className="flex justify-between items-center text-xs md:text-sm mb-2 text-brand-ink/80">
+                    <span className="font-semibold">{lp.infraMetric2Label || "Biomass feedstock from farm waste (vs purchased)"}</span>
+                    <span className="font-bold text-brand-green text-right">90%</span>
+                  </div>
+                  <div className="h-2.5 w-full bg-brand-green/10 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "90%" }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
+                      className="h-full bg-brand-green rounded-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Metric 3 */}
+                <div>
+                  <div className="flex justify-between items-center text-xs md:text-sm mb-2 text-brand-ink/80">
+                    <span className="font-semibold">{lp.infraMetric3Label || "Self-energy sufficiency via bio-pellet loop"}</span>
+                    <span className="font-bold text-[#EF9F27] text-right">80%</span>
+                  </div>
+                  <div className="h-2.5 w-full bg-[#FAEEDA] rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: "80%" }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+                      className="h-full bg-[#EF9F27] rounded-full"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
 
         {/* Impact Section */}
         <section id="impact" className="py-24 px-6 bg-brand-paper relative" aria-labelledby="impact-title">
