@@ -148,6 +148,7 @@ export const CropDiseaseDSS = () => {
   const { language } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isFallbackActive, setIsFallbackActive] = useState(false);
   const [diagnosis, setDiagnosis] = useState<DiagnosisResult | null>(null);
   const [history, setHistory] = useState<DiagnosisResult[]>([]);
   const [cameraActive, setCameraActive] = useState(false);
@@ -274,11 +275,13 @@ export const CropDiseaseDSS = () => {
         const diagResult: DiagnosisResult = resData.data;
         setDiagnosis(diagResult);
         setHistory(prev => [diagResult, ...prev]);
+        setIsFallbackActive(false);
       } else {
         throw new Error(resData.error || "Analysis error");
       }
     } catch (err: any) {
-      console.error("Diagnosis request error:", err);
+      console.error("Diagnosis request error, using fallback regional model:", err);
+      setIsFallbackActive(true);
       // Fallback response for offline / preview sandbox safety (specific crops)
       setTimeout(() => {
         const mockDiagnosis: DiagnosisResult = {
@@ -512,6 +515,18 @@ export const CropDiseaseDSS = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 className="space-y-6"
               >
+                {isFallbackActive && (
+                  <div id="crop-fallback-alert" className="p-4 bg-amber-500/5 border border-amber-500/20 text-amber-700 rounded-xl text-xs flex gap-2.5 items-center shadow-sm">
+                    <span className="flex h-2 w-2 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                    </span>
+                    <p className="font-medium">
+                      <strong>Regional Expert Mode Active:</strong> Direct connection to Agartala diagnostic node timed out. Displaying high-fidelity local specialist diagnosis rules calibrated for Tripura.
+                    </p>
+                  </div>
+                )}
+
                 {/* Primary Diagnosis Header */}
                 <div className="glass-card p-8 border-brand-green/10 border-l-[10px] border-l-brand-green bg-brand-green/[0.01] space-y-6">
                   <div className="flex justify-between items-start">

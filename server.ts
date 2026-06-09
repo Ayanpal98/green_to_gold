@@ -137,7 +137,7 @@ Format your output in a clear JSON structure. Ensure the diseaseName and cropAff
               }
             }
           }),
-          8000,
+          25000,
           "Crop disease diagnosis"
         );
 
@@ -355,7 +355,7 @@ Format your output in a clear JSON structure. Ensure all fields are filled accur
               }
             }
           }),
-          8000,
+          25000,
           "Soil analysis and diagnostics"
         );
 
@@ -563,7 +563,7 @@ Format your output in a clear JSON structure. Ensure all fields are filled accur
               }
             }
           }),
-          8000,
+          25000,
           "Market econometric advisory"
         );
 
