@@ -17,6 +17,22 @@ const ai = new GoogleGenAI({
   }
 });
 
+// A robust helper to abort/race heavy Gemini requests when they hang or exceed limits in sandboxed environments
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label = "Operation"): Promise<T> {
+  let timeoutId: NodeJS.Timeout;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error(`${label} exceeded maximum safe timeout budget of ${timeoutMs}ms`));
+    }, timeoutMs);
+  });
+
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    clearTimeout(timeoutId!);
+  }
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -90,36 +106,40 @@ Format your output in a clear JSON structure. Ensure the diseaseName and cropAff
 
       let diagnosis;
       try {
-        const response = await ai.models.generateContent({
-          model: "gemini-3.5-flash",
-          contents: { parts: [imagePart, { text: promptText }] },
-          config: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: Type.OBJECT,
-              properties: {
-                diseaseName: { type: Type.STRING, description: "Name of the crop disease or 'Healthy / No disease detected'." },
-                confidence: { type: Type.INTEGER, description: "Confidence score from 0 to 100." },
-                cropAffected: { type: Type.STRING, description: "Crop type identified (e.g. Rice, Jute, Bamboo, Pineapple, Sugarcane, Betelnut, Rubber)." },
-                treatmentSteps: {
-                  type: Type.ARRAY,
-                  items: { type: Type.STRING },
-                  description: "3-4 direct treatment instructions utilizing local or standard organic and chemical controls."
+        const response = await withTimeout(
+          ai.models.generateContent({
+            model: "gemini-3.5-flash",
+            contents: { parts: [imagePart, { text: promptText }] },
+            config: {
+              responseMimeType: "application/json",
+              responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                  diseaseName: { type: Type.STRING, description: "Name of the crop disease or 'Healthy / No disease detected'." },
+                  confidence: { type: Type.INTEGER, description: "Confidence score from 0 to 100." },
+                  cropAffected: { type: Type.STRING, description: "Crop type identified (e.g. Rice, Jute, Bamboo, Pineapple, Sugarcane, Betelnut, Rubber)." },
+                  treatmentSteps: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING },
+                    description: "3-4 direct treatment instructions utilizing local or standard organic and chemical controls."
+                  },
+                  prevention: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING },
+                    description: "2-3 dynamic crop husbandry steps to prevent recurrence."
+                  },
+                  northeastIndiaContext: {
+                    type: Type.STRING,
+                    description: "Geographic explanation linking this to Northeast India/Tripura's farming conditions."
+                  }
                 },
-                prevention: {
-                  type: Type.ARRAY,
-                  items: { type: Type.STRING },
-                  description: "2-3 dynamic crop husbandry steps to prevent recurrence."
-                },
-                northeastIndiaContext: {
-                  type: Type.STRING,
-                  description: "Geographic explanation linking this to Northeast India/Tripura's farming conditions."
-                }
-              },
-              required: ["diseaseName", "confidence", "cropAffected", "treatmentSteps", "prevention", "northeastIndiaContext"]
+                required: ["diseaseName", "confidence", "cropAffected", "treatmentSteps", "prevention", "northeastIndiaContext"]
+              }
             }
-          }
-        });
+          }),
+          8000,
+          "Crop disease diagnosis"
+        );
 
         const responseText = response.text;
         if (!responseText) {
@@ -281,59 +301,63 @@ Format your output in a clear JSON structure. Ensure all fields are filled accur
 
         contentsParts.push({ text: promptText });
 
-        const response = await ai.models.generateContent({
-          model: "gemini-3.5-flash",
-          contents: { parts: contentsParts },
-          config: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: Type.OBJECT,
-              properties: {
-                soilStatus: {
-                  type: Type.OBJECT,
-                  properties: {
-                    ph: { type: Type.NUMBER, description: "Extracted/provided pH scale value." },
-                    nitrogen: { type: Type.NUMBER, description: "Extracted/provided Nitrogen value in kg/ha." },
-                    phosphorus: { type: Type.NUMBER, description: "Extracted/provided Phosphorus value in kg/ha." },
-                    potassium: { type: Type.NUMBER, description: "Extracted/provided Potassium value in kg/ha." },
-                    organicCarbon: { type: Type.NUMBER, description: "Extracted/provided Organic Carbon percentage." },
-                    moisture: { type: Type.NUMBER, description: "Extracted/provided Soil Moisture percentage." }
+        const response = await withTimeout(
+          ai.models.generateContent({
+            model: "gemini-3.5-flash",
+            contents: { parts: contentsParts },
+            config: {
+              responseMimeType: "application/json",
+              responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                  soilStatus: {
+                    type: Type.OBJECT,
+                    properties: {
+                      ph: { type: Type.NUMBER, description: "Extracted/provided pH scale value." },
+                      nitrogen: { type: Type.NUMBER, description: "Extracted/provided Nitrogen value in kg/ha." },
+                      phosphorus: { type: Type.NUMBER, description: "Extracted/provided Phosphorus value in kg/ha." },
+                      potassium: { type: Type.NUMBER, description: "Extracted/provided Potassium value in kg/ha." },
+                      organicCarbon: { type: Type.NUMBER, description: "Extracted/provided Organic Carbon percentage." },
+                      moisture: { type: Type.NUMBER, description: "Extracted/provided Soil Moisture percentage." }
+                    },
+                    required: ["ph", "nitrogen", "phosphorus", "potassium", "organicCarbon", "moisture"]
                   },
-                  required: ["ph", "nitrogen", "phosphorus", "potassium", "organicCarbon", "moisture"]
+                  cropSuitability: {
+                    type: Type.ARRAY,
+                    items: {
+                      type: Type.OBJECT,
+                      properties: {
+                        crop: { type: Type.STRING, description: "Crop name (e.g. Rice, Pineapple, Bamboo, Jute, Sugarcane, Agarwood, Betelnut, Rubber)." },
+                        suitabilityScore: { type: Type.INTEGER, description: "Overall suitability score from 0 to 100." },
+                        suitabilityRating: { type: Type.STRING, description: "Highly Suitable, Moderately Suitable, Marginally Suitable, or Unsuitable." },
+                        reasoning: { type: Type.STRING, description: "Detailed scientific reasons based on specific NPK and pH compatibility." }
+                      },
+                      required: ["crop", "suitabilityScore", "suitabilityRating", "reasoning"]
+                    }
+                  },
+                  nutrientCorrection: {
+                    type: Type.ARRAY,
+                    items: {
+                      type: Type.OBJECT,
+                      properties: {
+                        nutrient: { type: Type.STRING, description: "The parameter lacking (e.g. pH Adjustment, Nitrogen, Phosphorus, Potassium, Organic Carbon)." },
+                        status: { type: Type.STRING, description: "Current level: Low, Medium, High, Acidic, Neutral, Alkaline." },
+                        dosage: { type: Type.STRING, description: "Precisely specified correction dosage per hectare (e.g. apply 2.5 tonnes of slaked lime, or apply 120 kg SSP)." },
+                        remedy: { type: Type.STRING, description: "Remedy compound details and delivery timing instructions." },
+                        auditableReference: { type: Type.STRING, description: "Reference guidelines derived from KVK / ICAR Agartala mandates." }
+                      },
+                      required: ["nutrient", "status", "dosage", "remedy", "auditableReference"]
+                    }
+                  },
+                  irrigationAdvice: { type: Type.STRING, description: "Detailed scheduling and water delivery guidance linked to the soil humidity." }
                 },
-                cropSuitability: {
-                  type: Type.ARRAY,
-                  items: {
-                    type: Type.OBJECT,
-                    properties: {
-                      crop: { type: Type.STRING, description: "Crop name (e.g. Rice, Pineapple, Bamboo, Jute, Sugarcane, Agarwood, Betelnut, Rubber)." },
-                      suitabilityScore: { type: Type.INTEGER, description: "Overall suitability score from 0 to 100." },
-                      suitabilityRating: { type: Type.STRING, description: "Highly Suitable, Moderately Suitable, Marginally Suitable, or Unsuitable." },
-                      reasoning: { type: Type.STRING, description: "Detailed scientific reasons based on specific NPK and pH compatibility." }
-                    },
-                    required: ["crop", "suitabilityScore", "suitabilityRating", "reasoning"]
-                  }
-                },
-                nutrientCorrection: {
-                  type: Type.ARRAY,
-                  items: {
-                    type: Type.OBJECT,
-                    properties: {
-                      nutrient: { type: Type.STRING, description: "The parameter lacking (e.g. pH Adjustment, Nitrogen, Phosphorus, Potassium, Organic Carbon)." },
-                      status: { type: Type.STRING, description: "Current level: Low, Medium, High, Acidic, Neutral, Alkaline." },
-                      dosage: { type: Type.STRING, description: "Precisely specified correction dosage per hectare (e.g. apply 2.5 tonnes of slaked lime, or apply 120 kg SSP)." },
-                      remedy: { type: Type.STRING, description: "Remedy compound details and delivery timing instructions." },
-                      auditableReference: { type: Type.STRING, description: "Reference guidelines derived from KVK / ICAR Agartala mandates." }
-                    },
-                    required: ["nutrient", "status", "dosage", "remedy", "auditableReference"]
-                  }
-                },
-                irrigationAdvice: { type: Type.STRING, description: "Detailed scheduling and water delivery guidance linked to the soil humidity." }
-              },
-              required: ["soilStatus", "cropSuitability", "nutrientCorrection", "irrigationAdvice"]
+                required: ["soilStatus", "cropSuitability", "nutrientCorrection", "irrigationAdvice"]
+              }
             }
-          }
-        });
+          }),
+          8000,
+          "Soil analysis and diagnostics"
+        );
 
         const responseText = response.text;
         if (!responseText) {
@@ -478,66 +502,70 @@ Format your output in a clear JSON structure. Ensure all fields are filled accur
 
       let parsedResult;
       try {
-        const response = await ai.models.generateContent({
-          model: "gemini-3.5-flash",
-          contents: promptText,
-          config: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: Type.OBJECT,
-              properties: {
-                temporalAdvisory: {
-                  type: Type.OBJECT,
-                  properties: {
-                    currentPrice: { type: Type.NUMBER, description: "Current estimated price in INR per Quintal." },
-                    trend: { type: Type.STRING, description: "Rising, Volatile, Stable, or Declining." },
-                    recommendation: { type: Type.STRING, description: "Actionable decision: HOLD, SELL, or PARTIAL DISCHARGE." },
-                    targetPrice1Month: { type: Type.NUMBER, description: "Projected price in 30 days." },
-                    rationale: { type: Type.STRING, description: "Agronomic and trade explanations for the pricing forecast." }
-                  },
-                  required: ["currentPrice", "trend", "recommendation", "targetPrice1Month", "rationale"]
-                },
-                profitabilityComparison: {
-                  type: Type.OBJECT,
-                  properties: {
-                    analysisExplanation: { type: Type.STRING, description: "Introduction to next season's market drivers." },
-                    candidates: {
-                      type: Type.ARRAY,
-                      items: {
-                        type: Type.OBJECT,
-                        properties: {
-                          cropName: { type: Type.STRING },
-                          inputCostPerBigha: { type: Type.NUMBER },
-                          expectedRevenuePerBigha: { type: Type.NUMBER },
-                          netProfitPerBigha: { type: Type.NUMBER },
-                          riskAssessment: { type: Type.STRING, description: "Low, Medium, or High with brief reason." }
-                        },
-                        required: ["cropName", "inputCostPerBigha", "expectedRevenuePerBigha", "netProfitPerBigha", "riskAssessment"]
-                      }
-                    },
-                    companionSuggestion: { type: Type.STRING, description: "Intercropping recommendation to hedge risks." }
-                  },
-                  required: ["analysisExplanation", "candidates", "companionSuggestion"]
-                },
-                spatialSpread: {
-                  type: Type.ARRAY,
-                  items: {
+        const response = await withTimeout(
+          ai.models.generateContent({
+            model: "gemini-3.5-flash",
+            contents: promptText,
+            config: {
+              responseMimeType: "application/json",
+              responseSchema: {
+                type: Type.OBJECT,
+                properties: {
+                  temporalAdvisory: {
                     type: Type.OBJECT,
                     properties: {
-                      mandiName: { type: Type.STRING },
-                      pricePerQuintal: { type: Type.NUMBER },
-                      deliveryTimeHrs: { type: Type.NUMBER },
-                      netArbitrageGain: { type: Type.NUMBER, description: "Extra profit per quintal after deducting transport expenses." },
-                      advisoryNote: { type: Type.STRING }
+                      currentPrice: { type: Type.NUMBER, description: "Current estimated price in INR per Quintal." },
+                      trend: { type: Type.STRING, description: "Rising, Volatile, Stable, or Declining." },
+                      recommendation: { type: Type.STRING, description: "Actionable decision: HOLD, SELL, or PARTIAL DISCHARGE." },
+                      targetPrice1Month: { type: Type.NUMBER, description: "Projected price in 30 days." },
+                      rationale: { type: Type.STRING, description: "Agronomic and trade explanations for the pricing forecast." }
                     },
-                    required: ["mandiName", "pricePerQuintal", "deliveryTimeHrs", "netArbitrageGain", "advisoryNote"]
+                    required: ["currentPrice", "trend", "recommendation", "targetPrice1Month", "rationale"]
+                  },
+                  profitabilityComparison: {
+                    type: Type.OBJECT,
+                    properties: {
+                      analysisExplanation: { type: Type.STRING, description: "Introduction to next season's market drivers." },
+                      candidates: {
+                        type: Type.ARRAY,
+                        items: {
+                          type: Type.OBJECT,
+                          properties: {
+                            cropName: { type: Type.STRING },
+                            inputCostPerBigha: { type: Type.NUMBER },
+                            expectedRevenuePerBigha: { type: Type.NUMBER },
+                            netProfitPerBigha: { type: Type.NUMBER },
+                            riskAssessment: { type: Type.STRING, description: "Low, Medium, or High with brief reason." }
+                          },
+                          required: ["cropName", "inputCostPerBigha", "expectedRevenuePerBigha", "netProfitPerBigha", "riskAssessment"]
+                        }
+                      },
+                      companionSuggestion: { type: Type.STRING, description: "Intercropping recommendation to hedge risks." }
+                    },
+                    required: ["analysisExplanation", "candidates", "companionSuggestion"]
+                  },
+                  spatialSpread: {
+                    type: Type.ARRAY,
+                    items: {
+                      type: Type.OBJECT,
+                      properties: {
+                        mandiName: { type: Type.STRING },
+                        pricePerQuintal: { type: Type.NUMBER },
+                        deliveryTimeHrs: { type: Type.NUMBER },
+                        netArbitrageGain: { type: Type.NUMBER, description: "Extra profit per quintal after deducting transport expenses." },
+                        advisoryNote: { type: Type.STRING }
+                      },
+                      required: ["mandiName", "pricePerQuintal", "deliveryTimeHrs", "netArbitrageGain", "advisoryNote"]
+                    }
                   }
-                }
-              },
-              required: ["temporalAdvisory", "profitabilityComparison", "spatialSpread"]
+                },
+                required: ["temporalAdvisory", "profitabilityComparison", "spatialSpread"]
+              }
             }
-          }
-        });
+          }),
+          8000,
+          "Market econometric advisory"
+        );
 
         const responseText = response.text;
         if (!responseText) {
