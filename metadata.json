@@ -1,5 +1,8 @@
 {
   "name": "Green-to-Gold",
   "description": "Transforming agricultural waste into high-value bio-composite construction materials in Tripura.",
-  "requestFramePermissions": []
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

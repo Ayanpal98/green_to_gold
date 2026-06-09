@@ -24,6 +24,9 @@ import {
 } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { useLanguage } from "../context/LanguageContext";
+import { CropDiseaseDSS } from "./CropDiseaseDSS";
+import { SoilIntelligence } from "./SoilIntelligence";
+import { MarketIntelligence } from "./MarketIntelligence";
 
 import { 
   BarChart, 
@@ -105,6 +108,9 @@ const BioSenseDSS = () => {
   const { t, language } = useLanguage();
   const tabs = [
     t("common.resourceIntel"),
+    "🌾 Crop Disease DSS",
+    "🌱 Soil Intelligence DSS",
+    "📊 Market Intelligence",
     `${t("common.rice")} DSS`,
     `${t("common.sugarcane")} DSS`,
     `${t("common.rubber")} DSS`,
@@ -117,13 +123,13 @@ const BioSenseDSS = () => {
     t("sidebar.activeAlerts")
   ];
   const cropMap: Record<number, string> = {
-    1: "Rice",
-    2: "Sugarcane",
-    3: "Rubber",
-    4: "Agarwood",
-    5: "Betelnut",
-    6: "Jute",
-    7: "Bamboo"
+    4: "Rice",
+    5: "Sugarcane",
+    6: "Rubber",
+    7: "Agarwood",
+    8: "Betelnut",
+    9: "Jute",
+    10: "Bamboo"
   };
   const [activeTab, setActiveTab] = useState(0);
   const [resources, setResources] = useState<DistrictResource[]>(MOCK_RESOURCES);
@@ -159,7 +165,7 @@ const BioSenseDSS = () => {
   const [engineLoading, setEngineLoading] = useState(false);
 
   useEffect(() => {
-    if (activeTab >= 1 && activeTab <= 7) {
+    if (activeTab >= 4 && activeTab <= 10) {
       const cropName = cropMap[activeTab];
       if (cropName) {
         setEngineForm(prev => ({ ...prev, crop: cropName, species: "" }));
@@ -322,7 +328,10 @@ const BioSenseDSS = () => {
               transition={{ duration: 0.3 }}
             >
               {activeTab === 0 && <ResourceIntelligence resources={resources} />}
-              {activeTab >= 1 && activeTab <= 7 && (
+              {activeTab === 1 && <CropDiseaseDSS />}
+              {activeTab === 2 && <SoilIntelligence />}
+              {activeTab === 3 && <MarketIntelligence />}
+              {activeTab >= 4 && activeTab <= 10 && (
                 <HarvestEngine 
                   form={engineForm} 
                   setForm={setEngineForm} 
@@ -334,9 +343,9 @@ const BioSenseDSS = () => {
                   getSpeciesForCrop={getSpeciesForCrop}
                 />
               )}
-              {activeTab === 8 && <SHGActivitySection activities={activities} setActivities={setActivities} />}
-              {activeTab === 9 && <CarbonReplantingSection resources={resources} activities={activities} />}
-              {activeTab === 10 && <AlertsSection alerts={alerts} onResolve={resolveAlert} />}
+              {activeTab === 11 && <SHGActivitySection activities={activities} setActivities={setActivities} />}
+              {activeTab === 12 && <CarbonReplantingSection resources={resources} activities={activities} />}
+              {activeTab === 13 && <AlertsSection alerts={alerts} onResolve={resolveAlert} />}
             </motion.div>
           </AnimatePresence>
         </main>
