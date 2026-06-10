@@ -141,6 +141,26 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     en: "Signal successfully routed to Tripura State Agricultural Extension Desk (Agartala). Reference: BFS-2026-",
     bn: "আবেদন সফলভাবে ত্রিপুরা কৃষি সম্প্রসারণ ডেস্কে পাঠানো হয়েছে (আগরতলা)। রেফারেন্স: BFS-2026-",
     kok: "Signal successfully routed to Tripura Extension Desk. Reference: BFS-2026-"
+  },
+  regionalExpertMode: {
+    en: "Regional Expert Mode Active: Direct connection to Agartala diagnostic node timed out. Displaying high-fidelity local specialist diagnosis rules calibrated for Tripura.",
+    bn: "স্থানীয় এক্সপার্ট মোড সক্রিয়: আগরতলা ডায়াগনস্টিক নোডের সাথে সংযোগের সময় শেষ হয়েছে। ত্রিপুরার পরিবেশের জন্য তৈরি বিশেষ নির্দেশাবলী দেখানো হচ্ছে।",
+    kok: "Regional Expert Mode Active: Agartala diagnostic node connection timeout. Tripura ni local specialist diagnosis rules rwi thango."
+  },
+  treatmentStepsHeader: {
+    en: "Treatment Steps",
+    bn: "প্রতিকার বা চিকিৎসা পদক্ষেপ",
+    kok: "Remedy tei Treatment Steps"
+  },
+  preventionRoutineHeader: {
+    en: "Prevention Routine",
+    bn: "প্রতিরোধমূলক পরিচর্যা",
+    kok: "Prevention actions"
+  },
+  agroClimateContext: {
+    en: "Tripura Agro-Climate Context:",
+    bn: "ত্রিপুরার কৃষি-জলবায়ু পরিস্থিতি সংগতি:",
+    kok: "Tripura Agro-Climate Context:"
   }
 };
 
@@ -263,7 +283,7 @@ export const CropDiseaseDSS = () => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ image: imageSrc })
+        body: JSON.stringify({ image: imageSrc, language })
       });
 
       if (!response.ok) {
@@ -284,7 +304,41 @@ export const CropDiseaseDSS = () => {
       setIsFallbackActive(true);
       // Fallback response for offline / preview sandbox safety (specific crops)
       setTimeout(() => {
-        const mockDiagnosis: DiagnosisResult = {
+        const mockDiagnosis: DiagnosisResult = language === "bn" ? {
+          diseaseName: "ধানের ব্লাস্ট রোগ (Rice Blast - Pyricularia oryzae)",
+          confidence: 68,
+          cropAffected: "ধান (মাইমুং)",
+          treatmentSteps: [
+            "নিম বীজের নির্যাস (NSKE ৫%) ছিটান",
+            "নেতিয়ে পড়া জমিতে জল নিষ্কাশনের ব্যবস্থা করুন",
+            "৪ দিন পরেও লক্ষণ দেখা দিলে অনুমেদিত কপার অক্সিক্লোরাইড স্প্রে করুন",
+            "বর্ষাকালে অতিরিক্ত নাইট্রোজেন সার প্রয়োগ করা বন্ধ করুন"
+          ],
+          prevention: [
+            "স্বর্ণা সাব-১ এর মতো রোগ প্রতিরোধক জাত নির্বাচন করুন",
+            "সঠিক ফসল আবর্তন নিশ্চিত করুন এবং জৈব সার ব্যবহার করুন",
+            "মরসুম শেষে আক্রান্ত অবশিষ্ট ঘাস ও খড় পুড়িয়ে নষ্ট করে দিন"
+          ],
+          northeastIndiaContext: "উত্তর-পূর্ব ভারতের পাহাড়ি ঢাল এবং অতিরিক্ত আর্দ্র জলবায়ু ম্যাগনাপোর্থে ব্লাস্ট ছত্রাকের বংশবৃদ্ধির জন্য অনুকূল অবস্থা তৈরি করে। ধলাই ও উনকোটি উপত্যকার মাঠগুলিতে জলাবদ্ধতা এই রোগের প্রকোপ আরও বাড়িয়ে তোলে।",
+          humanInTheLoopRequired: true
+        } : language === "kok" ? {
+          diseaseName: "Rice Blast (Endemic Pyricularia oryzae)",
+          confidence: 68,
+          cropAffected: "Maimung (Rice)",
+          treatmentSteps: [
+            "Neem seed bark juice raw extract split khlaidi",
+            "Tui-halok area drainage system safe khlaidi",
+            "Symptoms thangkhe local copper oxychloride spray khlaidi doro",
+            "Monsoon seasonal ranges rogo excess nitrogen limit khlaidi"
+          ],
+          prevention: [
+            "Resistant variety Swarna Sub-1 maimung khorhadi",
+            "Biological crop rotation khlaidi",
+            "Clear debris and infected straw after seasonal harvesting"
+          ],
+          northeastIndiaContext: "Tripura ni hachuk slopes and hot humid monsoon kothoma climate blast spores nikhai optimal tongo. Dhalai tei Unakoti valley rogo rain waterlogging stem decay bariba.",
+          humanInTheLoopRequired: true
+        } : {
           diseaseName: "Rice Blast (Endemic Pyricularia oryzae)",
           confidence: 68, // Low confidence to trigger Human-in-the-Loop!
           cropAffected: "Rice (Maimung)",
@@ -522,7 +576,7 @@ export const CropDiseaseDSS = () => {
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                     </span>
                     <p className="font-medium">
-                      <strong>Regional Expert Mode Active:</strong> Direct connection to Agartala diagnostic node timed out. Displaying high-fidelity local specialist diagnosis rules calibrated for Tripura.
+                      <strong>{localT("regionalExpertMode")}</strong>
                     </p>
                   </div>
                 )}
@@ -558,7 +612,7 @@ export const CropDiseaseDSS = () => {
 
                   {/* regional explanation */}
                   <div className="text-xs text-brand-ink/80 leading-relaxed bg-brand-green/5 p-4 rounded-xl italic">
-                    <strong>Tripura Agro-Climate Context:</strong> {diagnosis.northeastIndiaContext}
+                    <strong>{localT("agroClimateContext")}</strong> {diagnosis.northeastIndiaContext}
                   </div>
                 </div>
 
@@ -566,7 +620,7 @@ export const CropDiseaseDSS = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="glass-card p-6 border-brand-green/5 space-y-4">
                     <h5 className="text-[11px] uppercase font-bold text-brand-orange tracking-widest border-b border-brand-green/10 pb-2">
-                      Treatment Steps
+                      {localT("treatmentStepsHeader")}
                     </h5>
                     <ul className="space-y-3">
                       {diagnosis.treatmentSteps.map((step, idx) => (
@@ -582,7 +636,7 @@ export const CropDiseaseDSS = () => {
 
                   <div className="glass-card p-6 border-brand-green/5 space-y-4">
                     <h5 className="text-[11px] uppercase font-bold text-brand-green tracking-widest border-b border-brand-green/10 pb-2">
-                      Prevention Routine
+                      {localT("preventionRoutineHeader")}
                     </h5>
                     <ul className="space-y-3">
                       {diagnosis.prevention.map((step, idx) => (

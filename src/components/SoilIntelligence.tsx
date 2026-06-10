@@ -153,6 +153,141 @@ export const SoilIntelligence: React.FC = () => {
   };
 
   const generateLocalSoilReport = (baseValues: SoilStatus): AnalysisResult => {
+    if (language === "bn") {
+      return {
+        soilStatus: baseValues,
+        cropSuitability: [
+          {
+            crop: "আনারস (আনারস - কুইন)",
+            suitabilityScore: baseValues.ph < 5.5 ? 95 : 75,
+            suitabilityRating: baseValues.ph < 5.5 ? "অত্যন্ত উপযুক্ত" : "মাঝারি উপযুক্ত",
+            reasoning: `ত্রিপুরার আম্লিক মাটি (pH ${baseValues.ph}) আনারস-কুইন জাতের জন্য অত্যন্ত উপযুক্ত। আম্লিক অবস্থা সুক্রোজ জমার হার উন্নত করে এবং মূল পচা রোগ প্রতিরোধ করে।`
+          },
+          {
+            crop: "বাঁশ (মূলী)",
+            suitabilityScore: 90,
+            suitabilityRating: "অত্যন্ত উপযুক্ত",
+            reasoning: `আম্লিক পাহাড়ি ঢালে দেশীয় প্রজাতির বাঁশ স্বাভাবিকভাবে জন্মায়। মূলী বাঁশ কম ফসফেটেও ভালো ফলন দেয়।`
+          },
+          {
+            crop: "আগর কাঠ (Agarwood)",
+            suitabilityScore: 88,
+            suitabilityRating: "অত্যন্ত উপযুক্ত",
+            reasoning: "উৎকৃষ্ট উপযুক্ততা। আগর গাছের জন্য হালকা আম্লিক মাটি এবং ভালো নিষ্কাশন ব্যবস্থা প্রয়োজন।"
+          },
+          {
+            crop: "রাবার (Rubber)",
+            suitabilityScore: 85,
+            suitabilityRating: "অত্যন্ত উপযুক্ত",
+            reasoning: `আম্লিক পাহাড়ী ঢাল চাষের জন্য আদর্শ। মাটির আর্দ্রতা (${baseValues.moisture}%) ল্যাটেক্সের নিয়মিত প্রবাহ বজায় রাখে।`
+          },
+          {
+            crop: "ধান (মাইমুং)",
+            suitabilityScore: baseValues.nitrogen > 250 ? 85 : 68,
+            suitabilityRating: baseValues.nitrogen > 250 ? "অত্যন্ত উপযুক্ত" : "মাঝারি উপযুক্ত",
+            reasoning: `আম্লিক মাটি (pH ${baseValues.ph}) এবং কম নাইট্রোজেন (${baseValues.nitrogen} কেজি/হেক্টর) ফলন সীমিত করে। চুন প্রয়োগ বা ইউরিয়া বিভক্ত প্রয়োগ ফলন ৯০+ এ নিয়ে যাবে।`
+          },
+          {
+            crop: "পাট (Pat)",
+            suitabilityScore: 60,
+            suitabilityRating: "সীমিত উপযুক্ত",
+            reasoning: "অতিরিক্ত অম্লতা তন্তুর পরিপক্কতা হ্রাস করে। মাটি শোধন করে pH অন্তত ৫.৮ করা প্রয়োজন।"
+          },
+          {
+            crop: "আখ (Sugarcane)",
+            suitabilityScore: 55,
+            suitabilityRating: "সীমিত উপযুক্ত",
+            reasoning: "অতিরিক্ত আম্লিক মাটিতে ফসফরাস ও বোরন শোষণ ব্যাহত হয়, যা আখের বৃদ্ধি হ্রাস করে।"
+          },
+          {
+            crop: "সুপারি (Arecanut)",
+            suitabilityScore: 45,
+            suitabilityRating: "অনুপযুক্ত",
+            reasoning: "অতিরিক্ত অম্লতা এবং নিকাশী ব্যবস্থার অভাব থাকলে কুঁড়ি পচা রোগ হতে পারে। আবাদের আগে মাটি শোধন বাধ্যতামূলক।"
+          }
+        ],
+        nutrientCorrection: [
+          {
+            nutrient: "মাটির pH (অম্লতা সংশোধন)",
+            status: baseValues.ph < 5.0 ? "তীব্র আম্লিক" : "আম্লিক",
+            dosage: "হেক্টর প্রতি ৩.৫ টন কৃষি চুন (CaCO3) প্রয়োগ করুন।",
+            remedy: "বীজ বোনার ২ সপ্তাহ আগে লাঙল দেওয়া জমিতে চুন ছড়িয়ে দিন। অ্যামোনিয়া উড়ে যাওয়া এড়াতে নাইট্রোজেন সারের সাথে একযোগে প্রয়োগ করবেন না।",
+            auditableReference: "আইসিএআর-ত্রিপুরা আম্লিক মৃত্তিকা পুনরুদ্ধার নীতি, ধারা ৪.১"
+          },
+          {
+            nutrient: "নাইট্রোজেন (N)",
+            status: baseValues.nitrogen < 280 ? "নিম্ন (ঘাটতি)" : "মাঝারি",
+            dosage: baseValues.nitrogen < 280 ? "ইউরিয়া হেক্টর প্রতি ১১০ কেজি ৩টি বিভক্ত কিস্তিতে প্রয়োগ করুন।" : "হেক্টর প্রতি ৪৫ কেজি ইউরিয়া প্রয়োগ করুন।",
+            remedy: "প্রথম কিস্তি জমি তৈরির সময় বেসাল ডোজ হিসেবে এবং বাকি কিস্তিগুলি কুশি গজানো ও শীষ বেরোনোর সময় প্রয়োগ করুন।",
+            auditableReference: "কেভিকে সার নির্দেশিকা ২০২৫"
+          },
+          {
+            nutrient: "ফসফরাস (P)",
+            status: baseValues.phosphorus < 10 ? "নিম্ন (ঘাটতি)" : "মাঝারি",
+            dosage: baseValues.phosphorus < 10 ? "হেক্টর প্রতি ১৫০ কেজি রক ফসফেট প্রয়োগ করুন।" : "হেক্টর প্রতি ৫০ কেজি এসএসপি (SSP) প্রয়োগ করুন।",
+            remedy: "জমি তৈরির সময় সম্পূর্ণ ডোজ বেসাল সার হিসেবে দিন। ত্রিপুরার আম্লিক মাটিতে রক ফসফেট খুব ভালো কাজ করে।",
+            auditableReference: "আইসিএআর মাটির গুণমান প্রোটোকল"
+          },
+          {
+            nutrient: "জৈব কার্বন (OC)",
+            status: baseValues.organicCarbon < 0.5 ? "নিম্ন (ঘাটতি)" : "মাঝারি",
+            dosage: "হেক্টর প্রতি ৫.০ টন কেঁচোসার (ভার্মিকম্পোস্ট) বা গোবর সার প্রয়োগ করুন।",
+            remedy: "জমি চাষের সময় মাটির সাথে মিশিয়ে দিন। দ্রুত কার্যকারিতার জন্য ট্রাইকোডার্মা কালচার দিয়ে দিন।",
+            auditableReference: "ত্রিপুরা অর্গানিক মিশন নির্দেশিকা"
+          }
+        ],
+        irrigationAdvice: `বর্তমানে মাটির আর্দ্রতা ${baseValues.moisture}% রয়েছে, যা মধ্য-বর্ষার জন্য পর্যাপ্ত। আনারস ও রাবার গাছের জন্য ঢাল বরাবর ভালো জল নিষ্কাশন ব্যবস্থা রাখুন যাতে জল না জমে। শুষ্ক মরসুমে ড্রিপ সেচ ব্যবস্থার মাধ্যমে সঠিক মাত্রায় জল দিন।`
+      };
+    }
+
+    if (language === "kok") {
+      return {
+        soilStatus: baseValues,
+        cropSuitability: [
+          {
+            crop: "Anarash (Pineapple - Queen)",
+            suitabilityScore: baseValues.ph < 5.5 ? 95 : 75,
+            suitabilityRating: baseValues.ph < 5.5 ? "Highly Suitable" : "Moderately Suitable",
+            reasoning: `Tripura ni acidic soils (pH ${baseValues.ph}) anarash-queen variety nikhai belai kahm. Sucrose accumulate khlaio tei root decay limit khlaio.`
+          },
+          {
+            crop: "Wa (Muli)",
+            suitabilityScore: 90,
+            suitabilityRating: "Highly Suitable",
+            reasoning: `Native species hachuk slopes rogo easily thriveyo. Low phosphorus muli wa rhizomes tolerate khlaio.`
+          },
+          {
+            crop: "Agarwood",
+            suitabilityScore: 88,
+            suitabilityRating: "Highly Suitable",
+            reasoning: "Aquilaria species light acidic tei high humidic drainage kothoma resin kahm khlaio."
+          },
+          {
+            crop: "Rubber",
+            suitabilityScore: 85,
+            suitabilityRating: "Highly Suitable",
+            reasoning: `Hachuk terrain rogo rubber thrives. Moisture (${baseValues.moisture}%) latex flow regular khlaio.`
+          },
+          {
+            crop: "Maimung (Rice)",
+            suitabilityScore: baseValues.nitrogen > 250 ? 85 : 68,
+            suitabilityRating: baseValues.nitrogen > 250 ? "Highly Suitable" : "Moderately Suitable",
+            reasoning: `Acidic soil (pH ${baseValues.ph}) tei Low Nitrogen (${baseValues.nitrogen} kg/ha) yield limit khlaio.`
+          }
+        ],
+        nutrientCorrection: [
+          {
+            nutrient: "Soil pH (Acidity Neutralization)",
+            status: baseValues.ph < 5.0 ? "Strongly Acidic" : "Acidic",
+            dosage: "Apply CaCO3 @ 3.5 tonnes/hectare.",
+            remedy: "Broadcast lime plowed fields rogo sowing swkang riadi.",
+            auditableReference: "ICAR-Tripura Acidic Soil Reclamation Policy"
+          }
+        ],
+        irrigationAdvice: `Moisture level ${baseValues.moisture}% tongo. Drainage systems slopes rogo adjust khlaidi anarash tei rubber logs safe aungna.`
+      };
+    }
+
     return {
       soilStatus: baseValues,
       cropSuitability: [
@@ -255,8 +390,8 @@ export const SoilIntelligence: React.FC = () => {
 
     try {
       const payload = inputMode === "upload" 
-        ? { pdfData: base64File }
-        : { manualValues: manualForm };
+        ? { pdfData: base64File, language }
+        : { manualValues: manualForm, language };
 
       if (inputMode === "upload" && !base64File) {
         throw new Error(
@@ -579,7 +714,7 @@ export const SoilIntelligence: React.FC = () => {
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-brand-green/5 pb-6 mb-6 gap-4">
                     <div>
                       <h4 className="text-2xl font-serif text-brand-green font-bold">
-                        {language === 'bn' ? "মৃত্তিকা স্বাস্থ্য কার্ড রিপোর্ট" : "Soil Health Card Report"}
+                        {language === 'bn' ? "মৃত্তিকা স্বাস্থ্য কার্ড রিপোর্ট" : language === 'kok' ? "Haste-Ha bini report card" : "Soil Health Card Report"}
                       </h4>
                       <p className="text-xs text-brand-ink/45 mt-1">
                         State Audit ID: <span className="font-mono font-bold text-brand-orange">TRP-KVK-{Math.floor(100000 + Math.random() * 900000)}</span> • Conforming Category ICAR
@@ -740,17 +875,17 @@ export const SoilIntelligence: React.FC = () => {
                 <div className="glass-card border-brand-green/10 p-8 overflow-hidden">
                   <h4 className="text-lg font-serif text-brand-green font-bold mb-6 flex items-center gap-2">
                     <Activity className="w-5 h-5 text-brand-orange animate-pulse" />
-                    KVK Recommended Soil Correction Schedule
+                    {language === 'bn' ? "কেভিকে সুপারিশকৃত মৃত্তিকা সংশোধন তফসিল" : language === 'kok' ? "KVK Soil Correction Schedule" : "KVK Recommended Soil Correction Schedule"}
                   </h4>
                   
                   <div className="overflow-x-auto no-scrollbar border border-brand-green/10 rounded-2xl">
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="bg-brand-green/[0.04] text-[10px] uppercase font-bold text-brand-green tracking-wider border-b border-brand-green/10">
-                          <th className="p-4">Soil Deficit</th>
-                          <th className="p-4">Optimal Dosage</th>
-                          <th className="p-4">Remedy Application</th>
-                          <th className="p-4">KVK Reference Index</th>
+                          <th className="p-4">{language === 'bn' ? "মাটির ঘাটতি" : language === 'kok' ? "Soil Deficit" : "Soil Deficit"}</th>
+                          <th className="p-4">{language === 'bn' ? "পরিমিত প্রয়োগ মাত্রা" : language === 'kok' ? "Optimal Dosage" : "Optimal Dosage"}</th>
+                          <th className="p-4">{language === 'bn' ? "প্রতিকার প্রয়োগ বিধি" : language === 'kok' ? "Remedy Application" : "Remedy Application"}</th>
+                          <th className="p-4">{language === 'bn' ? "কেভিকে রেফারেন্স সূচক" : language === 'kok' ? "KVK Reference" : "KVK Reference Index"}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-brand-green/5 bg-white">
@@ -781,7 +916,7 @@ export const SoilIntelligence: React.FC = () => {
                   <Info className="w-5 h-5 text-brand-green mt-0.5 flex-shrink-0" />
                   <div>
                     <h5 className="font-bold text-sm text-brand-green uppercase tracking-wider mb-2">
-                      KVK Irrigation & Slope-Hydrology Counsel
+                      {language === 'bn' ? "কেভিকে সেচ ও পাহাড়ি হাইড্রোলজি পরামর্শ" : language === 'kok' ? "KVK Irrigation Advice" : "KVK Irrigation & Slope-Hydrology Counsel"}
                     </h5>
                     <p className="text-xs text-brand-ink/75 leading-relaxed">
                       {report.irrigationAdvice}

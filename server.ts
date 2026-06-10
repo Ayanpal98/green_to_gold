@@ -44,10 +44,13 @@ async function startServer() {
   // API endpoint for Crop Disease Detection
   app.post("/api/diagnose", async (req, res) => {
     try {
-      const { image } = req.body;
+      const { image, language } = req.body;
       if (!image) {
         return res.status(400).json({ error: "No image provided" });
       }
+
+      const targetLang = language || "en";
+      const targetLangName = targetLang === 'bn' ? 'Bengali (বাংলা)' : targetLang === 'kok' ? 'Kokborok (ককবরক)' : 'English';
 
       // Check if image is data URL or an external URL
       let mimeType = "image/jpeg";
@@ -101,7 +104,9 @@ Give the treatment guidelines suitable for local farmers in Tripura (such as usi
 Give the preventative guidelines for future protection.
 Provide contextual explanations on how this diagnosis fits the unique humid geographic climate of northeast India (acidic soils, waterlogging, or persistent pre-monsoon showers).
 
-Format your output in a clear JSON structure. Ensure the diseaseName and cropAffected are in English, but descriptive.
+IMPORTANT: You MUST write all descriptive fields (specifically diseaseName, treatmentSteps, prevention, and northeastIndiaContext) in the requested language: ${targetLangName}.
+If Bengali is selected, write in native Bengali script. If Kokborok is selected, write in Kokborok sentences (Latin or Bengali script). If English is selected, write in English.
+Format your output in a clear JSON structure. Ensure the cropAffected remains recognizable in English or translated dynamically as request.
 `;
 
       let diagnosis;
@@ -115,22 +120,22 @@ Format your output in a clear JSON structure. Ensure the diseaseName and cropAff
               responseSchema: {
                 type: Type.OBJECT,
                 properties: {
-                  diseaseName: { type: Type.STRING, description: "Name of the crop disease or 'Healthy / No disease detected'." },
+                  diseaseName: { type: Type.STRING, description: "Name of the crop disease, in the target language." },
                   confidence: { type: Type.INTEGER, description: "Confidence score from 0 to 100." },
-                  cropAffected: { type: Type.STRING, description: "Crop type identified (e.g. Rice, Jute, Bamboo, Pineapple, Sugarcane, Betelnut, Rubber)." },
+                  cropAffected: { type: Type.STRING, description: "Crop type identified (e.g. Rice, Jute, Bamboo, Pineapple, Sugarcane, Betelnut, Rubber), optionally translated." },
                   treatmentSteps: {
                     type: Type.ARRAY,
                     items: { type: Type.STRING },
-                    description: "3-4 direct treatment instructions utilizing local or standard organic and chemical controls."
+                    description: "3-4 direct treatment instructions, in the target language."
                   },
                   prevention: {
                     type: Type.ARRAY,
                     items: { type: Type.STRING },
-                    description: "2-3 dynamic crop husbandry steps to prevent recurrence."
+                    description: "2-3 husbandry steps to prevent recurrence, in the target language."
                   },
                   northeastIndiaContext: {
                     type: Type.STRING,
-                    description: "Geographic explanation linking this to Northeast India/Tripura's farming conditions."
+                    description: "Geographic explanation linking this to Northeast India/Tripura's farming conditions, in the target language."
                   }
                 },
                 required: ["diseaseName", "confidence", "cropAffected", "treatmentSteps", "prevention", "northeastIndiaContext"]
@@ -153,54 +158,156 @@ Format your output in a clear JSON structure. Ensure the diseaseName and cropAff
         // Match regional sample clues in the image payload
         const imgStr = String(image);
         if (imgStr.includes("502082553048") || imgStr.toLowerCase().includes("bamboo")) {
-          diagnosis = {
-            diseaseName: "Bamboo Dieback (Sarocladium oryzae)",
-            confidence: 65,
-            cropAffected: "Bamboo (Wa)",
-            treatmentSteps: [
-              "Prune and burn heavily infected culms before pre-monsoon showers expand fungal spores",
-              "Apply localized bio-fungicides or spray copper oxychloride (0.2%) at the base of affected clumps",
-              "Maintain healthy spacing and slice dry branch points to restrict mycelial movement"
-            ],
-            prevention: [
-              "Introduce soil enrichment with local Trichoderma-enriched compost",
-              "Regulate drainage inside forest boundaries to limit root oversaturation"
-            ],
-            northeastIndiaContext: "Frequent waterlogging in North Tripura's hillside valleys during heavy monsoons makes regional bamboo culms vulnerable to Sarocladium spores, causing rapid stem crown necrosis."
-          };
+          if (targetLang === "bn") {
+            diagnosis = {
+              diseaseName: "বাঁশ শুকিয়ে যাওয়া রোগ (Sarocladium oryzae)",
+              confidence: 65,
+              cropAffected: "বাঁশ (Wa)",
+              treatmentSteps: [
+                "প্রাক-বর্ষার বৃষ্টির আগে অত্যন্ত সংক্রামিত কান্ডগুলি কেটে পুড়িয়ে ফেলুন যাতে ছত্রাক না ছড়ায়",
+                "আক্রান্ত ঝাড় সংলগ্ন এলাকায় জৈব-ছত্রাকনাশক বা কপার অক্সিক্লোরাইড ছিটান",
+                "পর্যাপ্ত দূরত্ব বজায় রাখুন এবং কান্ডের শুকনো ডালপালা কেটে পরিষ্কার করুন"
+              ],
+              prevention: [
+                "ট্রাইকোডার্মা সমৃদ্ধ জৈব সার দিয়ে মাটি তৈরি করুন",
+                "ঝাড়ের অভ্যন্তরে জল নিষ্কাশন ব্যবস্থা উন্নত করুন"
+              ],
+              northeastIndiaContext: "ভারী বর্ষার সময় উত্তর ত্রিপুরার পাহাড়ি উপত্যকায় জল জমে থাকার কারণে কান্ডগুলি সহজে আক্রান্ত হয়।"
+            };
+          } else if (targetLang === "kok") {
+            diagnosis = {
+              diseaseName: "Wa Blight / Dieback (Sarocladium oryzae)",
+              confidence: 65,
+              cropAffected: "Wa (Bamboo)",
+              treatmentSteps: [
+                "Monsoon jora chengya swkang sajak bakhrokrog thiyakwi phuldi.",
+                "Wa kokhai rogo bio-organic fungicide spray khlaidi.",
+                "Aungmung kahm nikhai spacing adjusting khlaidi."
+              ],
+              prevention: [
+                "Hachuk bagwkmung organic compost rwi soil enrich khlaidi.",
+                "Wa hachuk kothoma khor go drainage kahm khlaidi."
+              ],
+              northeastIndiaContext: "Dhalai tei Unakoti khor hachuk jora tongmung kothoma fungal spore wa blight kwrak khlaio."
+            };
+          } else {
+            diagnosis = {
+              diseaseName: "Bamboo Dieback (Sarocladium oryzae)",
+              confidence: 65,
+              cropAffected: "Bamboo (Wa)",
+              treatmentSteps: [
+                "Prune and burn heavily infected culms before pre-monsoon showers expand fungal spores",
+                "Apply localized bio-fungicides or spray copper oxychloride (0.2%) at the base of affected clumps",
+                "Maintain healthy spacing and slice dry branch points to restrict mycelial movement"
+              ],
+              prevention: [
+                "Introduce soil enrichment with local Trichoderma-enriched compost",
+                "Regulate drainage inside forest boundaries to limit root oversaturation"
+              ],
+              northeastIndiaContext: "Frequent waterlogging in North Tripura's hillside valleys during heavy monsoons makes regional bamboo culms vulnerable to Sarocladium spores, causing rapid stem crown necrosis."
+            };
+          }
         } else if (imgStr.includes("550258114") || imgStr.toLowerCase().includes("pineapple")) {
-          diagnosis = {
-            diseaseName: "Pineapple Mealybug Wilt (PMWD complex)",
-            confidence: 74,
-            cropAffected: "Pineapple (Anarash)",
-            treatmentSteps: [
-              "Control companion ant populations using ecological organic diatomaceous earth",
-              "Uproot and burn heavily symptomatic plants displaying downward leaf curl",
-              "Spray neem seed extract (NSKE 5%) formulation directly into leaf axils"
-            ],
-            prevention: [
-              "Drench planting slips in bio-pesticides or hot-water treated solution prior to propagation",
-              "Aerate the thick pineapple bed rows to restrict localized pest shelter spots"
-            ],
-            northeastIndiaContext: "Acidic hill soils in the Kumarghat pineapple tracts retain persistent humidity, creating ideal microhabitats for Dysmicoccus brevipes to spread PMWD virus strains."
-          };
+          if (targetLang === "bn") {
+            diagnosis = {
+              diseaseName: "আনারসের মিলিবাগ ঝলসানো রোগ (PMWD)",
+              confidence: 74,
+              cropAffected: "আনারস (Anarash)",
+              treatmentSteps: [
+                "ডায়াটোমাসিয়াস আর্থ ব্যবহার করে মিলিবাগের বাহক পিঁপড়ে নিয়ন্ত্রণ করুন",
+                "পাতা কুঁকড়ে যাওয়া তীব্র রোগাক্রান্ত গাছগুলি উপড়ে পুড়িয়ে ধ্বংস করুন",
+                "পাতার গোড়ায় ৫% নিম বীজের নির্যাস (NSKE) সরাসরি স্প্রে করুন"
+              ],
+              prevention: [
+                "রোপণের আগে চারাগুলিকে জৈব কীটনাশক বা গরম জলে শোধন করে নিন",
+                "আনারসের সারির মাঝের অংশ পরিষ্কার রাখুন যাতে পোকামাকড়ের উপদ্রব না হয়"
+              ],
+              northeastIndiaContext: "কুমারঘাটের আনারস চাষের জমিতে আর্দ্রতা বেশি থাকার কারণে মিলিবাগ খুব দ্রুত ছড়িয়ে পড়ে।"
+            };
+          } else if (targetLang === "kok") {
+            diagnosis = {
+              diseaseName: "Anarash Mealybug Wilt (PMWD complex)",
+              confidence: 74,
+              cropAffected: "Anarash (Pineapple)",
+              treatmentSteps: [
+                "Khumung companion ant populations no organic diatomaceous earth bai khlamdi.",
+                "Anarash leaf curl sajakphungrogno khulwi phuldi.",
+                "Neem seed extract (NSKE 5%) raw solution spray khlaidi leaf axils rogo."
+              ],
+              prevention: [
+                "Slips planting swkang bio-pesticides or gwdung towi treatment khlaidi.",
+                "Row spacing aungmung safe spacing khlaidi pest kothomarak kwrwina."
+              ],
+              northeastIndiaContext: "Kumarghat anarash hachuk khor soil humidity kothoma Dysmicoccus brevipes viral spread khlaio."
+            };
+          } else {
+            diagnosis = {
+              diseaseName: "Pineapple Mealybug Wilt (PMWD complex)",
+              confidence: 74,
+              cropAffected: "Pineapple (Anarash)",
+              treatmentSteps: [
+                "Control companion ant populations using ecological organic diatomaceous earth",
+                "Uproot and burn heavily symptomatic plants displaying downward leaf curl",
+                "Spray neem seed extract (NSKE 5%) formulation directly into leaf axils"
+              ],
+              prevention: [
+                "Drench planting slips in bio-pesticides or hot-water treated solution prior to propagation",
+                "Aerate the thick pineapple bed rows to restrict localized pest shelter spots"
+              ],
+              northeastIndiaContext: "Acidic hill soils in the Kumarghat pineapple tracts retain persistent humidity, creating ideal microhabitats for Dysmicoccus brevipes to spread PMWD virus strains."
+            };
+          }
         } else {
-          // Default fallback to Rice Blast - triggering the explanatory human-in-the-loop warning if confidence < 70
-          diagnosis = {
-            diseaseName: "Rice Blast (Endemic Pyricularia oryzae)",
-            confidence: 68,
-            cropAffected: "Rice (Maimung)",
-            treatmentSteps: [
-              "Drench affected plots with 5% raw Neem Seed Kernel Extract (NSKE) biocide",
-              "Adjust field water level and restrict nitrogenous chemical fertilizers temporarily",
-              "Apply localized ecological valid copper oxychloride for persistent spore lesions"
-            ],
-            prevention: [
-              "Choose regional blast-resistant seed varieties such as Swarna Sub-1",
-              "Practice seasonal crop rotation and destroy previous cropping straws"
-            ],
-            northeastIndiaContext: "High pre-monsoon temperatures coupled with prolonged leaf wetness in Tripura's low-lying plains provide optimal germination triggers for Pyricularia blast spores."
-          };
+          if (targetLang === "bn") {
+            diagnosis = {
+              diseaseName: "ধানের ব্লাস্ট বা পাতা ঝলসানো রোগ (Pyricularia oryzae)",
+              confidence: 68,
+              cropAffected: "ধান (Maimung)",
+              treatmentSteps: [
+                "ক্ষতিগ্রস্ত জমিতে ৫% নিম বীজের নির্যাস (NSKE) স্প্রে করুন",
+                "জমিতে জলের মাত্রা নিয়ন্ত্রণ করুন এবং অস্থায়ীভাবে নাইট্রোজেন সার দেওয়া বন্ধ রাখুন",
+                "লক্ষণ বেশি দেখা দিলে অনুমোদিত জৈব তামাঘটিত ছত্রাকনাশক প্রয়োগ করুন"
+              ],
+              prevention: [
+                "আঞ্চলিক ব্লাস্ট-প্রতিরোধী বীজ যেমন স্বর্ণ সাব-১ চাষ করুন",
+                "পর্যায়ক্রমিক ফসল চাষ করুন এবং আগের মরসুমের শুকনো খড় ও আবর্জনা পুড়িয়ে ফেলুন"
+              ],
+              northeastIndiaContext: "প্রাক-বর্ষার উচ্চ তাপমাত্রা ও দীর্ঘকালীন আর্দ্র আবহাওয়া ধানের ব্লাস্ট ছত্রাক ছড়াতে সাহায্য করে।"
+            };
+          } else if (targetLang === "kok") {
+            diagnosis = {
+              diseaseName: "Maimung Blast (Pyricularia oryzae)",
+              confidence: 68,
+              cropAffected: "Maimung (Rice)",
+              treatmentSteps: [
+                "Maimung safe khor rogo 5% Neem Seed Kernel Extract (NSKE) spray khlaidi.",
+                "To towi restrict nitrogenous chemical fertilizers khladi bini jora.",
+                "Copper oxychloride spray khlaidi symptoms thiyakwi."
+              ],
+              prevention: [
+                "Resistant seeds variety Swarna Sub-1 select khlaidi.",
+                "Crop rotation khlaidi tei previous waste straws no phuldi."
+              ],
+              northeastIndiaContext: "Tripura plains plains plain temperature humidity Pyricularia spore blast leaf wetness trigger khlaio."
+            };
+          } else {
+            // Default fallback to Rice Blast
+            diagnosis = {
+              diseaseName: "Rice Blast (Endemic Pyricularia oryzae)",
+              confidence: 68,
+              cropAffected: "Rice (Maimung)",
+              treatmentSteps: [
+                "Drench affected plots with 5% raw Neem Seed Kernel Extract (NSKE) biocide",
+                "Adjust field water level and restrict nitrogenous chemical fertilizers temporarily",
+                "Apply localized ecological valid copper oxychloride for persistent spore lesions"
+              ],
+              prevention: [
+                "Choose regional blast-resistant seed varieties such as Swarna Sub-1",
+                "Practice seasonal crop rotation and destroy previous cropping straws"
+              ],
+              northeastIndiaContext: "High pre-monsoon temperatures coupled with prolonged leaf wetness in Tripura's low-lying plains provide optimal germination triggers for Pyricularia blast spores."
+            };
+          }
         }
       }
       
@@ -224,8 +331,11 @@ Format your output in a clear JSON structure. Ensure the diseaseName and cropAff
   // API endpoint for Soil Intelligence DSS
   app.post("/api/soil-analyze", async (req, res) => {
     try {
-      const { pdfData, manualValues } = req.body;
+      const { pdfData, manualValues, language } = req.body;
       const hasPdf = !!pdfData;
+
+      const targetLang = language || "en";
+      const targetLangName = targetLang === 'bn' ? 'Bengali (বাংলা)' : targetLang === 'kok' ? 'Kokborok (ককবরক)' : 'English';
 
       let promptText = `
 You are the Krishi Vigyan Kendra (KVK) Soil Health & Agronomy Specialist for Northeast India (specifically Tripura).
@@ -275,6 +385,10 @@ Evaluate Crop Suitability Ratings (Highly Suitable, Moderately Suitable, Margina
 - Agarwood (Highly suited for Unakoti/North Tripura acidic soil)
 - Arecanut / Betelnut (Guwa)
 - Rubber (Latex cash crop, thrives in hill terrains)
+
+IMPORTANT: Generate all descriptive text strings, crop names, suitabilityRating, reasoning, status, dosage, remedy, auditableReference, and irrigationAdvice in the requested language: ${targetLangName}. 
+For Bengali, output them in beautiful native Bengali script. For Kokborok, output them in Kokborok sentences. For English, output in standard English.
+The JSON keys and structure must remain unchanged.
 
 Format your output in a clear JSON structure. Ensure all fields are filled accurately and realistically.
 `;
@@ -376,90 +490,223 @@ Format your output in a clear JSON structure. Ensure all fields are filled accur
           moisture: 38
         };
 
-        parsedResult = {
-          soilStatus: baseValues,
-          cropSuitability: [
-            {
-              crop: "Pineapple (Anarash - Queen)",
-              suitabilityScore: 95,
-              suitabilityRating: "Highly Suitable",
-              reasoning: `Tripura's acidic soils (pH ${baseValues.ph}) are highly ideal for Anarash-Queen variety. Acidic conditions enhance sucrose accumulation and prevent root-knot rot typical of neutral soils.`
-            },
-            {
-              crop: "Bamboo (Muli)",
-              suitabilityScore: 90,
-              suitabilityRating: "Highly Suitable",
-              reasoning: `Native species thrive easily under acidic hill terrain structures. Low phosphorus is tolerated well by established native bamboo rhizomes.`
-            },
-            {
-              crop: "Agarwood",
-              suitabilityScore: 88,
-              suitabilityRating: "Highly Suitable",
-              reasoning: "Excellent suitability. Aquilaria species require light acidic soils and high humidic drainage for optimal heartwood resin inoculation."
-            },
-            {
-              crop: "Rubber",
-              suitabilityScore: 85,
-              suitabilityRating: "Highly Suitable",
-              reasoning: `Thrives in hilly acidic ranges. Strong moisture content (${baseValues.moisture}%) guarantees steady latex flows during tapping cycles.`
-            },
-            {
-              crop: "Rice (Maimung)",
-              suitabilityScore: 68,
-              suitabilityRating: "Moderately Suitable",
-              reasoning: `Acidic soil (pH ${baseValues.ph}) combined with Low Nitrogen (${baseValues.nitrogen} kg/ha) limits crop yield. Liming treatment and urea splits will elevate the score to 90+.`
-            },
-            {
-              crop: "Jute (Pat)",
-              suitabilityScore: 60,
-              suitabilityRating: "Marginally Suitable",
-              reasoning: "High acidity retards fiber extraction maturity. Best grown after corrective soil liming and raising pH to at least 5.8."
-            },
-            {
-              crop: "Sugarcane",
-              suitabilityScore: 55,
-              suitabilityRating: "Marginally Suitable",
-              reasoning: "Symmetric cane formation is hindered by high soil acidity, which locks out boron and phosphorus absorption."
-            },
-            {
-              crop: "Betelnut (Arecanut)",
-              suitabilityScore: 45,
-              suitabilityRating: "Unsuitable",
-              reasoning: "Extremely susceptible to bud rot under highly acidic, poorly drained conditions. Acid neutralization is mandatory prior to plantation."
-            }
-          ],
-          nutrientCorrection: [
-            {
-              nutrient: "Soil pH (Acidity Neutralization)",
-              status: baseValues.ph < 5.0 ? "Strongly Acidic" : "Acidic",
-              dosage: "Apply Agricultural Hydrated Lime / CaCO3 @ 3.5 tonnes/hectare.",
-              remedy: "Broadcast lime evenly across plowed fields 2 weeks before sowing. Do not apply simultaneously with nitrogen fertilizers to prevent ammonia volatilization.",
-              auditableReference: "ICAR-Tripura Acidic Soil Reclamation Policy, Section 4.1"
-            },
-            {
-              nutrient: "Nitrogen (N)",
-              status: baseValues.nitrogen < 280 ? "Low (Deficient)" : "Medium",
-              dosage: baseValues.nitrogen < 280 ? "Apply 110 kg/hectare Urea in 3 split applications." : "Apply 45 kg/hectare Urea maintaining dose.",
-              remedy: "First split of 50% as basal during land preparation; remaining splits top-dressed at tillering and panicle initiation stages.",
-              auditableReference: "KVK Tripura Fertilizer Advisory Index 2025"
-            },
-            {
-              nutrient: "Phosphorus (P)",
-              status: baseValues.phosphorus < 10 ? "Low (Deficient)" : "Medium",
-              dosage: baseValues.phosphorus < 10 ? "Apply Rock Phosphate @ 150 kg/hectare" : "Apply SSP @ 50 kg/hectare",
-              remedy: "Apply entire Rock Phosphate / Single Super Phosphate as a basal dose. Acidic soils of Tripura respond exceptionally well to raw Rock Phosphate.",
-              auditableReference: "ICAR National Soil Quality Protocol"
-            },
-            {
-              nutrient: "Organic Carbon (OC)",
-              status: baseValues.organicCarbon < 0.5 ? "Low (Deficient)" : "Medium",
-              dosage: "Incorporate 5.0 tonnes of Vermicompost or dry Farm Yard Manure (FYM) per hectare.",
-              remedy: "Blend with topsoil during the secondary tillage phase. Highly recommended to inoculate with local Trichoderma culture to fast-track microbial decay.",
-              auditableReference: "Tripura Organic Farming Support Mission Guidelines"
-            }
-          ],
-          irrigationAdvice: `With present soil moisture levels measured at ${baseValues.moisture}%, the soil indicates adequate mid-monsoon saturation. For Pineapple and Rubber, maintain strict drainage networks along the slopes to prevent water accumulation. For dry-season spacing, implement drip tape lines configured at 2.4 Litres/hour emitter rates to maximize nutrient delivery efficiency.`
-        };
+        if (targetLang === "bn") {
+          parsedResult = {
+            soilStatus: baseValues,
+            cropSuitability: [
+              {
+                crop: "আনারস (আনারস - কুইন)",
+                suitabilityScore: 95,
+                suitabilityRating: "অত্যন্ত উপযুক্ত",
+                reasoning: `ত্রিপুরার আম্লিক মাটি (pH ${baseValues.ph}) আনারস-কুইন জাতের জন্য অত্যন্ত উপযুক্ত। আম্লিক অবস্থা সুক্রোজ জমার হার উন্নত করে এবং মূল পচা রোগ প্রতিরোধ করে।`
+              },
+              {
+                crop: "বাঁশ (মূলী)",
+                suitabilityScore: 90,
+                suitabilityRating: "অত্যন্ত উপযুক্ত",
+                reasoning: `আম্লিক পাহাড়ি ঢালে দেশীয় প্রজাতির বাঁশ স্বাভাবিকভাবে জন্মায়। মূলী বাঁশ কম ফসফেটেও ভালো ফলন দেয়।`
+              },
+              {
+                crop: "আগর কাঠ (Agarwood)",
+                suitabilityScore: 88,
+                suitabilityRating: "অত্যন্ত উপযুক্ত",
+                reasoning: "উৎকৃষ্ট উপযুক্ততা। আগর গাছের জন্য হালকা আম্লিক মাটি এবং ভালো নিষ্কাশন ব্যবস্থা প্রয়োজন।"
+              },
+              {
+                crop: "রাবার (Rubber)",
+                suitabilityScore: 85,
+                suitabilityRating: "অত্যন্ত উপযুক্ত",
+                reasoning: `আম্লিক পাহাড়ী ঢাল চাষের জন্য আদর্শ। মাটির আর্দ্রতা (${baseValues.moisture}%) তরল রাবার বা ল্যাটেক্সের নিয়মিত প্রবাহ বজায় রাখে।`
+              },
+              {
+                crop: "ধান (মাইমুং)",
+                suitabilityScore: 68,
+                suitabilityRating: "মাঝারি উপযুক্ত",
+                reasoning: `আম্লিক মাটি (pH ${baseValues.ph}) এবং কম নাইট্রোজেন (${baseValues.nitrogen} কেজি/হেক্টর) ফলন সীমিত করে। চুন প্রয়োগ বা ইউরিয়া বিভক্ত প্রয়োগ ফলন ৯০+ এ নিয়ে যাবে।`
+              },
+              {
+                crop: "পাট (Pat)",
+                suitabilityScore: 60,
+                suitabilityRating: "সীমিত উপযুক্ত",
+                reasoning: "অতিরিক্ত অম্লতা তন্তুর পরিপক্কতা হ্রাস করে। মাটি শোধন করে pH অন্তত ৫.৮ করা প্রয়োজন।"
+              },
+              {
+                crop: "আখ (Sugarcane)",
+                suitabilityScore: 55,
+                suitabilityRating: "সীমিত উপযুক্ত",
+                reasoning: "অতিরিক্ত আম্লিক মাটিতে ফসফরাস ও বোরন শোষণ ব্যাহত হয়, যা আখের বৃদ্ধি হ্রাস করে।"
+              },
+              {
+                crop: "সুপারি (Arecanut)",
+                suitabilityScore: 45,
+                suitabilityRating: "অনুপযুক্ত",
+                reasoning: "অতিরিক্ত আম্লিক এবং নিকাশী ব্যবস্থার অভাব থাকলে কুঁড়ি পচা রোগ হতে পারে। আবাদের আগে মাটি শোধন বাধ্যতামূলক।"
+              }
+            ],
+            nutrientCorrection: [
+              {
+                nutrient: "মাটির pH (অম্লতা সংশোধন)",
+                status: baseValues.ph < 5.0 ? "তীব্র আম্লিক" : "আম্লিক",
+                dosage: "হেক্টর প্রতি ৩.৫ টন কৃষি চুন (CaCO3) প্রয়োগ করুন।",
+                remedy: "বীজ বোনার ২ সপ্তাহ আগে লাঙল দেওয়া জমিতে চুন ছড়িয়ে দিন। অ্যামোনিয়া উড়ে যাওয়া এড়াতে নাইট্রোজেন সারের সাথে একযোগে প্রয়োগ করবেন না।",
+                auditableReference: "আইসিএআর-ত্রিপুরা আম্লিক মৃত্তিকা পুনরুদ্ধার নীতি, ধারা ৪.১"
+              },
+              {
+                nutrient: "নাইট্রোজেন (N)",
+                status: baseValues.nitrogen < 280 ? "নিম্ন (ঘাটতি)" : "মাঝারি",
+                dosage: baseValues.nitrogen < 280 ? "ইউরিয়া হেক্টর প্রতি ১১০ কেজি ৩টি বিভক্ত কিস্তিতে প্রয়োগ করুন।" : "হেক্টর প্রতি ৪৫ কেজি ইউরিয়া প্রয়োগ করুন।",
+                remedy: "প্রথম কিস্তি জমি তৈরির সময় বেসাল ডোজ হিসেবে এবং বাকি কিস্তিগুলি কুশি গজানো ও শীষ বেরোনোর সময় প্রয়োগ করুন।",
+                auditableReference: "কেভিকে ত্রিপুরা সার প্রয়োগ নির্দেশিকা ২০২৫"
+              },
+              {
+                nutrient: "ফসফরাস (P)",
+                status: baseValues.phosphorus < 10 ? "নিম্ন (ঘাটতি)" : "মাঝারি",
+                dosage: baseValues.phosphorus < 10 ? "হেক্টর প্রতি ১৫০ কেজি রক ফসফেট প্রয়োগ করুন।" : "হেক্টর প্রতি ৫০ কেজি এসএসপি (SSP) প্রয়োগ করুন।",
+                remedy: "জমি তৈরির সময় সম্পূর্ণ ডোজ বেসাল সার হিসেবে দিন। ত্রিপুরার আম্লিক মাটিতে রক ফসফেট খুব ভালো কাজ করে।",
+                auditableReference: "আইসিএআর জাতীয় মাটির গুণমান প্রোটোকল"
+              },
+              {
+                nutrient: "জৈব কার্বন (OC)",
+                status: baseValues.organicCarbon < 0.5 ? "নিম্ন (ঘাটতি)" : "মাঝারি",
+                dosage: "হেক্টর প্রতি ৫.০ টন কেঁচোসার (ভার্মিকম্পোস্ট) বা গোবর সার প্রয়োগ করুন।",
+                remedy: "জমি চাষের সময় মাটির সাথে মিশিয়ে দিন। দ্রুত কার্যকারিতার জন্য ট্রাইকোডার্মা কালচার দিয়ে দিন।",
+                auditableReference: "ত্রিপুরা অর্গানিক ফার্মিং সাপোর্ট মিশন নির্দেশিকা"
+              }
+            ],
+            irrigationAdvice: `বর্তমানে মাটির আর্দ্রতা ${baseValues.moisture}% রয়েছে, যা মধ্য-বর্ষার জন্য পর্যাপ্ত। আনারস ও রাবার গাছের জন্য ঢাল বরাবর ভালো জল নিষ্কাশন ব্যবস্থা রাখুন যাতে জল না জমে। শুষ্ক মরসুমে ড্রিপ সেচ ব্যবস্থার মাধ্যমে সঠিক মাত্রায় জল দিন।`
+          };
+        } else if (targetLang === "kok") {
+          parsedResult = {
+            soilStatus: baseValues,
+            cropSuitability: [
+              {
+                crop: "Anarash (Pineapple - Queen)",
+                suitabilityScore: 95,
+                suitabilityRating: "Highly Suitable",
+                reasoning: `Tripura ni acidic soils (pH ${baseValues.ph}) anarash-queen variety nikhai belai kahm. Sucrose accumulate khlaio tei root decay limit khlaio.`
+              },
+              {
+                crop: "Wa (Muli)",
+                suitabilityScore: 90,
+                suitabilityRating: "Highly Suitable",
+                reasoning: `Native species hachuk slopes rogo easily thriveyo. Low phosphorus muli wa rhizomes tolerate khlaio.`
+              },
+              {
+                crop: "Agarwood",
+                suitabilityScore: 88,
+                suitabilityRating: "Highly Suitable",
+                reasoning: "Aquilaria species light acidic tei high humidic drainage kothoma resin kahm khlaio."
+              },
+              {
+                crop: "Rubber",
+                suitabilityScore: 85,
+                suitabilityRating: "Highly Suitable",
+                reasoning: `Hachuk terrain rogo rubber thrives. Moisture (${baseValues.moisture}%) latex flow regular khlaio.`
+              },
+              {
+                crop: "Maimung (Rice)",
+                suitabilityScore: 68,
+                suitabilityRating: "Moderately Suitable",
+                reasoning: `Acidic soil (pH ${baseValues.ph}) tei Low Nitrogen (${baseValues.nitrogen} kg/ha) yield limit khlaio. Lime tei urea applications 90+ coordinate khlaio.`
+              }
+            ],
+            nutrientCorrection: [
+              {
+                nutrient: "Soil pH (Acidity Neutralization)",
+                status: baseValues.ph < 5.0 ? "Strongly Acidic" : "Acidic",
+                dosage: "Apply CaCO3 @ 3.5 tonnes/hectare.",
+                remedy: "Broadcast lime plowed fields rogo sowing swkang riadi.",
+                auditableReference: "ICAR-Tripura Acidic Soil Reclamation Policy"
+              }
+            ],
+            irrigationAdvice: `Moisture level ${baseValues.moisture}% tongo. Drainage systems slopes rogo adjust khlaidi anarash tei rubber logs safe aungna.`
+          };
+        } else {
+          parsedResult = {
+            soilStatus: baseValues,
+            cropSuitability: [
+              {
+                crop: "Pineapple (Anarash - Queen)",
+                suitabilityScore: 95,
+                suitabilityRating: "Highly Suitable",
+                reasoning: `Tripura's acidic soils (pH ${baseValues.ph}) are highly ideal for Anarash-Queen variety. Acidic conditions enhance sucrose accumulation and prevent root-knot rot typical of neutral soils.`
+              },
+              {
+                crop: "Bamboo (Muli)",
+                suitabilityScore: 90,
+                suitabilityRating: "Highly Suitable",
+                reasoning: `Native species thrive easily under acidic hill terrain structures. Low phosphorus is tolerated well by established native bamboo rhizomes.`
+              },
+              {
+                crop: "Agarwood",
+                suitabilityScore: 88,
+                suitabilityRating: "Highly Suitable",
+                reasoning: "Excellent suitability. Aquilaria species require light acidic soils and high humidic drainage for optimal heartwood resin inoculation."
+              },
+              {
+                crop: "Rubber",
+                suitabilityScore: 85,
+                suitabilityRating: "Highly Suitable",
+                reasoning: `Thrives in hilly acidic ranges. Strong moisture content (${baseValues.moisture}%) guarantees steady latex flows during tapping cycles.`
+              },
+              {
+                crop: "Rice (Maimung)",
+                suitabilityScore: 68,
+                suitabilityRating: "Moderately Suitable",
+                reasoning: `Acidic soil (pH ${baseValues.ph}) combined with Low Nitrogen (${baseValues.nitrogen} kg/ha) limits crop yield. Liming treatment and urea splits will elevate the score to 90+.`
+              },
+              {
+                crop: "Jute (Pat)",
+                suitabilityScore: 60,
+                suitabilityRating: "Marginally Suitable",
+                reasoning: "High acidity retards fiber extraction maturity. Best grown after corrective soil liming and raising pH to at least 5.8."
+              },
+              {
+                crop: "Sugarcane",
+                suitabilityScore: 55,
+                suitabilityRating: "Marginally Suitable",
+                reasoning: "Symmetric cane formation is hindered by high soil acidity, which locks out boron and phosphorus absorption."
+              },
+              {
+                crop: "Betelnut (Arecanut)",
+                suitabilityScore: 45,
+                suitabilityRating: "Unsuitable",
+                reasoning: "Extremely susceptible to bud rot under highly acidic, poorly drained conditions. Acid neutralization is mandatory prior to plantation."
+              }
+            ],
+            nutrientCorrection: [
+              {
+                nutrient: "Soil pH (Acidity Neutralization)",
+                status: baseValues.ph < 5.0 ? "Strongly Acidic" : "Acidic",
+                dosage: "Apply Agricultural Hydrated Lime / CaCO3 @ 3.5 tonnes/hectare.",
+                remedy: "Broadcast lime evenly across plowed fields 2 weeks before sowing. Do not apply simultaneously with nitrogen fertilizers to prevent ammonia volatilization.",
+                auditableReference: "ICAR-Tripura Acidic Soil Reclamation Policy, Section 4.1"
+              },
+              {
+                nutrient: "Nitrogen (N)",
+                status: baseValues.nitrogen < 280 ? "Low (Deficient)" : "Medium",
+                dosage: baseValues.nitrogen < 280 ? "Apply 110 kg/hectare Urea in 3 split applications." : "Apply 45 kg/hectare Urea maintaining dose.",
+                remedy: "First split of 50% as basal during land preparation; remaining splits top-dressed at tillering and panicle initiation stages.",
+                auditableReference: "KVK Tripura Fertilizer Advisory Index 2025"
+              },
+              {
+                nutrient: "Phosphorus (P)",
+                status: baseValues.phosphorus < 10 ? "Low (Deficient)" : "Medium",
+                dosage: baseValues.phosphorus < 10 ? "Apply Rock Phosphate @ 150 kg/hectare" : "Apply SSP @ 50 kg/hectare",
+                remedy: "Apply entire Rock Phosphate / Single Super Phosphate as a basal dose. Acidic soils of Tripura respond exceptionally well to raw Rock Phosphate.",
+                auditableReference: "ICAR National Soil Quality Protocol"
+              },
+              {
+                nutrient: "Organic Carbon (OC)",
+                status: baseValues.organicCarbon < 0.5 ? "Low (Deficient)" : "Medium",
+                dosage: "Incorporate 5.0 tonnes of Vermicompost or dry Farm Yard Manure (FYM) per hectare.",
+                remedy: "Blend with topsoil during the secondary tillage phase. Highly recommended to inoculate with local Trichoderma culture to fast-track microbial decay.",
+                auditableReference: "Tripura Organic Farming Support Mission Guidelines"
+              }
+            ],
+            irrigationAdvice: `With present soil moisture levels measured at ${baseValues.moisture}%, the soil indicates adequate mid-monsoon saturation. For Pineapple and Rubber, maintain strict drainage networks along the slopes to prevent water accumulation. For dry-season spacing, implement drip tape lines configured at 2.4 Litres/hour emitter rates to maximize nutrient delivery efficiency.`
+          };
+        }
       }
 
       return res.json({
@@ -475,9 +722,12 @@ Format your output in a clear JSON structure. Ensure all fields are filled accur
   // API endpoint for Market Intelligence DSS
   app.post("/api/market-analyze", async (req, res) => {
     try {
-      const { crop, district } = req.body;
+      const { crop, district, language } = req.body;
       const targetCrop = crop || "Rice";
       const targetDistrict = district || "West Tripura (Agartala)";
+
+      const targetLang = language || "en";
+      const targetLangName = targetLang === 'bn' ? 'Bengali (বাংলা)' : targetLang === 'kok' ? 'Kokborok (ককবরক)' : 'English';
 
       const promptText = `
 You are the Krishi Vigyan Kendra (KVK) Agricultural Economics & Market Intelligence Analyst for Northeast India (specifically Tripura).
@@ -496,6 +746,10 @@ Analyze and return:
 3. Spatial spread in nearby Tripura markets: "What is happening in nearby markets?"
    - Spreads across major mandis: Agartala (Maharajganj Bazar), Udaipur Mandi, Dharmanagar Mandi, and Khowai Mandi.
    - Highlight logistics spread: cost of freight vs arbitrage gains.
+
+IMPORTANT: Generate all descriptive text strings, rationale, trend, recommendation, cropName, companionSuggestion, advisoryNote, riskAssessment, and analytical explanations in the requested language: ${targetLangName}.
+For Bengali, output them in beautiful native Bengali script. For Kokborok, output them in Kokborok sentences. For English, output in standard English.
+The JSON keys and structure must remain unchanged.
 
 Format your output in a clear JSON structure. Ensure all fields are filled accurately, with realistic INR amounts and realistic market numbers.
 `;
@@ -577,207 +831,446 @@ Format your output in a clear JSON structure. Ensure all fields are filled accur
         
         // Custom high quality realistic fallback datasets based on crop specific parameters
         if (targetCrop.toLowerCase().includes("pineapple")) {
-          parsedResult = {
-            temporalAdvisory: {
-              currentPrice: 1650, // per quintal (bulk rate in Tripura)
-              trend: "Rising",
-              recommendation: "HOLD & DELAY (Sell late-harvest Queens)",
-              targetPrice1Month: 1880,
-              rationale: "Strong demand surge from processing units in Assam and exporting links to Kolkata. Post-monsoon drying will reduce transport losses, escalating trade volumes."
-            },
-            profitabilityComparison: {
-              analysisExplanation: "Next season pineapple tract trends point to Queen variety commanding a 25% premium over Kew. High soil moisture on hillside terraces makes pineapple risk-hedged.",
-              candidates: [
+          if (targetLang === "bn") {
+            parsedResult = {
+              temporalAdvisory: {
+                currentPrice: 1650,
+                trend: "ক্রমবর্ধমান",
+                recommendation: "সংরক্ষণ করুন (বিলম্বিত ফসল বিক্রি করুন)",
+                targetPrice1Month: 1880,
+                rationale: "আসামের প্রক্রিয়াকরণ ইউনিট এবং কলকাতায় রপ্তানি লিঙ্কের কারণে চাহিদা বেড়েছে। বর্ষা শেষ হলে পরিবহন ক্ষতি কমবে, ফলে বাণিজ্যের পরিমাণ বৃদ্ধি পাবে।"
+              },
+              profitabilityComparison: {
+                analysisExplanation: "পরবর্তী মরসুমে কুইন আনারস কেও আনারসের চেয়ে ২৫% বেশি লাভজনক হতে পারে। পাহাড়ি ঢালে আর্দ্র মাটির জন্য আনারস চাষ অত্যন্ত নিরাপদ।",
+                candidates: [
+                  {
+                    cropName: "কুইন আনারস (মোয়া)",
+                    inputCostPerBigha: 9500,
+                    expectedRevenuePerBigha: 24500,
+                    netProfitPerBigha: 15000,
+                    riskAssessment: "নিম্ন - উচ্চ বৃষ্টি সহনশীল"
+                  },
+                  {
+                    cropName: "কেও আনারস (পাইকারি)",
+                    inputCostPerBigha: 8000,
+                    expectedRevenuePerBigha: 18500,
+                    netProfitPerBigha: 10500,
+                    riskAssessment: "নিম্ন - শক্ত জাত"
+                  },
+                  {
+                    cropName: "হলুদ (সহযোগী ফসল)",
+                    inputCostPerBigha: 4500,
+                    expectedRevenuePerBigha: 11000,
+                    netProfitPerBigha: 6500,
+                    riskAssessment: "নিম্ন - ছায়াপ্রেমী ফসল"
+                  }
+                ],
+                companionSuggestion: "আনারসের সারির মাঝখানে আদা বা হলুদ চাষ করুন। এগুলি মাটির গভীরের খনিজ ব্যবহার করে এবং ক্ষতিকর কৃমি পোকা দমন করে।"
+              },
+              spatialSpread: [
                 {
-                  cropName: "Queen Pineapple",
-                  inputCostPerBigha: 9500,
-                  expectedRevenuePerBigha: 24500,
-                  netProfitPerBigha: 15000,
-                  riskAssessment: "Low - High rain resistance"
+                  mandiName: "আগরতলা মহারাজগঞ্জ বাজার মান্ডি",
+                  pricePerQuintal: 1800,
+                  deliveryTimeHrs: 2.5,
+                  netArbitrageGain: 150,
+                  advisoryNote: "উচ্চমানের ক্রেতা টার্মিনাল। খোয়াই এবং সিপাহীজলার কৃষকদের জন্য অত্যন্ত সুপারিশকৃত।"
                 },
                 {
-                  cropName: "Kew Pineapple (Bulk)",
-                  inputCostPerBigha: 8000,
-                  expectedRevenuePerBigha: 18500,
-                  netProfitPerBigha: 10500,
-                  riskAssessment: "Low - Sturdy cultivar"
+                  mandiName: "উদয়পুর মান্ডি (গোমতী)",
+                  pricePerQuintal: 1720,
+                  deliveryTimeHrs: 1.5,
+                  netArbitrageGain: 70,
+                  advisoryNote: "স্থানীয় ফলের রসের কারখানার জন্য ধারাবাহিক চাহিদা সম্পন্ন আঞ্চলিক মান্ডি।"
                 },
                 {
-                  cropName: "Turmeric (Haldi - KVK Companion)",
-                  inputCostPerBigha: 4500,
-                  expectedRevenuePerBigha: 11000,
-                  netProfitPerBigha: 6500,
-                  riskAssessment: "Low - Shade crop"
+                  mandiName: "ধর্মনগর মান্ডি (উত্তর ত্রিপুরা)",
+                  pricePerQuintal: 1650,
+                  deliveryTimeHrs: 4.0,
+                  netArbitrageGain: 0,
+                  advisoryNote: "স্থানীয় বেস মূল্য নোড। শুধুমাত্র নিকটবর্তী অঞ্চলের কৃষকদের জন্য নিরাপদ।"
+                },
+                {
+                  mandiName: "খোয়াই মান্ডি",
+                  pricePerQuintal: 1680,
+                  deliveryTimeHrs: 1.0,
+                  netArbitrageGain: 30,
+                  advisoryNote: "ঘন ঘন পাইকারি সংগ্রহ অভিযান হয়। কম পরিবহন ব্যয়ের সাথে সুবিধাজনক।"
                 }
-              ],
-              companionSuggestion: "Intercrop ginger or medicinal turmeric within pineapple rows. These utilize root space efficiently and act as local biocide vectors against wild nematodes."
-            },
-            spatialSpread: [
-              {
-                mandiName: "Agartala Maharajganj Bazar Mandi",
-                pricePerQuintal: 1800,
-                deliveryTimeHrs: 2.5,
-                netArbitrageGain: 150,
-                advisoryNote: "Premium grade buyer terminal. Highly recommended for farmers in Khowai and Sepahijala."
+              ]
+            };
+          } else if (targetLang === "kok") {
+            parsedResult = {
+              temporalAdvisory: {
+                currentPrice: 1650,
+                trend: "Rising",
+                recommendation: "HOLD & DELAY",
+                targetPrice1Month: 1880,
+                rationale: "Assam tei Kolkata processing units ni demand hamo. Rain thangkhe transit loss khmaiba tei price bariba."
               },
-              {
-                mandiName: "Udaipur Mandi (Gomati)",
-                pricePerQuintal: 1720,
-                deliveryTimeHrs: 1.5,
-                netArbitrageGain: 70,
-                advisoryNote: "Sturdy regional mandi with consistent processing demand for local juices."
+              profitabilityComparison: {
+                analysisExplanation: "Mariyong hachuk slopes rogo anarash khlaikhe risk low tongo. Companion crops kothoma support khlaio.",
+                candidates: [
+                  {
+                    cropName: "Queen Anarash",
+                    inputCostPerBigha: 9500,
+                    expectedRevenuePerBigha: 24500,
+                    netProfitPerBigha: 15000,
+                    riskAssessment: "Low - rain resistant"
+                  },
+                  {
+                    cropName: "Kew Anarash",
+                    inputCostPerBigha: 8000,
+                    expectedRevenuePerBigha: 18500,
+                    netProfitPerBigha: 10500,
+                    riskAssessment: "Low - hardy"
+                  },
+                  {
+                    cropName: "Haldi (Turmeric)",
+                    inputCostPerBigha: 4500,
+                    expectedRevenuePerBigha: 11000,
+                    netProfitPerBigha: 6500,
+                    riskAssessment: "Low - shade companion"
+                  }
+                ],
+                companionSuggestion: "Intercrop ginger/turmeric khlaidi nematodes control khlaina."
               },
-              {
-                mandiName: "Dharmanagar Mandi (North Tripura)",
-                pricePerQuintal: 1650,
-                deliveryTimeHrs: 4.0,
-                netArbitrageGain: 0,
-                advisoryNote: "Local base pricing node. Safest choice only for direct close-clearing."
+              spatialSpread: [
+                {
+                  mandiName: "Agartala Maharajganj Mandi",
+                  pricePerQuintal: 1800,
+                  deliveryTimeHrs: 2.5,
+                  netArbitrageGain: 150,
+                  advisoryNote: "Sepahijala tei Khowai ni farmers nikhai chongya."
+                }
+              ]
+            };
+          } else {
+            parsedResult = {
+              temporalAdvisory: {
+                currentPrice: 1650, // per quintal (bulk rate in Tripura)
+                trend: "Rising",
+                recommendation: "HOLD & DELAY (Sell late-harvest Queens)",
+                targetPrice1Month: 1880,
+                rationale: "Strong demand surge from processing units in Assam and exporting links to Kolkata. Post-monsoon drying will reduce transport losses, escalating trade volumes."
               },
-              {
-                mandiName: "Khowai Mandi",
-                pricePerQuintal: 1680,
-                deliveryTimeHrs: 1.0,
-                netArbitrageGain: 30,
-                advisoryNote: "Frequent bulk collection drives. Convenient with low transit expenses."
-              }
-            ]
-          };
+              profitabilityComparison: {
+                analysisExplanation: "Next season pineapple tract trends point to Queen variety commanding a 25% premium over Kew. High soil moisture on hillside terraces makes pineapple risk-hedged.",
+                candidates: [
+                  {
+                    cropName: "Queen Pineapple",
+                    inputCostPerBigha: 9500,
+                    expectedRevenuePerBigha: 24500,
+                    netProfitPerBigha: 15000,
+                    riskAssessment: "Low - High rain resistance"
+                  },
+                  {
+                    cropName: "Kew Pineapple (Bulk)",
+                    inputCostPerBigha: 8000,
+                    expectedRevenuePerBigha: 18500,
+                    netProfitPerBigha: 10500,
+                    riskAssessment: "Low - Sturdy cultivar"
+                  },
+                  {
+                    cropName: "Turmeric (Haldi - KVK Companion)",
+                    inputCostPerBigha: 4500,
+                    expectedRevenuePerBigha: 11000,
+                    netProfitPerBigha: 6500,
+                    riskAssessment: "Low - Shade crop"
+                  }
+                ],
+                companionSuggestion: "Intercrop ginger or medicinal turmeric within pineapple rows. These utilize root space efficiently and act as local biocide vectors against wild nematodes."
+              },
+              spatialSpread: [
+                {
+                  mandiName: "Agartala Maharajganj Bazar Mandi",
+                  pricePerQuintal: 1800,
+                  deliveryTimeHrs: 2.5,
+                  netArbitrageGain: 150,
+                  advisoryNote: "Premium grade buyer terminal. Highly recommended for farmers in Khowai and Sepahijala."
+                },
+                {
+                  mandiName: "Udaipur Mandi (Gomati)",
+                  pricePerQuintal: 1720,
+                  deliveryTimeHrs: 1.5,
+                  netArbitrageGain: 70,
+                  advisoryNote: "Sturdy regional mandi with consistent processing demand for local juices."
+                },
+                {
+                  mandiName: "Dharmanagar Mandi (North Tripura)",
+                  pricePerQuintal: 1650,
+                  deliveryTimeHrs: 4.0,
+                  netArbitrageGain: 0,
+                  advisoryNote: "Local base pricing node. Safest choice only for direct close-clearing."
+                },
+                {
+                  mandiName: "Khowai Mandi",
+                  pricePerQuintal: 1680,
+                  deliveryTimeHrs: 1.0,
+                  netArbitrageGain: 30,
+                  advisoryNote: "Frequent bulk collection drives. Convenient with low transit expenses."
+                }
+              ]
+            };
+          }
         } else if (targetCrop.toLowerCase().includes("rubber")) {
-          parsedResult = {
-            temporalAdvisory: {
-              currentPrice: 17500, // per quintal (RSS-4 grade latex sheet)
-              trend: "Volatile",
-              recommendation: "PARTIAL DISCHARGE (Sell 50%, hold 50% RSS-4)",
-              targetPrice1Month: 18200,
-              rationale: "International tyre manufacturer bookings are climbing, but heavy rainfall interrupts tapping frequency across Sepahijala, causing sudden trade volume drops."
-            },
-            profitabilityComparison: {
-              analysisExplanation: "Dry sheet rubber is highly rewarding, but requires 6-7 year maturation. Short cycle companion crops are critical for immediate liquidity.",
-              candidates: [
+          if (targetLang === "bn") {
+            parsedResult = {
+              temporalAdvisory: {
+                currentPrice: 17500,
+                trend: "অস্থির",
+                recommendation: "আংশিক বিক্রি করুন (৫০% বিক্রি করুন, ৫০% সংরক্ষণ করুন)",
+                targetPrice1Month: 18200,
+                rationale: "আন্তর্জাতিক টায়ার প্রস্তুতকারকদের বুকিং বাড়ছে, তবে সিপাহীজলায় ভারী বৃষ্টিপাতের কারণে ট্যাপিং ব্যাহত হওয়ায় সরবরাহে ঘাটতি দেখা দিয়েছে।"
+              },
+              profitabilityComparison: {
+                analysisExplanation: "শুকনো রাবার শিট অত্যন্ত লাভজনক, কিন্তু পরিপক্ক হতে ৬-৭ বছর সময় লাগে। স্বল্পমেয়াদী সহযোগী ফসল তাত্ক্ষণিক তারল্যের জন্য অত্যন্ত গুরুত্বপূর্ণ।",
+                candidates: [
+                  {
+                    cropName: "ল্যাটেক্স প্রক্রিয়াকরণ (শিট)",
+                    inputCostPerBigha: 12000,
+                    expectedRevenuePerBigha: 38000,
+                    netProfitPerBigha: 26000,
+                    riskAssessment: "মাঝারি - আবহাওয়া সংবেদনশীল"
+                  },
+                  {
+                    cropName: "স্থানীয় কলা (চম্পা জাতের কুঁড়ি)",
+                    inputCostPerBigha: 3500,
+                    expectedRevenuePerBigha: 9000,
+                    netProfitPerBigha: 5500,
+                    riskAssessment: "নিম্ন - উচ্চ ঘরোয়া চাহিদা"
+                  },
+                  {
+                    cropName: "গোলমরিচ (রাবার কান্ডে লতা)",
+                    inputCostPerBigha: 2500,
+                    expectedRevenuePerBigha: 8500,
+                    netProfitPerBigha: 6000,
+                    riskAssessment: "নিম্ন - সহজ চাষ পদ্ধতি"
+                  }
+                ],
+                companionSuggestion: "রাবার গাছের কান্ডে গোলমরিচ লতা চাষ করুন। এটি অতিরিক্ত জমি ছাড়াই কৃষকদের বাড়তি আয় নিশ্চিত করে।"
+              },
+              spatialSpread: [
                 {
-                  cropName: "Latex Processing (Sheet)",
-                  inputCostPerBigha: 12000,
-                  expectedRevenuePerBigha: 38000,
-                  netProfitPerBigha: 26000,
-                  riskAssessment: "Medium - Weather sensitive"
+                  mandiName: "আগরতলা মহারাজগঞ্জ বাজার মান্ডি",
+                  pricePerQuintal: 18200,
+                  deliveryTimeHrs: 2.0,
+                  netArbitrageGain: 700,
+                  advisoryNote: "সার্টিফাইড গ্রেড RSS-4-এর জন্য তাত্ক্ষণিক ক্যাশ-সোয়াপ নিষ্পত্তির ব্যবস্থা রয়েছে।"
                 },
                 {
-                  cropName: "Local Banana (Champa Variety Companion)",
-                  inputCostPerBigha: 3500,
-                  expectedRevenuePerBigha: 9000,
-                  netProfitPerBigha: 5500,
-                  riskAssessment: "Low - High domestic demand"
+                  mandiName: "উদয়পুর মান্ডি (গোমতী)",
+                  pricePerQuintal: 17900,
+                  deliveryTimeHrs: 1.2,
+                  netArbitrageGain: 400,
+                  advisoryNote: "ধারাবাহিক বেসরকারি গুদামজাতকারী ক্রেতা। উচ্চ লেনদেন ভলিউম স্ট্যান্ডার্ড।"
                 },
                 {
-                  cropName: "Black Pepper (Vines on Rubber stem)",
-                  inputCostPerBigha: 2500,
-                  expectedRevenuePerBigha: 8500,
-                  netProfitPerBigha: 6000,
-                  riskAssessment: "Low - Parasitic structural ease"
+                  mandiName: "खोয়াই মান্ডি",
+                  pricePerQuintal: 17600,
+                  deliveryTimeHrs: 1.0,
+                  netArbitrageGain: 100,
+                  advisoryNote: "সরাসরি সমবায় সংগ্রহ কেন্দ্র। কম পরিবহন খরচ।"
                 }
-              ],
-              companionSuggestion: "Train black pepper vines to scale old rubber stems. This doubles multi-level spatial canopy profit with virtually zero land addition cost."
-            },
-            spatialSpread: [
-              {
-                mandiName: "Agartala Maharajganj Bazar Mandi",
-                pricePerQuintal: 18200,
-                deliveryTimeHrs: 2.0,
-                netArbitrageGain: 700,
-                advisoryNote: "Immediate cash-swap settlement tier for certified grade RSS-4."
+              ]
+            };
+          } else {
+            parsedResult = {
+              temporalAdvisory: {
+                currentPrice: 17500, // per quintal (RSS-4 grade latex sheet)
+                trend: "Volatile",
+                recommendation: "PARTIAL DISCHARGE (Sell 50%, hold 50% RSS-4)",
+                targetPrice1Month: 18200,
+                rationale: "International tyre manufacturer bookings are climbing, but heavy rainfall interrupts tapping frequency across Sepahijala, causing sudden trade volume drops."
               },
-              {
-                mandiName: "Udaipur Mandi (Gomati)",
-                pricePerQuintal: 17900,
-                deliveryTimeHrs: 1.2,
-                netArbitrageGain: 400,
-                advisoryNote: "Steady private warehouse buyers. High throughput volume standard check."
+              profitabilityComparison: {
+                analysisExplanation: "Dry sheet rubber is highly rewarding, but requires 6-7 year maturation. Short cycle companion crops are critical for immediate liquidity.",
+                candidates: [
+                  {
+                    cropName: "Latex Processing (Sheet)",
+                    inputCostPerBigha: 12000,
+                    expectedRevenuePerBigha: 38000,
+                    netProfitPerBigha: 26000,
+                    riskAssessment: "Medium - Weather sensitive"
+                  },
+                  {
+                    cropName: "Local Banana (Champa Variety Companion)",
+                    inputCostPerBigha: 3500,
+                    expectedRevenuePerBigha: 9000,
+                    netProfitPerBigha: 5500,
+                    riskAssessment: "Low - High domestic demand"
+                  },
+                  {
+                    cropName: "Black Pepper (Vines on Rubber stem)",
+                    inputCostPerBigha: 2500,
+                    expectedRevenuePerBigha: 8500,
+                    netProfitPerBigha: 6000,
+                    riskAssessment: "Low - Parasitic structural ease"
+                  }
+                ],
+                companionSuggestion: "Train black pepper vines to scale old rubber stems. This doubles multi-level spatial canopy profit with virtually zero land addition cost."
               },
-              {
-                mandiName: "Khowai Mandi",
-                pricePerQuintal: 17600,
-                deliveryTimeHrs: 1.0,
-                netArbitrageGain: 100,
-                advisoryNote: "Direct co-operative collection. Minimal shipping overhead."
-              },
-              {
-                mandiName: "Dharmanagar Mandi (North Tripura)",
-                pricePerQuintal: 17400,
-                deliveryTimeHrs: 4.5,
-                netArbitrageGain: -200,
-                advisoryNote: "Slightly depressed rates due to local collection saturation."
-              }
-            ]
-          };
+              spatialSpread: [
+                {
+                  mandiName: "Agartala Maharajganj Bazar Mandi",
+                  pricePerQuintal: 18200,
+                  deliveryTimeHrs: 2.0,
+                  netArbitrageGain: 700,
+                  advisoryNote: "Immediate cash-swap settlement tier for certified grade RSS-4."
+                },
+                {
+                  mandiName: "Udaipur Mandi (Gomati)",
+                  pricePerQuintal: 17900,
+                  deliveryTimeHrs: 1.2,
+                  netArbitrageGain: 400,
+                  advisoryNote: "Steady private warehouse buyers. High throughput volume standard check."
+                },
+                {
+                  mandiName: "Khowai Mandi",
+                  pricePerQuintal: 17600,
+                  deliveryTimeHrs: 1.0,
+                  netArbitrageGain: 100,
+                  advisoryNote: "Direct co-operative collection. Minimal shipping overhead."
+                },
+                {
+                  mandiName: "Dharmanagar Mandi (North Tripura)",
+                  pricePerQuintal: 17400,
+                  deliveryTimeHrs: 4.5,
+                  netArbitrageGain: -200,
+                  advisoryNote: "Slightly depressed rates due to local collection saturation."
+                }
+              ]
+            };
+          }
         } else {
           // Default to Rice
-          parsedResult = {
-            temporalAdvisory: {
-              currentPrice: 2280, // MSP level + quality premium
-              trend: "Stable",
-              recommendation: "SELL IMMEDIATELY (Avoid wet storage mold)",
-              targetPrice1Month: 2320,
-              rationale: "Humidity levels in rural storehouses exceed safe thresholds (14%). Selling now prevents grains from swelling or developing black aflatoxins."
-            },
-            profitabilityComparison: {
-              analysisExplanation: "Paddy crop net margins are stabilized by government minimum support pricing (MSP). To maximize profit, rotating with winter mustard during rabi is essential.",
-              candidates: [
+          if (targetLang === "bn") {
+            parsedResult = {
+              temporalAdvisory: {
+                currentPrice: 2280,
+                trend: "স্থিতিশীল",
+                recommendation: "অবিলম্বে বিক্রি করুন (আর্দ্রতা জনিত পচন এড়ান)",
+                targetPrice1Month: 2320,
+                rationale: "গ্রামাঞ্চলের গুদামগুলিতে আর্দ্রতার মাত্রা নিরাপদ সীমার (১৪%) চেয়ে বেশি। এখন বিক্রি করলে শস্যে কালো ছত্রাক সংক্রমণ এড়ানো যাবে।"
+              },
+              profitabilityComparison: {
+                analysisExplanation: "ধানের নেট মার্জিন সরকারি ন্যূনতম সমর্থন মূল্য (MSP) দ্বারা স্থিতিশীল। লাভ বাড়াতে রবি মরসুমে সরিষা চাষ করা প্রয়োজন।",
+                candidates: [
+                  {
+                    cropName: "রবি ধান (বোরো)",
+                    inputCostPerBigha: 5200,
+                    expectedRevenuePerBigha: 11800,
+                    netProfitPerBigha: 6600,
+                    riskAssessment: "নিম্ন - সম্পূর্ণ সেচনির্ভর"
+                  },
+                  {
+                    cropName: "আমন ধান (খরিফ)",
+                    inputCostPerBigha: 4800,
+                    expectedRevenuePerBigha: 9800,
+                    netProfitPerBigha: 5000,
+                    riskAssessment: "মাঝারি - অসঙ্গত বর্ষা"
+                  },
+                  {
+                    cropName: "সরিষা (M-27 রবি আবর্তন)",
+                    inputCostPerBigha: 2400,
+                    expectedRevenuePerBigha: 7800,
+                    netProfitPerBigha: 5400,
+                    riskAssessment: "নিম্ন - তেলের উচ্চ স্থানীয় চাহিদা"
+                  }
+                ],
+                companionSuggestion: "জলাশয়ের পাড়ে শাকসবজি এবং ডাল চাষ করুন। সঠিক মাত্রায় সূর্যের আলো পাওয়ার জন্য লাইন-পদ্ধতিতে চাষ করুন।"
+              },
+              spatialSpread: [
                 {
-                  cropName: "Rabi Paddy (Boro)",
-                  inputCostPerBigha: 5200,
-                  expectedRevenuePerBigha: 11800,
-                  netProfitPerBigha: 6600,
-                  riskAssessment: "Low - Fully irrigated"
+                  mandiName: "আগরতলা মহারাজগঞ্জ বাজার মান্ডি",
+                  pricePerQuintal: 2450,
+                  deliveryTimeHrs: 2.0,
+                  netArbitrageGain: 130,
+                  advisoryNote: "চমৎকার মূল্য স্তর কিন্তু পিক-আওয়ারে অতিরিক্ত ট্রাকের যানজট রয়েছে।"
                 },
                 {
-                  cropName: "Aman Paddy (Kharif)",
-                  inputCostPerBigha: 4800,
-                  expectedRevenuePerBigha: 9800,
-                  netProfitPerBigha: 5000,
-                  riskAssessment: "Medium - Monsoon vagaries"
+                  mandiName: "উদয়পুর মান্ডি (গোমতী)",
+                  pricePerQuintal: 2360,
+                  deliveryTimeHrs: 1.8,
+                  netArbitrageGain: 55,
+                  advisoryNote: "সরাসরি সরকারি সংগ্রহ কেন্দ্র (PACS) ন্যূনতম ধান ক্রয়ের দরে কিনছে।"
                 },
                 {
-                  cropName: "Yellow Mustard (M-27 Rabi Rotation)",
-                  inputCostPerBigha: 2400,
-                  expectedRevenuePerBigha: 7800,
-                  netProfitPerBigha: 5400,
-                  riskAssessment: "Low - High local oil press rates"
+                  mandiName: "খোয়াই মান্ডি",
+                  pricePerQuintal: 2310,
+                  deliveryTimeHrs: 1.0,
+                  netArbitrageGain: 10,
+                  advisoryNote: "দ্রুত খালাস প্রক্রিয়া। লাইনে দাঁড়িয়ে থাকার ঝামেলা নেই, ফলে অতিরিক্ত ভাড়া বাচে।"
                 }
-              ],
-              companionSuggestion: "Utilize farm-pond borders for growing sweet potato and local pulses. Practice line-sowing of dwarf fields to improve sunlight absorption."
-            },
-            spatialSpread: [
-              {
-                mandiName: "Agartala Maharajganj Bazar Mandi",
-                pricePerQuintal: 2450,
-                deliveryTimeHrs: 2.0,
-                netArbitrageGain: 130,
-                advisoryNote: "Excellent price levels but with peak-hour tractor queuing overhead."
+              ]
+            };
+          } else {
+            parsedResult = {
+              temporalAdvisory: {
+                currentPrice: 2280, // MSP level + quality premium
+                trend: "Stable",
+                recommendation: "SELL IMMEDIATELY (Avoid wet storage mold)",
+                targetPrice1Month: 2320,
+                rationale: "Humidity levels in rural storehouses exceed safe thresholds (14%). Selling now prevents grains from swelling or developing black aflatoxins."
               },
-              {
-                mandiName: "Udaipur Mandi (Gomati)",
-                pricePerQuintal: 2360,
-                deliveryTimeHrs: 1.8,
-                netArbitrageGain: 55,
-                advisoryNote: "Direct government procurement center (PACS) processing at MSP rate."
+              profitabilityComparison: {
+                analysisExplanation: "Paddy crop net margins are stabilized by government minimum support pricing (MSP). To maximize profit, rotating with winter mustard during rabi is essential.",
+                candidates: [
+                  {
+                    cropName: "Rabi Paddy (Boro)",
+                    inputCostPerBigha: 5200,
+                    expectedRevenuePerBigha: 11800,
+                    netProfitPerBigha: 6600,
+                    riskAssessment: "Low - Fully irrigated"
+                  },
+                  {
+                    cropName: "Aman Paddy (Kharif)",
+                    inputCostPerBigha: 4800,
+                    expectedRevenuePerBigha: 9800,
+                    netProfitPerBigha: 5000,
+                    riskAssessment: "Medium - Monsoon vagaries"
+                  },
+                  {
+                    cropName: "Yellow Mustard (M-27 Rabi Rotation)",
+                    inputCostPerBigha: 2400,
+                    expectedRevenuePerBigha: 7800,
+                    netProfitPerBigha: 5400,
+                    riskAssessment: "Low - High local oil press rates"
+                  }
+                ],
+                companionSuggestion: "Utilize farm-pond borders for growing sweet potato and local pulses. Practice line-sowing of dwarf fields to improve sunlight absorption."
               },
-              {
-                mandiName: "Khowai Mandi",
-                pricePerQuintal: 2310,
-                deliveryTimeHrs: 1.0,
-                netArbitrageGain: 10,
-                advisoryNote: "Quick unloading loops. No waiting time, saving truck hire variables."
-              },
-              {
-                mandiName: "Dharmanagar Mandi (North Tripura)",
-                pricePerQuintal: 2290,
-                deliveryTimeHrs: 4.8,
-                netArbitrageGain: -40,
-                advisoryNote: "Distant logistics node. Focus on neighboring village level sales."
-              }
-            ]
-          };
+              spatialSpread: [
+                {
+                  mandiName: "Agartala Maharajganj Bazar Mandi",
+                  pricePerQuintal: 2450,
+                  deliveryTimeHrs: 2.0,
+                  netArbitrageGain: 130,
+                  advisoryNote: "Excellent price levels but with peak-hour tractor queuing overhead."
+                },
+                {
+                  mandiName: "Udaipur Mandi (Gomati)",
+                  pricePerQuintal: 2360,
+                  deliveryTimeHrs: 1.8,
+                  netArbitrageGain: 55,
+                  advisoryNote: "Direct government procurement center (PACS) processing at MSP rate."
+                },
+                {
+                  mandiName: "Khowai Mandi",
+                  pricePerQuintal: 2310,
+                  deliveryTimeHrs: 1.0,
+                  netArbitrageGain: 10,
+                  advisoryNote: "Quick unloading loops. No waiting time, saving truck hire variables."
+                },
+                {
+                  mandiName: "Dharmanagar Mandi (North Tripura)",
+                  pricePerQuintal: 2290,
+                  deliveryTimeHrs: 4.8,
+                  netArbitrageGain: -40,
+                  advisoryNote: "Distant logistics node. Focus on neighboring village level sales."
+                }
+              ]
+            };
+          }
         }
       }
 

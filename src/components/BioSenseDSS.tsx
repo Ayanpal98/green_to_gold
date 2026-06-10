@@ -108,9 +108,9 @@ const BioSenseDSS = () => {
   const { t, language } = useLanguage();
   const tabs = [
     t("common.resourceIntel"),
-    "🌾 Crop Disease DSS",
-    "🌱 Soil Intelligence DSS",
-    "📊 Market Intelligence",
+    language === "bn" ? "🌾 শস্য রোগ বিশ্লেষণ ও পরামর্শ" : language === "kok" ? "🌾 Crop Diagnosis DSS" : "🌾 Crop Disease DSS",
+    language === "bn" ? "🌱 মৃত্তিকা স্বাস্থ্য ও সার নির্দেশ" : language === "kok" ? "🌱 Soil health analysis" : "🌱 Soil Intelligence DSS",
+    language === "bn" ? "📊 ফসলের বাজার পরিস্থিতি" : language === "kok" ? "📊 Market Analysis" : "📊 Market Intelligence",
     `${t("common.rice")} DSS`,
     `${t("common.sugarcane")} DSS`,
     `${t("common.rubber")} DSS`,

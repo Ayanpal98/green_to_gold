@@ -68,6 +68,8 @@ import {
 } from "lucide-react";
 import { Navbar } from "./components/Navbar";
 import { PartnerForm } from "./components/PartnerForm";
+import biocompositeBoardsImg from "./assets/images/biocomposite_boards_1781093871984.png";
+import organicDinnerwareImg from "./assets/images/organic_dinnerware_1781093892153.png";
 
 const SectionTitle = ({ children, subtitle, light = false, id }: { children: ReactNode, subtitle?: string, light?: boolean, id?: string }) => (
   <div className="mb-12 md:mb-16">
@@ -295,7 +297,7 @@ const LP_TRANSLATIONS = {
     heroBadge: "Tripura's Sustainable Manufacturing Leader",
     heroTitle1: "From Waste",
     heroTitle2: "to Wealth.",
-    heroSubtitle: "Transforming agricultural waste into high-value bio-composite construction materials — cheaper, stronger, and built from Tripura's own soil.",
+    heroSubtitle: "Transforming agricultural waste into high-demand biodegradable plates, organic tableware, and high-strength bio-composite boards replacing premium plywood — cheaper, stronger, and built from Tripura's own soil.",
     exploreButton: "Explore the Model",
     farmersImpacted: "1,000+ Farmers Impacted",
     problemBadge: "The Challenge",
@@ -314,9 +316,9 @@ const LP_TRANSLATIONS = {
     collectTitle: "Collect",
     collectDesc: "Buy waste from farmers at ₹2,000/tonne — turning a disposal cost into a revenue stream.",
     processTitle: "Process",
-    processDesc: "Modular mini-factory presses bamboo + pineapple fibre into bio-composite boards on-site.",
+    processDesc: "Modular farm-gate units press bamboo + pineapple organic fibres on-site into durable building boards and thermal-mold them into premium biodegradable plates.",
     sellTitle: "Sell",
-    sellDesc: "Supply boards locally at up to 54% below imported plywood prices, with bio-fuel pellets as bonus revenue.",
+    sellDesc: "Deliver dual high-demand lines: eco-construction boards at 54% below imported plywood prices, and premium compostable plates, generating multiple robust revenue streams.",
     marketBadge: "Market Ready",
     marketTitle: "Sustainable Product Range",
     specsText: "Explore Specifications",
@@ -374,15 +376,20 @@ const LP_TRANSLATIONS = {
     privacy: "Privacy",
     terms: "Terms",
     investorPortal: "Investor Portal",
-    productCutleryTitle: "Biodegradable Tableware",
-    productCutleryDesc: "Premium cutlery and tableware made via compression molding from rice husk and bagasse. Heat-resistant and shelf-stable for 10-12 months.",
+    productBoardTitle: "Bio-Composite Construction Boards",
+    productBoardDesc: "Premium, ultra-durable tree-free construction boards pressed from Muli bamboo and pineapple leaf fibre. Termite-proof, water-resistant, and up to 54% cheaper than imported plywood.",
+    pBoardFeats: ["IS:12406 Compliant", "Termite & Fire Resistant", "54% Cost Reduction"],
+    pBoardComp: "60% Muli Bamboo fibre, 30% Pineapple leaf fibre, 10% bio-based resins",
+    pBoardUses: ["Affordable Housing (PMAY-U)", "Modular Furniture", "Prefabricated Structures"],
+    productCutleryTitle: "High-Demand Biodegradable Plates & Dinnerware",
+    productCutleryDesc: "Premium dining plates, bowls, and smart food trays Hot Pressed from local bamboo and pineapple biomass. 100% home-compostable with premium water-resistance and a 12-month shelf life. Capturing high-revenue corporate and wedding markets.",
     productPackagingTitle: "Mycelium Packaging",
     productPackagingDesc: "Fully compostable packaging solutions including bags, trays, and protective foams. ISO certified and optimized for e-commerce.",
     productFilmsTitle: "Compostable Films",
     productFilmsDesc: "Starch-bound sheets for retail carry bags and protective wraps. Low-cost extrusion process replacing single-use plastics.",
-    pCutleryFeats: ["100% Home Compostable", "Heat Resistant", "Hotel/Event Ready"],
-    pCutleryComp: "70% Rice Husk, 25% Sugarcane Bagasse, 5% Natural Starch Binder",
-    pCutleryUses: ["QSR Chains", "In-flight Catering", "Eco-Weddings"],
+    pCutleryFeats: ["100% Home Compostable", "Heat Resistant & Oil Proof", "High-Revenue Event Ready"],
+    pCutleryComp: "70% Rice Husk & Bamboo fiber, 25% Sugarcane Bagasse, 5% Natural Starch Binder",
+    pCutleryUses: ["High-End Caterers", "In-flight catering", "Premium Weddings & Festivals"],
     pPackagingFeats: ["Composts in 3 Months", "Shock Absorbent", "Zero Moisture Debt"],
     pPackagingComp: "Mycelium composite grown on pineapple core waste",
     pPackagingUses: ["Electronics Packing", "Luxury Fragrance Boxes", "Wine Shippers"],
@@ -407,19 +414,19 @@ const LP_TRANSLATIONS = {
         phase: "Phase 1: Validation",
         title: "Pilot Unit",
         time: "Current — Month 12",
-        items: ["Unakoti district pilot", "Bio-composite boards focus", "Revenue: ₹3.5–5.5L/month", "18–25 community jobs"]
+        items: ["Unakoti district pilot", "Biodegradable plates & boards", "Revenue: ₹4.8–6.8L/month", "18–25 community jobs"]
       },
       {
         phase: "Phase 2: Expansion",
         title: "Product Growth",
         time: "Months 6–18",
-        items: ["Moulded tableware addition", "PALF table covers", "Paper pulping feasibility", "ONDC marketplace entry"]
+        items: ["Moulded tableware focus (Plates/Dinnerware)", "PALF table covers", "Paper pulping feasibility", "ONDC marketplace entry"]
       },
       {
         phase: "Phase 3: Replication",
         title: "Pan-Tripura",
         time: "Months 18–36",
-        items: ["One unit per district (8 total)", "Revenue Potential: ₹35–50L/mo", "180–250 direct community jobs", "Bangladesh export gateway"]
+        items: ["One unit per district (8 total)", "Revenue Potential: ₹52–75L/mo (Plates margin lift)", "180–250 direct community jobs", "Bangladesh export gateway"]
       },
       {
         phase: "Phase 4: Global Scale",
@@ -524,7 +531,7 @@ const LP_TRANSLATIONS = {
     heroBadge: "ত্রিপুরায় টেকসই তিসি বর্জ্যভিত্তিক বায়ার ম্যানুফ্যাকচারিং",
     heroTitle1: "বর্জ্য থেকে",
     heroTitle2: "সম্পদ।",
-    heroSubtitle: "কৃষি বর্জ্যকে উচ্চ মূল্যবান বায়ো-কম্পোজিট বা জৈব-মিশ্র নির্মাণ সামগ্রীতে রূপান্তর করা হচ্ছে — সস্তা, শক্তিশালী এবং ত্রিপুরার নিজস্ব মাটি থেকে নির্মিত।",
+    heroSubtitle: "কৃষি বর্জ্যকে উচ্চ চাহিদাপূর্ণ পচনশীল থালা-বাসন, পরিবেশবান্ধব টেবিলসামগ্রী এবং প্লাইউডের বিকল্প উচ্চ-শক্তির বায়ো-কম্পোজিট বোর্ডে রূপান্তর — সস্তা, আরো উন্নত এবং ত্রিপুরার নিজস্ব মাটি থেকে নির্মিত।",
     exploreButton: "মডেলটি অন্বেষণ করুন",
     farmersImpacted: "১,০০০+ কৃষক উপকৃত হয়েছেন",
     problemBadge: "মূল চ্যালেঞ্জ",
@@ -543,9 +550,9 @@ const LP_TRANSLATIONS = {
     collectTitle: "সংগ্রহ",
     collectDesc: "কৃষকদের কাছ থেকে ₹২,০০০/টন মূল্যে বর্জ্য সংগ্রহ করা — তাদের বর্জ্য ব্যবস্থাপনার খরচকে উপার্জনের উপায়ে পরিণত করা।",
     processTitle: "প্রক্রিয়া",
-    processDesc: "ক্ষেত্রের কাছেই বাঁশ এবং আনারসের আঁশ উচ্চ তাপে সংকোচন করে মজবুত বায়ো-কম্পোজিট বোর্ড তৈরি করা হয়।",
+    processDesc: "খামারের কাছেই বাঁশ ও আনারসের আঁশ উন্নত প্রযুক্তিতে সংকোচন করে দীর্ঘস্থায়ী নির্মাণ বোর্ড এবং প্রিমিয়াম পচনশীল থালা-বাসনে রূপান্তর করা হয়।",
     sellTitle: "বিক্রয়",
-    sellDesc: "আমদানিকৃত প্লাইউডের তুলনায় ৫৪% পর্যন্ত কম দামে স্থানীয়ভাবে বোর্ড সরবরাহ করা এবং অতিরিক্ত জ্বালানী পেল্যেট বিক্রি।",
+    sellDesc: "দুটি মূল উচ্চ-চাহিদা পণ্য সরবরাহ করুন: আমদানিকৃত প্লাইউড অপেক্ষা ৫৪% সস্তা নির্মাণ বোর্ড এবং রাজকীয় পরিবেশবান্ধব পচনশীল থালা, যা বহুমাত্রিক রাজস্ব নিশ্চিত করে।",
     marketBadge: "বাজারের জন্য প্রস্তুত",
     marketTitle: "টেকসই উন্নত পণ্যসমূহ",
     specsText: "বিশদ বিবরণী দেখুন",
@@ -603,15 +610,20 @@ const LP_TRANSLATIONS = {
     privacy: "গোপনীয়তা নীতি",
     terms: "শর্তাবলী",
     investorPortal: "বিনিয়োগকারী পোর্টাল",
-    productCutleryTitle: "পচনশীল টেবিলসামগ্রী",
-    productCutleryDesc: "ধানের তুষ ও আখের বর্জ্য থেকে উচ্চ চাপে তৈরি প্রিমিয়াম থালা-বাসন ও কাটলারী। এটি তাপ-প্রতিরোধী এবং ১০-১২ মাস পর্যন্ত সংরক্ষণযোগ্য।",
+    productBoardTitle: "বায়ো-কম্পোজিট বা জৈব-মিশ্র নির্মাণ বোর্ড",
+    productBoardDesc: "মূলী বাঁশ এবং আনারসের আঁশ থেকে তৈরি প্রিমিয়াম ও দীর্ঘস্থায়ী বৃক্ষহীন নির্মাণ বোর্ড। এটি উইপোকা-প্রতিরোধী, নিষ্কাশন উপযোগী এবং আমদানিকৃত প্লাইউড অপেক্ষা ৫৪% পর্যন্ত সাশ্রয়ী।",
+    pBoardFeats: ["IS:১২৪০৬ সার্টিফাইড", "উইপোকা ও অগ্নি প্রতিরোধী", "৫৪% নির্মাণ ব্যয় হ্রাস"],
+    pBoardComp: "৬০% মূলী বাঁশের আঁশ, ৩০% আনারসের পাতার আঁশ (PALF), ১০% জৈব-ভিত্তিক রেজিন",
+    pBoardUses: ["সাশ্রয়ী আবাসন প্রকল্প", "মডুলার আসবাবপত্র", "প্রিফেব্রিকেটেড ঘরবাড়ি"],
+    productCutleryTitle: "উচ্চ-চাহিদা সম্পন্ন পচনশীল থালা ও টেবিলসামগ্রী",
+    productCutleryDesc: "স্থানীয় বাঁশ ও আনারসের বর্জ্য থেকে উচ্চ তাপে তৈরি রাজকীয় পরিবেশবান্ধব থালা, বাটি ও খাবার ট্রে। ১০০% সম্পূর্ণ পচনশীল, জল-প্রতিরোধী এবং ১২ মাস স্থায়িত্ব। বিয়েবাড়ি ও কর্পোরেট ইভেন্টে উচ্চ মুনাফা সরবরাহকারী।",
     productPackagingTitle: "মাইসেলিয়াম প্যাকেজিং",
     productPackagingDesc: "সম্পূর্ণ জৈব উপায়ে তৈরি প্যাকেজিং সリューション যেমন ব্যাগ, ট্রে এবং সুরক্ষা ফোম। অত্যন্ত সুরক্ষাদায়ক ও ই-কমার্সের উপযোগী।",
     productFilmsTitle: "কম্পোস্টেবল ফিল্মস",
     productFilmsDesc: "খুচরা ব্যবসার থলি এবং সুরক্ষামূলক মোড়কের পরিবেশবান্ধব বিকল্প। সাশ্রয়ী মূল্যে প্লাস্টিকের স্থান দখলকারী এক বিশেষ উদ্ভাবন।",
-    pCutleryFeats: ["১০০% ঘরোয়াভাবে পচনশীল", "উচ্চ তাপ প্রতিরোধী", "হোটেল এবং অনুষ্ঠানের উপযোগী"],
-    pCutleryComp: "৭০% ধানের তুষ, ২৫% আখের বর্জ্য, ৫% প্রাকৃতিক স্টার্চ বাইন্ডার",
-    pCutleryUses: ["কুইক-সার্ভিস রেস্তোরাঁ", "বিমান চালনা ক্যাটারিং", "সবুজ বিবাহ অনুষ্ঠান"],
+    pCutleryFeats: ["১০০% ঘরোয়াভাবে পচনশীল", "উচ্চ তাপ ও তেল প্রতিরোধী", "উচ্চ-মুনাফা বিয়ে ও উৎসবের উপযোগী"],
+    pCutleryComp: "৭০% ধানের তুষ ও বাঁশ ফাইবার, ২৫% আখের বর্জ্য, ৫% প্রাকৃতিক স্টার্চ বাইন্ডার",
+    pCutleryUses: ["কাস্টম ক্যাটারার্স", "এয়ারলাইন ক্যাটারিং", "সবুজ শুভ বিবাহ ও মেলা"],
     pPackagingFeats: ["৩ মাসের মধ্যে শতভাগ পচনশীল", "চমৎকার আঘাত শোষণকারী", "শূন্য জলীয় ঋণ"],
     pPackagingComp: "আনারস বর্জ্য কাঁচামালে উৎপাদিত উন্নত মাইসেলিয়াম মিশ্রণ",
     pPackagingUses: ["ইলেকট্রনিক্স সরঞ্জাম মোড়ক", "সুগন্ধি বিলাসবহুল বক্স", "কাঁচ বা তরল পাত্র"],
@@ -636,19 +648,19 @@ const LP_TRANSLATIONS = {
         phase: "পর্যায় ১: যাচাইকরণ",
         title: "পাইলট ইউনিট",
         time: "বর্তমান — ১২ মাস",
-        items: ["ঊনকোটি জেলা পাইলট ইউনিট", "জৈব-মিশ্র বোর্ডে বিশেষ গুরুত্ব", "রাজস্ব: ৩.৫-৫.৫ লক্ষ/মাস", "১৮-২৫টি গ্রামীণ কর্মসংস্থান"]
+        items: ["ঊনকোটি জেলা পাইলট ইউনিট", "পচনশীল থালা ও পরিবেশবান্ধব বোর্ড", "রাজস্ব: ৪.৮-৬.৮ লক্ষ/মাস (থালা বিক্রয়ে অধিক লাভ)", "১৮-২৫টি গ্রামীণ কর্মসংস্থান"]
       },
       {
         phase: "পর্যায় ২: সম্প্রসারণ",
         title: "পণ্য বৃদ্ধি",
         time: "৬-১৮ মাস",
-        items: ["পচনশীল থালা-বাসন ও কাটলারী সংযোজন", "আনারস ফাইবারের টেবিল কভার", "কাগজ তৈরির সম্ভাব্যতা যাচাই", "ওএনডিসি (ONDC) বাজারে প্রবেশ"]
+        items: ["পচনশীল থালা-বাসন ও কাটলারী ফোকাস", "আনারস ফাইবারের টেবিল কভার", "কাগজ তৈরির সম্ভাব্যতা যাচাই", "ওএনডিসি (ONDC) বাজারে প্রবেশ"]
       },
       {
         phase: "পর্যায় ৩: অনুলিপি করণ",
         title: "সমগ্র ত্রিপুরা জুড়ে",
         time: "১৮-৩৬ মাস",
-        items: ["প্রতি জেলায় একটি করে ইউনিট (মোট ৮টি)", "সম্ভাব্য রাজস্ব: ৩৫-৫০ লক্ষ/মাস", "১৮০-২৫০টি সরাসরি কাজের সুযোগ", "বাংলাদেশ রপ্তানির করিডোর"]
+        items: ["প্রতি জেলায় একটি করে ইউনিট (মোট ৮টি)", "সম্ভাব্য রাজস্ব: ৫২-৭৫ লক্ষ/মাস (থালা বিক্রয়ে অধিক লাভ)", "১৮০-২৫০টি সরাসরি কাজের সুযোগ", "বাংলাদেশ রপ্তানির করিডোর"]
       },
       {
         phase: "পর্যায় ৪: আন্তর্জাতিক প্রসার",
@@ -753,7 +765,7 @@ const LP_TRANSLATIONS = {
     heroBadge: "Tripura ni Phola-Haste Thungmung Swk",
     heroTitle1: "Waste Stream ni",
     heroTitle2: "Wealth dila.",
-    heroSubtitle: "Tripura ni buphang tei maithangrok no yak khlaiwi kotor bio-composite construction hachuk kahm khlamna bagwi — rang chom, force kotor.",
+    heroSubtitle: "Agri waste no premium biodegradable plates, organic tableware, tei high-strength bioboard raw laminated plywood alternative khlaimung — rang chom tei force kotor.",
     exploreButton: "Laman no choba phiadi",
     farmersImpacted: "১,০০০+ Cooperatives impact khlaio",
     problemBadge: "Chaitokmung kotor",
@@ -772,9 +784,9 @@ const LP_TRANSLATIONS = {
     collectTitle: "Collect",
     collectDesc: "Crops waste buying ₹2,000/tonne — farmers waste adding income range.",
     processTitle: "Process",
-    processDesc: "Modular minipress machine bamboo plus pineapple leaf pressing board board local.",
+    processDesc: "Modular mini-factory slopes rogo bamboo tei pineapple fibre board tei premium biodegradable plates compression khlaio.",
     sellTitle: "Sell",
-    sellDesc: "Supply bioboard locally up to 54% less than imported items, power pellets extra revenue.",
+    sellDesc: "Dual high-demand products dila: bioboards 54% cheaper than imported plywood, tei high-revenue biodegradable plates.",
     marketBadge: "Market Ready",
     marketTitle: "Engineered Products",
     specsText: "Specifications naidi",
@@ -832,15 +844,20 @@ const LP_TRANSLATIONS = {
     privacy: "Privacy rule",
     terms: "Terms condition",
     investorPortal: "Investor login",
-    productCutleryTitle: "Compostable Tableware",
-    productCutleryDesc: "Cutlery items bamboo plates bagasse hot pressing. High temperature resistant 12 months shelf.",
+    productBoardTitle: "Bio-Composite Construction Boards",
+    productBoardDesc: "Muli bamboo tei pineapple leaf organic fibre pressed durable plywood alternative. Termite proof tei water resistant, up to 54% cheaper.",
+    pBoardFeats: ["IS:12406 Standard", "Termite & Fire proof", "54% Cost Saving"],
+    pBoardComp: "60% Muli bamboo, 30% Pineapple fibre, 10% bio-resin",
+    pBoardUses: ["PMAY-U Housing", "Modular Furniture", "Local Buildings"],
+    productCutleryTitle: "Biodegradable Plates & Tableware",
+    productCutleryDesc: "High demand premium dining plates, bowls tei food trays muli wa tei pineapple leaf pressed. 100% organic home-compostable and high-revenue B2B.",
     productPackagingTitle: "Mycelium Packaging",
     productPackagingDesc: "Packaging solutions trays boxes mycelium. Bio-compostable luxury packing e-commerce.",
     productFilmsTitle: "Compostable Films",
     productFilmsDesc: "Starch based carry bags roll wraps. Low cost replacing plastic bags retail.",
-    pCutleryFeats: ["100% Home Degradable", "Heat proof", "Premium event ready"],
-    pCutleryComp: "70% Rice Husk with soy-binder",
-    pCutleryUses: ["Cooperative catering", "Eco hotels", "Local events"],
+    pCutleryFeats: ["100% Home Degradable", "Heat proof & Oil proof", "Premium events ready"],
+    pCutleryComp: "70% Rice Husk with soy-binder and bamboo fibers",
+    pCutleryUses: ["Cooperative catering", "Eco hotels & Wedding halls", "Local large events"],
     pPackagingFeats: ["Compost 3 months", "Shockproof packing", "Dry shelf"],
     pPackagingComp: "Pineapple waste and premium mycelium binder",
     pPackagingUses: ["Agara luxury boxes", "Electronics boxes", "Fragile bottles"],
@@ -865,19 +882,19 @@ const LP_TRANSLATIONS = {
         phase: "Phase 1: Validation",
         title: "Pilot Unit",
         time: "Current — Month 12",
-        items: ["Unakoti district pilot", "Bio-composite boards focus", "Revenue: ₹3.5–5.5L/month", "18–25 community jobs"]
+        items: ["Unakoti district pilot", "Bioboards & degradable plates focus", "Revenue: ₹4.8–6.8L/month", "18–25 community jobs"]
       },
       {
         phase: "Phase 2: Expansion",
         title: "Product Growth",
         time: "Months 6–18",
-        items: ["Moulded tableware addition", "PALF table covers", "Paper pulping feasibility", "ONDC marketplace entry"]
+        items: ["Moulded plates & tableware focus", "PALF table covers", "Paper pulping feasibility", "ONDC marketplace entry"]
       },
       {
         phase: "Phase 3: Replication",
         title: "Pan-Tripura",
         time: "Months 18–36",
-        items: ["One unit per district (8 total)", "Revenue Potential: ₹35–50L/mo", "180–250 direct community jobs", "Bangladesh export gateway"]
+        items: ["One unit per district (8 total)", "Revenue Potential: ₹52–75L/mo (Plates margin lift)", "180–250 direct community jobs", "Bangladesh export gateway"]
       },
       {
         phase: "Phase 4: Global Scale",
@@ -1647,19 +1664,33 @@ function LandingPage({ user }: { user: any }) {
         <section id="products" className="py-24 px-6 bg-white" aria-labelledby="products-title">
           <div className="max-w-7xl mx-auto">
             <SectionTitle id="products-title" subtitle={lp.marketBadge}>{lp.marketTitle}</SectionTitle>
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
+                {
+                  id: "boards",
+                  title: lp.productBoardTitle,
+                  desc: lp.productBoardDesc,
+                  tag: language === "bn" ? "সাশ্রয়ী বিকল্প" : language === "kok" ? "Low Cost" : "Ultra-Durable",
+                  image: biocompositeBoardsImg,
+                  features: lp.pBoardFeats,
+                  composition: lp.pBoardComp,
+                  certs: ["IS 12406", "ISO 9001", "CARB Phase 2"],
+                  impact: language === "bn" ? "প্রতি বোর্ডে ১.৪ টন CO2e সঞ্চিত" : "Sequesters 1.4t CO2e per tonne of boards",
+                  uses: lp.pBoardUses,
+                  isFlagship: true
+                },
                 {
                   id: "tableware",
                   title: lp.productCutleryTitle,
                   desc: lp.productCutleryDesc,
                   tag: language === "bn" ? "প্লাস্টিকের বিকল্প" : language === "kok" ? "Alternative" : "Plastic Alternative",
-                  image: "https://images.unsplash.com/photo-1605348128311-667746142718?auto=format&fit=crop&q=80&w=800",
+                  image: organicDinnerwareImg,
                   features: lp.pCutleryFeats,
                   composition: lp.pCutleryComp,
                   certs: ["ISO 17088", "EN 13432", "ASTM D6400"],
                   impact: language === "bn" ? "প্রতি ১০০ ইউনিটে ২.৪ কেজি কার্বন ডাই অক্সাইড হ্রাস" : "Offsets 2.4kg CO2 per 100 units vs plastic",
-                  uses: lp.pCutleryUses
+                  uses: lp.pCutleryUses,
+                  isFlagship: true
                 },
                 {
                   id: "packaging",
@@ -1671,7 +1702,8 @@ function LandingPage({ user }: { user: any }) {
                   composition: lp.pPackagingComp,
                   certs: ["OK Compost Industrial", "SGS Certified"],
                   impact: language === "bn" ? "১০০% বায়ো-ভিত্তিক, শূন্য প্লাস্টিক ফুটপ্রিন্ট" : "100% Bio-based, zero plastic footprint",
-                  uses: lp.pPackagingUses
+                  uses: lp.pPackagingUses,
+                  isFlagship: false
                 },
                 {
                   id: "films",
@@ -1683,7 +1715,8 @@ function LandingPage({ user }: { user: any }) {
                   composition: lp.pFilmsComp,
                   certs: ["OK Compost Home", "IS 17088"],
                   impact: language === "bn" ? "১৮০ দিনের কম সময়ে মহাসাগরীয় দ্রবণশীল" : "Marine-degradable in under 180 days",
-                  uses: lp.pFilmsUses
+                  uses: lp.pFilmsUses,
+                  isFlagship: false
                 }
               ].map((product, i) => (
                 <motion.div
@@ -1692,33 +1725,46 @@ function LandingPage({ user }: { user: any }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-brand-paper rounded-3xl overflow-hidden border border-brand-green/5 hover:shadow-xl transition-all group cursor-pointer"
+                  className={`bg-brand-paper rounded-3xl overflow-hidden border transition-all duration-500 group cursor-pointer relative flex flex-col justify-between ${
+                    product.isFlagship 
+                      ? "border-brand-orange/30 shadow-md shadow-brand-orange/5 hover:border-brand-orange hover:shadow-2xl hover:shadow-brand-orange/10" 
+                      : "border-brand-green/5 hover:shadow-xl hover:border-brand-green/20"
+                  }`}
                   onClick={() => setSelectedProduct(product)}
                 >
-                  <div className="h-64 overflow-hidden relative">
-                    <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
-                    <div className="absolute inset-0 bg-brand-green/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="bg-white/90 backdrop-blur-md px-6 py-3 rounded-full text-brand-green font-bold text-xs flex items-center gap-2">
-                        <Target className="w-4 h-4" />
-                        {lp.specsText}
+                  <div>
+                    <div className="h-48 overflow-hidden relative">
+                      <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+                      <div className="absolute inset-0 bg-brand-green/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="bg-white/90 backdrop-blur-md px-6 py-3 rounded-full text-brand-green font-bold text-xs flex items-center gap-2">
+                          <Target className="w-4 h-4" />
+                          {lp.specsText}
+                        </div>
                       </div>
+                      <div className="absolute top-4 right-4 bg-brand-green/80 backdrop-blur-md text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full">{product.tag}</div>
+                      {product.isFlagship && (
+                        <div className="absolute top-4 left-4 bg-brand-orange text-white text-[9px] uppercase tracking-widest font-extrabold px-2.5 py-1 rounded-md shadow-sm border border-white/20">
+                          ★ FLAGSHIP
+                        </div>
+                      )}
                     </div>
-                    <div className="absolute top-4 right-4 bg-brand-orange text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full">{product.tag}</div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-serif text-brand-green mb-2.5 min-h-[56px] flex items-center">{product.title}</h3>
+                      <p className="text-brand-ink/60 text-xs leading-relaxed mb-4 line-clamp-3">{product.desc}</p>
+                      <ul className="space-y-1.5 mb-6">
+                        {product.features.slice(0, 3).map((feat, j) => (
+                          <li key={j} className="flex items-center gap-2 text-[11px] font-semibold text-brand-green/80">
+                            <CheckCircle2 className="w-3 h-3 text-brand-light-green shrink-0" />
+                            <span className="truncate">{feat}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <div className="p-8">
-                    <h3 className="text-2xl font-serif text-brand-green mb-3">{product.title}</h3>
-                    <p className="text-brand-ink/60 text-sm leading-relaxed mb-6 line-clamp-2">{product.desc}</p>
-                    <ul className="space-y-2 mb-8">
-                      {product.features.map((feat, j) => (
-                        <li key={j} className="flex items-center gap-2 text-xs font-semibold text-brand-green/80">
-                          <CheckCircle2 className="w-3 h-3 text-brand-light-green" />
-                          {feat}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="pt-6 border-t border-brand-green/5 flex justify-between items-center">
+                  <div className="p-6 pt-0">
+                    <div className="pt-4 border-t border-brand-green/5 flex justify-between items-center text-xs">
                       <span className="text-[10px] uppercase tracking-widest font-bold text-brand-orange-dark">{lp.specsBadge}</span>
-                      <ChevronRight className="w-4 h-4 text-brand-green group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="w-3.5 h-3.5 text-brand-green group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </motion.div>

@@ -89,6 +89,219 @@ export const MarketIntelligence: React.FC = () => {
   const generateLocalMarketReport = (crop: string, district: string): MarketIntelligenceResult => {
     const normCrop = crop.toLowerCase();
     
+    if (language === "bn") {
+      if (normCrop.includes("pineapple")) {
+        return {
+          temporalAdvisory: {
+            currentPrice: 1650,
+            trend: "ক্রমবর্ধমান",
+            recommendation: "সংরক্ষণ করুন (বিলম্বিত ফসল বিক্রি করুন)",
+            targetPrice1Month: 1880,
+            rationale: `আসামের প্রক্রিয়াকরণ ইউনিট এবং কলকাতায় রপ্তানি লিঙ্কের কারণে চাহিদা বেড়েছে। বর্ষা শেষ হলে পরিবহন ক্ষতি কমবে, ফলে বাণিজ্যের পরিমাণ বৃদ্ধি পাবে (${district}-এ)।`
+          },
+          profitabilityComparison: {
+            analysisExplanation: "পরবর্তী মরসুমে কুইন আনারস কেও আনারসের চেয়ে ২৫% বেশি লাভজনক হতে পারে। পাহাড়ি ঢালে আর্দ্র মাটির জন্য আনারস চাষ অত্যন্ত নিরাপদ।",
+            candidates: [
+              {
+                cropName: "কুইন আনারস (মোয়া)",
+                inputCostPerBigha: 9500,
+                expectedRevenuePerBigha: 24500,
+                netProfitPerBigha: 15000,
+                riskAssessment: "निम्न - উচ্চ বৃষ্টি সহনশীল"
+              },
+              {
+                cropName: "কেও আনারস (পাইকারি)",
+                inputCostPerBigha: 8000,
+                expectedRevenuePerBigha: 18500,
+                netProfitPerBigha: 10500,
+                riskAssessment: "निम्ন - শক্ত জাত"
+              },
+              {
+                cropName: "হলুদ (সহযোগী ফসল)",
+                inputCostPerBigha: 4500,
+                expectedRevenuePerBigha: 11000,
+                netProfitPerBigha: 6500,
+                riskAssessment: "निम्ন - ছায়াপ্রেমী ফসল"
+              }
+            ],
+            companionSuggestion: "আনারসের সারির মাঝখানে আদা বা হলুদ চাষ করুন। এগুলি মাটির গভীরের খনিজ ব্যবহার করে এবং ক্ষতিকর কৃমি পোকা দমন করে।"
+          },
+          spatialSpread: [
+            {
+              mandiName: "আগরতলা মহারাজগঞ্জ বাজার মান্ডি",
+              pricePerQuintal: 1800,
+              deliveryTimeHrs: 2.5,
+              netArbitrageGain: 150,
+              advisoryNote: `উচ্চমানের ক্রেতা টার্মিনাল। খোয়াই এবং সিপাহীজলার কৃষকদের জন্য অত্যন্ত সুপারিশকৃত (${district}-র জন্য)।`
+            },
+            {
+              mandiName: "উদয়পুর মান্ডি (গোমতী)",
+              pricePerQuintal: 1720,
+              deliveryTimeHrs: 1.5,
+              netArbitrageGain: 70,
+              advisoryNote: "স্থানীয় ফলের রসের কারখানার জন্য ধারাবাহিক চাহিদা সম্পন্ন আঞ্চলিক মান্ডি।"
+            },
+            {
+              mandiName: "ধর্মনগর মান্ডি (উত্তর ত্রিপুরা)",
+              pricePerQuintal: 1650,
+              deliveryTimeHrs: 4.0,
+              netArbitrageGain: 0,
+              advisoryNote: "স্থানীয় বেস মূল্য নোড। শুধুমাত্র নিকটবর্তী অঞ্চলের কৃষকদের জন্য নিরাপদ।"
+            },
+            {
+              mandiName: "খোয়াই মান্ডি",
+              pricePerQuintal: 1680,
+              deliveryTimeHrs: 1.0,
+              netArbitrageGain: 30,
+              advisoryNote: "ঘন ঘন পাইকারি সংগ্রহ অভিযান হয়। কম পরিবহন ব্যয়ের সাথে সুবিধাজনক।"
+            }
+          ]
+        };
+      } else if (normCrop.includes("rubber")) {
+        return {
+          temporalAdvisory: {
+            currentPrice: 17500,
+            trend: "অস্থির",
+            recommendation: "আংশিক বিক্রি করুন (৫০% বিক্রি করুন, ৫০% সংরক্ষণ করুন)",
+            targetPrice1Month: 18200,
+            rationale: `আন্তর্জাতিক টায়ার প্রস্তুতকারকদের বুকিং বাড়ছে, তবে সিপাহীজলায় ভারী বৃষ্টিপাতের কারণে ট্যাপিং ব্যাহত হওয়ায় সরবরাহে ঘাটতি দেখা দিয়েছে (${district}-এ)।`
+          },
+          profitabilityComparison: {
+            analysisExplanation: "শুকনো রাবার শিট অত্যন্ত লাভজনক, কিন্তু পরিপক্ক হতে ৬-৭ বছর সময় লাগে। স্বল্পমেয়াদী সহযোগী ফসল তাত্ক্ষণিক তারল্যের জন্য অত্যন্ত গুরুত্বপূর্ণ।",
+            candidates: [
+              {
+                cropName: "ল্যাটেক্স প্রক্রিয়াকরণ (শিট)",
+                inputCostPerBigha: 12000,
+                expectedRevenuePerBigha: 38000,
+                netProfitPerBigha: 26000,
+                riskAssessment: "মাঝারি - আবহাওয়া সংবেদনশীল"
+              },
+              {
+                cropName: "স্থানীয় কলা (চম্পা জাতের কুঁড়ি)",
+                inputCostPerBigha: 3500,
+                expectedRevenuePerBigha: 9000,
+                netProfitPerBigha: 5500,
+                riskAssessment: "निम्न - উচ্চ ঘরোয়া চাহিদা"
+              },
+              {
+                cropName: "গোলমরিচ (রাবার কান্ডে লতা)",
+                inputCostPerBigha: 2500,
+                expectedRevenuePerBigha: 8500,
+                netProfitPerBigha: 6000,
+                riskAssessment: "निम्ն - সহজ চাষ পদ্ধতি"
+              }
+            ],
+            companionSuggestion: "রাবার গাছের কান্ডে গোলমরিচ লতা চাষ করুন। এটি অতিরিক্ত জমি ছাড়াই কৃষকদের বাড়তি আয় নিশ্চিত করে।"
+          },
+          spatialSpread: [
+            {
+              mandiName: "আগরতলা মহারাজগঞ্জ বাজার মান্ডি",
+              pricePerQuintal: 18200,
+              deliveryTimeHrs: 2.0,
+              netArbitrageGain: 700,
+              advisoryNote: "RSS-4 গ্রেড সিটের জন্য তাত্ক্ষণিক ক্যাশ নিষ্পত্তির সুবিধা।"
+            },
+            {
+              mandiName: "উদয়পুর মান্ডি (গোমতী)",
+              pricePerQuintal: 17900,
+              deliveryTimeHrs: 1.2,
+              netArbitrageGain: 400,
+              advisoryNote: "ধারাবাহিক বেসরকারি গুদামজাতকারী ক্রেতা। উচ্চ লেনদেন ভলিউম স্ট্যান্ডার্ড।"
+            }
+          ]
+        };
+      } else {
+        return {
+          temporalAdvisory: {
+            currentPrice: 2280,
+            trend: "স্থিতিশীল",
+            recommendation: "অবিলম্বে বিক্রি করুন (আর্দ্রতা জনিত পচন এড়ান)",
+            targetPrice1Month: 2320,
+            rationale: `গ্রামাঞ্চলের গুদামগুলিতে আর্দ্রতার মাত্রা নিরাপদ সীমার (১৪%) চেয়ে বেশি (${district}-এ)। এখন বিক্রি করলে শস্যে কালো ছত্রাক সংক্রমণ এড়ানো যাবে।`
+          },
+          profitabilityComparison: {
+            analysisExplanation: "ধানের নেট মার্জিন সরকারি ন্যূনতম সমর্থন মূল্য (MSP) দ্বারা স্থিতিশীল। লাভ বাড়াতে রবি মরসুমে সরিষা চাষ করা প্রয়োজন।",
+            candidates: [
+              {
+                cropName: "রবি ধান (বোরো)",
+                inputCostPerBigha: 5200,
+                expectedRevenuePerBigha: 11800,
+                netProfitPerBigha: 6600,
+                riskAssessment: "निम्ন - সম্পূর্ণ সেচনির্ভর"
+              },
+              {
+                cropName: "আমন ধান (খরিফ)",
+                inputCostPerBigha: 4800,
+                expectedRevenuePerBigha: 9800,
+                netProfitPerBigha: 5000,
+                riskAssessment: "মাঝারি - অসঙ্গত বর্ষা"
+              },
+              {
+                cropName: "সরিষা (M-27 রবি আবর্তন)",
+                inputCostPerBigha: 2400,
+                expectedRevenuePerBigha: 7800,
+                netProfitPerBigha: 5400,
+                riskAssessment: "निम्न - তেলের উচ্চ স্থানীয় চাহিদা"
+              }
+            ],
+            companionSuggestion: "জলাশয়ের পাড়ে শাকসবজি এবং ডাল চাষ করুন। সঠিক মাত্রায় সূর্যের আলো পাওয়ার জন্য লাইন-পদ্ধতিতে চাষ করুন।"
+          },
+          spatialSpread: [
+            {
+              mandiName: "আগরতলা মহারাজগঞ্জ বাজার মান্ডি",
+              pricePerQuintal: 2450,
+              deliveryTimeHrs: 2.0,
+              netArbitrageGain: 130,
+              advisoryNote: "চমৎকার মূল্য স্তর কিন্তু অতিরিক্ত ট্রাকের যানজট রয়েছে।"
+            },
+            {
+              mandiName: "উদয়পুর মান্ডি (গোমতী)",
+              pricePerQuintal: 2360,
+              deliveryTimeHrs: 1.8,
+              netArbitrageGain: 55,
+              advisoryNote: "সরাসরি সরকারি সংগ্রহ কেন্দ্র (PACS) ন্যূনতম ধান ক্রয়ের দরে কিনছে।"
+            }
+          ]
+        };
+      }
+    }
+
+    if (language === "kok") {
+      if (normCrop.includes("pineapple")) {
+        return {
+          temporalAdvisory: {
+            currentPrice: 1650,
+            trend: "Rising",
+            recommendation: "HOLD & DELAY",
+            targetPrice1Month: 1880,
+            rationale: `Assam tei Kolkata units ni demand hamo. Rain thangkhe ${district} ni price bariba.`
+          },
+          profitabilityComparison: {
+            analysisExplanation: "Hachuk slopes rogo pineapple khlaikhe risk low tongo. Companion crops support khlaio.",
+            candidates: [
+              {
+                cropName: "Queen Anarash",
+                inputCostPerBigha: 9500,
+                expectedRevenuePerBigha: 24500,
+                netProfitPerBigha: 15000,
+                riskAssessment: "Low - rain resistant"
+              }
+            ],
+            companionSuggestion: "Intercrop ginger/turmeric khlaidi nematodes control khlaina."
+          },
+          spatialSpread: [
+            {
+              mandiName: "Agartala Maharajganj Mandi",
+              pricePerQuintal: 1800,
+              deliveryTimeHrs: 2.5,
+              netArbitrageGain: 150,
+              advisoryNote: "Sepahijala tei Khowai ni farmers nikhai chongya."
+            }
+          ]
+        };
+      }
+    }
+
     if (normCrop.includes("pineapple")) {
       return {
         temporalAdvisory: {
@@ -467,7 +680,7 @@ export const MarketIntelligence: React.FC = () => {
       const response = await fetch("/api/market-analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ crop: selectedCrop, district: selectedDistrict })
+        body: JSON.stringify({ crop: selectedCrop, district: selectedDistrict, language })
       });
 
       if (!response.ok) {
@@ -492,10 +705,10 @@ export const MarketIntelligence: React.FC = () => {
     }
   };
 
-  // Run automatically on first render to populate the screen beautifully
+  // Run automatically on first render or language change to populate the screen beautifully
   React.useEffect(() => {
     fetchMarketIntelligence();
-  }, [selectedCrop, selectedDistrict]);
+  }, [selectedCrop, selectedDistrict, language]);
 
   const getTrendBadgeColor = (trend: string) => {
     if (trend.toLowerCase().includes("rising")) return "bg-emerald-500/10 text-emerald-600 border-emerald-500/20";
@@ -622,7 +835,7 @@ export const MarketIntelligence: React.FC = () => {
                   <div className="flex items-center gap-2 mb-4">
                     <span className="bg-brand-orange/10 p-1.5 rounded-lg text-brand-orange font-bold text-xs">A</span>
                     <h4 className="text-md font-serif font-bold text-brand-ink">
-                      Should I sell today or wait?
+                      {language === 'bn' ? "আমি কি আজ বিক্রি করব নাকি অপেক্ষা করব?" : language === 'kok' ? "Ang bo salmari phalno hachungna ke bera?" : "Should I sell today or wait?"}
                     </h4>
                   </div>
 
@@ -630,7 +843,7 @@ export const MarketIntelligence: React.FC = () => {
                   <div className="p-4 bg-brand-green/[0.02] border border-brand-green/10 rounded-2xl mb-6 flex items-center justify-between gap-4">
                     <div>
                       <span className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-wider">
-                        KVK Recommended Action
+                        {language === 'bn' ? "কেভিকে নির্দেশিত প্রস্তাব" : language === 'kok' ? "KVK Recommended Khlaichamani" : "KVK Recommended Action"}
                       </span>
                       <h5 className="text-lg font-serif font-black text-brand-green mt-1 flex items-center gap-1.5">
                         {result.temporalAdvisory.recommendation}
@@ -638,55 +851,54 @@ export const MarketIntelligence: React.FC = () => {
                     </div>
                     <div className="px-3 py-1.5 rounded-full border text-[10px] uppercase font-bold tracking-wider flex items-center gap-1 bg-white">
                       <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-ping" />
-                      Dynamic Alert
+                      {language === 'bn' ? "অনলাইন সতর্কতা" : language === 'kok' ? "Kok khna choba" : "Dynamic Alert"}
                     </div>
                   </div>
 
-                  {/* Price Comparison Gauge */}
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="p-4 bg-brand-green/[0.04] rounded-xl border border-brand-green/5 text-center">
-                      <span className="text-[9px] uppercase font-bold text-brand-ink/40 tracking-wider block mb-1">
-                        Today's Mandi Price
+                      <span className="text-[10px] text-brand-ink/40 block font-semibold">
+                        {language === 'bn' ? "আজকের মান্ডি দর" : language === 'kok' ? "Ini mandi daam" : "Today's Mandi Price"}
                       </span>
                       <span className="text-2xl font-serif font-bold text-brand-green">
                         ₹{result.temporalAdvisory.currentPrice}
                       </span>
-                      <span className="text-[9px] text-brand-ink/40 block mt-1">per Quintal</span>
+                      <span className="text-[9px] text-brand-ink/40 block mt-1">{language === 'bn' ? "প্রতি কুইন্টাল" : "per Quintal"}</span>
                     </div>
 
                     <div className="p-4 bg-brand-orange/[0.03] rounded-xl border border-brand-orange/5 text-center">
-                      <span className="text-[9px] uppercase font-bold text-brand-ink/40 tracking-wider block mb-1">
-                        1-Month Target Forecaster
+                      <span className="text-[10px] text-brand-orange block font-semibold">
+                        {language === 'bn' ? "১ মাসের লক্ষ্যমাত্রা পূর্বাভাস" : language === 'kok' ? "1-mo tachal forecaster" : "1-Month Target Forecaster"}
                       </span>
                       <span className="text-2xl font-serif font-bold text-brand-orange">
                         ₹{result.temporalAdvisory.targetPrice1Month}
                       </span>
-                      <span className="text-[9px] text-brand-ink/40 block mt-1">per Quintal</span>
+                      <span className="text-[9px] text-brand-ink/40 block mt-1">{language === 'bn' ? "প্রতি কুইন্টাল" : "per Quintal"}</span>
                     </div>
                   </div>
+                </div>
 
-                  {/* Price change / direction */}
-                  <div className="flex justify-between items-center bg-brand-green/[0.02] border border-brand-green/5 p-3 rounded-xl mb-6">
-                    <span className="text-xs text-brand-ink/60 font-medium">Projected monthly trajectory</span>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border flex items-center gap-1 uppercase ${getTrendBadgeColor(result.temporalAdvisory.trend)}`}>
-                      {result.temporalAdvisory.trend.toLowerCase().includes("rising") ? (
-                        <TrendingUp className="w-3.5 h-3.5" />
-                      ) : (
-                        <TrendingDown className="w-3.5 h-3.5" />
-                      )}
-                      {result.temporalAdvisory.trend}
-                    </span>
-                  </div>
+                {/* Price change / direction */}
+                <div className="flex justify-between items-center bg-brand-green/[0.02] border border-brand-green/5 p-3 rounded-xl mb-6">
+                  <span className="text-xs text-brand-ink/60 font-medium">{language === 'bn' ? "মাসিক দামের পরিকল্পিত প্রবাহ" : language === 'kok' ? "Haste price roadmap" : "Projected monthly trajectory"}</span>
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border flex items-center gap-1 uppercase ${getTrendBadgeColor(result.temporalAdvisory.trend)}`}>
+                    {result.temporalAdvisory.trend.toLowerCase().includes("rising") || result.temporalAdvisory.trend.includes("ক্রমবর্ধমান") ? (
+                      <TrendingUp className="w-3.5 h-3.5" />
+                    ) : (
+                      <TrendingDown className="w-3.5 h-3.5" />
+                    )}
+                    {result.temporalAdvisory.trend}
+                  </span>
+                </div>
 
-                  {/* Rationale copy */}
-                  <div className="bg-brand-green/[0.02] border-l-4 border-brand-orange p-4 rounded-r-xl">
-                    <h6 className="text-[10px] uppercase font-bold text-brand-orange tracking-widest mb-1.5 flex items-center gap-1">
-                      <Info className="w-3.5 h-3.5" /> Economic Trade Explanation
-                    </h6>
-                    <p className="text-xs text-brand-ink/75 leading-relaxed">
-                      {result.temporalAdvisory.rationale}
-                    </p>
-                  </div>
+                {/* Rationale copy */}
+                <div className="bg-brand-green/[0.02] border-l-4 border-brand-orange p-4 rounded-r-xl">
+                  <h6 className="text-[10px] uppercase font-bold text-brand-orange tracking-widest mb-1.5 flex items-center gap-1">
+                    <Info className="w-3.5 h-3.5" /> {language === 'bn' ? "অর্থনৈতিক বাণিজ্য বিশ্লেষণ" : language === 'kok' ? "Economy-Trade explanation" : "Economic Trade Explanation"}
+                  </h6>
+                  <p className="text-xs text-brand-ink/75 leading-relaxed">
+                    {result.temporalAdvisory.rationale}
+                  </p>
                 </div>
               </div>
             </div>
