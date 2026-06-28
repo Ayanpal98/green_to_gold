@@ -117,7 +117,7 @@ export const Navbar = () => {
           {/* 2. BioSense DSS (Vision Pro styled subtle pill) */}
           <button 
             onClick={() => handleLinkClick("/dss")}
-            className="bg-brand-green text-white border border-[#D4AF37] shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_16px_rgba(212,175,55,0.15)] hover:border-[#E5C158] hover:scale-[1.02] transition-all duration-300 rounded-full px-5 py-2 text-[12px] font-bold uppercase tracking-widest flex items-center justify-center cursor-pointer h-9 shrink-0"
+            className="bg-brand-green text-white border border-[#D4AF37] shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] hover:border-[#E5C158] hover:scale-[1.02] transition-all duration-300 rounded-full px-5 py-2 text-[12px] font-bold uppercase tracking-widest flex items-center justify-center cursor-pointer h-9 shrink-0"
           >
             {t("nav.dss")}
           </button>
@@ -286,7 +286,7 @@ export const Navbar = () => {
                 <div className="py-2">
                   <button
                     onClick={() => handleLinkClick("/dss")}
-                    className="inline-flex items-center justify-center bg-brand-green text-white border border-[#D4AF37] shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_16px_rgba(212,175,55,0.15)] rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest cursor-pointer transition-all duration-300"
+                    className="inline-flex items-center justify-center bg-brand-green text-white border border-[#D4AF37] shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] hover:border-[#E5C158] hover:scale-[1.02] rounded-full px-5 py-2 text-sm font-bold uppercase tracking-widest cursor-pointer transition-all duration-300"
                   >
                     {t("nav.dss")}
                   </button>

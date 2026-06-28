@@ -15,6 +15,7 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-do
 import { GoogleGenAI } from "@google/genai";
 import BioSenseDSS from "./components/BioSenseDSS";
 import { useLanguage } from "./context/LanguageContext";
+import { CountUp } from "./components/CountUp";
 import { 
   ArrowRight, 
   Leaf, 
@@ -1069,381 +1070,309 @@ const INFRA_MACHINES: Record<string, MachineDetail> = {
     powerLabel: "Temp",
     powerVal: "160–180 °C",
     specs: [
-      { label: "Platen size", val: "4×8 ft (standard)" },
       { label: "Pressure", val: "150–200 bar" },
       { label: "Temperature", val: "160–180 °C" },
-      { label: "Cycle time", val: "8–12 min/board" }
+      { label: "Cycle time", val: "6–8 mins" },
+      { label: "Board size", val: "8x4 ft" }
     ],
-    desc: "The heart of every Green-to-Gold unit. A single-daylight hydraulic press that bonds bio-fibre mats under heat and pressure using UF or MF resin binders. Produces boards ranging from 6mm to 25mm thickness across a single 4×8 ft platen — no retooling needed. Designed for 3-shift operation with SHG labour."
-  },
-  dryer: {
-    id: "dryer",
-    iconName: "Wind",
-    name: "Rotary Drum Dryer",
-    sub: "Moisture reduction to < 8% before pressing",
-    phase: "p1",
-    tag: "Moisture Control",
-    metricLabel: "Output moisture",
-    metricVal: "< 8%",
-    powerLabel: "Fuel",
-    powerVal: "Self-fired bio-pellets",
-    specs: [
-      { label: "Inlet moisture", val: "Up to 65%" },
-      { label: "Target output", val: "< 8% MC" },
-      { label: "Drum length", val: "6–8 m" },
-      { label: "Heat source", val: "Bio-pellet burner (self-fired)" }
-    ],
-    desc: "Reduces feedstock moisture from field-fresh levels (40–65%) to press-ready levels (<8%). Fired entirely by the on-site pellet press output — no external fuel cost. Variable residence time control ensures consistent moisture output regardless of seasonal variation in incoming biomass moisture content."
-  },
-  pellet: {
-    id: "pellet",
-    iconName: "Activity",
-    name: "Pellet Press",
-    sub: "Converts press cake and residue into fuel",
-    phase: "p1",
-    tag: "Fuel Loop",
-    metricLabel: "Output",
-    metricVal: "200 kg/hr pellets",
-    powerLabel: "Sells surplus",
-    powerVal: "₹4–6/kg",
-    specs: [
-      { label: "Output rate", val: "200 kg/hr" },
-      { label: "Pellet diameter", val: "6–8 mm" },
-      { label: "Calorific value", val: "4,200–4,800 kcal/kg" },
-      { label: "Surplus sell price", val: "₹4–6 per kg" }
-    ],
-    desc: "Converts press cake, sawdust, and fibre fines — all waste from the main board line — into dense fuel pellets. Enough to power the dryer and other thermal processes with a surplus of ~80–100 kg/day for external sale. This creates a second revenue stream (bio-fuel) from material that would otherwise be disposed of, directly funding operating costs."
+    desc: "High-pressure multi-daylight hydraulic press that compresses the resin-treated fibre mat into rigid, high-density structural composite boards. Equipped with integrated thermal heating channels supplied by the pellet-fired boiler."
   },
   mixer: {
     id: "mixer",
     iconName: "RefreshCw",
     name: "Resin Blender / Mixer",
-    sub: "Uniform binder coating on fibre mat",
+    sub: "Ensures uniform distribution of eco-binders",
     phase: "p1",
-    tag: "Binder Application",
-    metricLabel: "Binder ratio",
-    metricVal: "8–12% UF/MF resin",
-    powerLabel: "Batch size",
-    powerVal: "300 kg",
+    tag: "Resin Blending",
+    metricLabel: "Mixing capacity",
+    metricVal: "300 kg/batch",
+    powerLabel: "Power",
+    powerVal: "7.5 kW",
     specs: [
-      { label: "Binder type", val: "UF / MF / bio-binder" },
-      { label: "Binder ratio", val: "8–12% by weight" },
-      { label: "Batch size", val: "300 kg per cycle" },
-      { label: "Mixing time", val: "4–6 minutes" }
+      { label: "Batch size", val: "300 kg" },
+      { label: "Cycle time", val: "4 mins" },
+      { label: "Speed", val: "120 RPM" },
+      { label: "Binder type", val: "Bio-resin" }
     ],
-    desc: "Ensures even distribution of urea-formaldehyde (UF) or melamine-formaldehyde (MF) resin across the shredded fibre before mat formation. Designed for future upgrade to bio-based binders (soy protein, tannin extract) to support full zero-formaldehyde certification as export markets demand it. Critical for board mechanical performance and IS 12406 compliance."
+    desc: "High-shear mechanical blender that evenly coats shredded fibers with binders before mat formation. Critical for board mechanical performance and strength."
   },
   trimsaw: {
     id: "trimsaw",
     iconName: "Scissors",
-    name: "Trim Saw & Edge Sander",
-    sub: "Final board dimensioning and surface finish",
+    name: "Trim Saw System",
+    sub: "Sizing and finishing — trims boards to exact commercial standard",
     phase: "p1",
-    tag: "Finishing",
-    metricLabel: "Board size",
-    metricVal: "8×4 ft standard",
-    powerLabel: "Thickness",
-    powerVal: "6–25 mm range",
+    tag: "Sizing & Finishing",
+    metricLabel: "Accuracy",
+    metricVal: "±0.5 mm",
+    powerLabel: "Power",
+    powerVal: "5.5 kW",
     specs: [
-      { label: "Standard output", val: "8×4 ft boards" },
-      { label: "Thickness range", val: "6–25 mm" },
-      { label: "Surface finish", val: "F2 grade (sanded)" },
-      { label: "Throughput", val: "40–60 boards/shift" }
+      { label: "Saw diameter", val: "350 mm" },
+      { label: "Feed rate", val: "12 m/min" },
+      { label: "Dust extraction", val: "Integrated" },
+      { label: "Blades", val: "Diamond-tipped" }
     ],
-    desc: "Trims pressed boards to standard market dimensions and sands both faces to F2 surface grade — the minimum required for furniture-grade and PMAY-U construction use. Edge straightness is critical for local contractor acceptance. Dust extracted and fed back to the pellet press, maintaining zero-waste processing."
+    desc: "Saws and squares cured composite boards to exact commercial 8x4 ft standard sizes. Includes vacuum dust containment."
   },
   moulding: {
     id: "moulding",
+    iconName: "Cpu",
+    name: "Tableware Moulding Press",
+    sub: "Hot presses plates, bowls, and takeout containers",
+    phase: "p2",
+    tag: "Thermoforming",
+    metricLabel: "Capacity",
+    metricVal: "1,200 units/hr",
+    powerLabel: "Temp",
+    powerVal: "180–210 °C",
+    specs: [
+      { label: "Mould stations", val: "Double-station" },
+      { label: "Cycle time", val: "35 secs" },
+      { label: "Output pressure", val: "50 tonnes" },
+      { label: "Products", val: "Plates/Bowls" }
+    ],
+    desc: "Double-station heated thermoforming press that shapes blended rice husk, sugarcane bagasse, and bamboo fiber into premium biodegradable dining tableware."
+  },
+  decorticator: {
+    id: "decorticator",
     iconName: "Layers",
-    name: "Compression Moulding Press",
-    sub: "Tableware production line addition",
+    name: "Fiber Decorticator",
+    sub: "High-yield leaf fiber extraction",
     phase: "p2",
-    tag: "Tableware Production",
+    tag: "Decortication",
     metricLabel: "Output",
-    metricVal: "2,000–3,000 units/hr",
-    powerLabel: "Material",
-    powerVal: "Rice husk + bagasse",
+    metricVal: "250 kg/hr",
+    powerLabel: "Power",
+    powerVal: "11 kW",
     specs: [
-      { label: "Output rate", val: "2,000–3,000 units/hr" },
-      { label: "Pressure range", val: "100–150 bar" },
-      { label: "Material compatibility", val: "Rice husk / bagasse mix" },
-      { label: "Cycle time", val: "20–30 sec per cycle" }
+      { label: "Feeding speed", val: "45 m/min" },
+      { label: "Water usage", val: "Zero-debt" },
+      { label: "Extraction rate", val: "94%" },
+      { label: "Blade material", val: "Hardened steel" }
     ],
-    desc: "Compresses agro-waste fibre combined with biodegradable binders under high temperature and mechanical load to cast premium, water-resistant eco cutlery, tableware, and plates. Runs on bio-pellet thermal steam systems."
+    desc: "Extracts long-staple pineapple leaf fiber (PALF) on-site without water debt. Furnishes raw materials for structural boards."
   },
-  pulping: {
-    id: "pulping",
-    iconName: "Wind",
-    name: "Paper Pulping Unit",
-    sub: "Kraft paper production line addition",
+  pulper: {
+    id: "pulper",
+    iconName: "RefreshCw",
+    name: "Closed-Cycle Pulp Purifier",
+    sub: "Prepares clean feedstock pulp for tableware lines",
     phase: "p2",
-    tag: "Kraft Paper Stream",
-    metricLabel: "Pulp grade",
-    metricVal: "Semi-chemical",
-    powerLabel: "Water loop",
-    powerVal: "Closed-cycle (zero effluent)",
+    tag: "Pulp Preparation",
+    metricLabel: "Capacity",
+    metricVal: "600 kg/batch",
+    powerLabel: "Power",
+    powerVal: "15 kW",
     specs: [
-      { label: "Pulping grade", val: "Semi-chemical pulp" },
-      { label: "Raw inputs", val: "Bamboo chips / crop stalks" },
-      { label: "Water recycling", val: "98% closed loop" },
-      { label: "Output moisture", val: "12% standard" }
+      { label: "Water recycling", val: "100% closed" },
+      { label: "Operating temp", val: "65 °C" },
+      { label: "Cycle time", val: "45 mins" },
+      { label: "Chemicals", val: "Zero chlorine" }
     ],
-    desc: "Transforms bamboo chips and high-lignin straw residues into robust brown unbleached paper pulp. Includes a premium closed water loop that prevents toxic effluent runoff, satisfying stringent environmental protocols for village boundaries."
+    desc: "Low-energy closed-cycle industrial pulper that prepares refined bamboo and bagasse pulp. Intercepts liquid outputs to ensure eco-friendly waste management."
   },
-  extractor: {
-    id: "extractor",
-    iconName: "Wrench",
-    name: "PALF Fibre Extractor",
-    sub: "Pineapple leaf fiber decorticator",
-    phase: "p2",
-    tag: "Pineapple Leaf Fibre",
-    metricLabel: "Fibre yield",
-    metricVal: "2.5–3% of leaf weight",
-    powerLabel: "Use",
-    powerVal: "Table covers, geotextiles",
+  bamboo: {
+    id: "bamboo",
+    iconName: "Scissors",
+    name: "Bamboo Internode Splitter",
+    sub: "Primary sizing unit for heavy structural timber",
+    phase: "p3",
+    tag: "Sizing & Splitting",
+    metricLabel: "Throughput",
+    metricVal: "800 kg/hr",
+    powerLabel: "Power",
+    powerVal: "7.5 kW",
     specs: [
-      { label: "Fibre yield", val: "2.5% to 3.0% of leaf weight" },
-      { label: "Blade drum speed", val: "500–600 RPM" },
-      { label: "Waste by-product", val: "Bio-slurry (fertilizer feedstock)" },
-      { label: "Output moisture", val: "< 12% after solar prep" }
+      { label: "Splitting lanes", val: "4-lane" },
+      { label: "Blade count", val: "8 blades" },
+      { label: "Feed speed", val: "25 m/min" },
+      { label: "Log diameter", val: "50-150 mm" }
     ],
-    desc: "High-speed rotary blade decorticator designed to scrape away outer pulp layers of agricultural pineapple leaves to harvest the high-performance cellulose fibers. Zero fiber breakage ensures peak tensile properties for mats."
+    desc: "Automatic hydraulic splitter that segments whole bamboo poles into structural strips or chips. High throughput with safety enclosures."
   },
   laminator: {
     id: "laminator",
     iconName: "Layers",
-    name: "Multi-Layer Laminator",
-    sub: "Engineered board upgrades and surface finishing",
-    phase: "p2",
-    tag: "Board Upgrade",
-    metricLabel: "Layers",
-    metricVal: "Up to 5-ply",
-    powerLabel: "Application",
-    powerVal: "Structural panels, flooring",
-    specs: [
-      { label: "Ply range", val: "3-ply to 5-ply construction" },
-      { label: "Lamination width", val: "Up to 5 ft standard" },
-      { label: "Heat source", val: "Induction / Bio-mass oil thermal" },
-      { label: "Finished grade", val: "E1 low emissions" }
-    ],
-    desc: "Bonds premium high-tensile veneer sheaths or decorative faces onto core composite boards. Enables multi-use modular building panels, water-resistant structural subfloors, and heavy-duty architectural structures."
-  },
-  bamboo: {
-    id: "bamboo",
-    iconName: "Layers",
-    name: "Bamboo Laminated Lumber Line",
-    sub: "Structural engineered lumber for premium export",
+    name: "Heavy Industrial Laminator",
+    sub: "Applies protective layers and finishes",
     phase: "p3",
-    tag: "Structural Export",
-    metricLabel: "Output",
-    metricVal: "High-density structural beams",
-    powerLabel: "Target",
-    powerVal: "IKEA supply chain spec",
+    tag: "Lamination",
+    metricLabel: "Width",
+    metricVal: "1,300 mm",
+    powerLabel: "Power",
+    powerVal: "22 kW",
     specs: [
-      { label: "Tensile rating", val: "140–235 MPa" },
-      { label: "Glue pressure", val: "Over 250 bar hydraulic" },
-      { label: "Target certification", val: "IKEA supply chain specs" },
-      { label: "Dimensions", val: "Custom structural lengths" }
+      { label: "Laminating temp", val: "140 °C" },
+      { label: "Feed speed", val: "8 m/min" },
+      { label: "Pressure", val: "80 bar" },
+      { label: "Finish types", val: "Matte/Gloss/Wood" }
     ],
-    desc: "High-density structural composite line. Presses cross-directional laminated bamboo splints into dimensional profiles that compete with tropical hardwoods. Extremely durable and carbon net-negative."
+    desc: "Dual-sided continuous lamination press that bonds protective overlays, natural veneers, or fire-retardant barriers onto raw composite boards."
   },
-  biogas: {
-    id: "biogas",
-    iconName: "Activity",
-    name: "Biogas Digester (SATAT)",
-    sub: "Off-grid organic utility energy system",
-    phase: "p3",
-    tag: "Renewable Energy Hub",
-    metricLabel: "Input",
-    metricVal: "Organic press cake + effluent",
-    powerLabel: "Output",
-    powerVal: "Biogas + digestate fertilizer",
-    specs: [
-      { label: "Methane yield", val: "60–65% concentration" },
-      { label: "Slurry output", val: "1,200 kg/day organic manure" },
-      { label: "Digester volume", val: "100 m³ capacity" },
-      { label: "Co-product", val: "Compressed Bio-Gas (CBG)" }
-    ],
-    desc: "Converts organic agricultural press-cakes, sizing wash-waters, and neighborhood farm waste into clean combustion gas. Feeds on-site power generators while yielding mineral-rich organic bio-fertilizer sold to local farms."
-  },
-  vision: {
-    id: "vision",
+  qcscanner: {
+    id: "qcscanner",
     iconName: "Eye",
-    name: "AI Quality Vision System",
-    sub: "Automated inline quality assurance & control",
+    name: "Neural QC Scanner",
+    sub: "Camera-assisted AI tolerance inspector",
     phase: "p3",
-    tag: "Inline QC",
-    metricLabel: "Defect detection",
-    metricVal: "Camera + ML model",
-    powerLabel: "Reject rate target",
-    powerVal: "< 2%",
+    tag: "Quality Control",
+    metricLabel: "Accuracy",
+    metricVal: "99.8%",
+    powerLabel: "Power",
+    powerVal: "Camera/Edge PC",
     specs: [
-      { label: "Inspection rate", val: "40 frames per second" },
-      { label: "Defect detection", val: "Edge cracks, delamination, void spaces" },
-      { label: "Reject rate bias", val: "< 1% false positive" },
-      { label: "Model latency", val: "12ms per panel" }
+      { label: "Inspection speed", val: "60 boards/hr" },
+      { label: "Camera resolution", val: "4K stereoscopic" },
+      { label: "Defect types", val: "Cracks/warping/voids" },
+      { label: "Action time", val: "0.2 secs" }
     ],
-    desc: "Computer vision cameras combined with localized edge computing models analyze the top and bottom faces of every outgoing board. Instantly flags thickness standard anomalies and auto-diverts rejects, ensuring export compliance."
-  },
-  carbon: {
-    id: "carbon",
-    iconName: "Activity",
-    name: "Carbon Credit Metering",
-    sub: "Digital ledger tracking for carbon offset assets",
-    phase: "p3",
-    tag: "ESG Tokenization",
-    metricLabel: "Standard",
-    metricVal: "Verra VCS / Gold Standard",
-    powerLabel: "Revenue",
-    powerVal: "Verified carbon tokens",
-    specs: [
-      { label: "Standard spec", val: "Verra / Gold Standard methodology" },
-      { label: "Tracking factor", val: "Realtime telemetry IoT hubs" },
-      { label: "Net offset multiplier", val: "1.4t CO2e sequestered / tonne board" },
-      { label: "Asset yield", val: "Blockchain-backed ESG tokens" }
-    ],
-    desc: "IoT telemetry integrated directly across shredding and thermal processes continuously tracks energy consumption and raw straw weight indexes. Generates verifiable data logs to supply global green carbon asset trading platforms."
+    desc: "Multi-camera neural network inspection platform that scans board surfaces and dimensions in real time. Flag and auto-segregates out-of-tolerance units."
   }
 };
 
-function LandingPage({ user }: { user: any }) {
-  const [isDocOpen, setIsDocOpen] = useState(false);
-  const [activePage, setActivePage] = useState(1);
+export const LandingPage = ({ user }: { user: any }) => {
+  const { language } = useLanguage();
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [infraPhase, setInfraPhase] = useState<"p1" | "p2" | "p3">("p1");
   const [selectedMachineId, setSelectedMachineId] = useState<string>("hammermill");
-  const { language } = useLanguage();
-  const lp = LP_TRANSLATIONS[language] || LP_TRANSLATIONS.en;
-
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 75, damping: 25 });
-  const mouseYSpring = useSpring(y, { stiffness: 75, damping: 25 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const [activePage, setActivePage] = useState<number>(1);
 
   const handleDownloadPDF = () => {
     window.print();
   };
 
+  const lp = LP_TRANSLATIONS[language as keyof typeof LP_TRANSLATIONS] || LP_TRANSLATIONS.en;
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { stiffness: 300, damping: 30 });
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left - width / 2;
+    const mouseY = event.clientY - rect.top - height / 2;
+    x.set(mouseX / width);
+    y.set(mouseY / height);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
   return (
-    <div className="min-h-screen selection:bg-brand-orange selection:text-white print:bg-white text-brand-ink">
-      <a href="#main-content" className="skip-link">Skip to main content</a>
-
+    <div className="min-h-screen bg-brand-paper text-brand-ink selection:bg-brand-orange/20 selection:text-brand-orange-dark font-sans relative overflow-x-hidden">
       <Navbar />
+      
+      {/* Hero Section */}
+      <header className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden flex flex-col items-center">
+        {/* Decorative background grids & shapes */}
+        <div className="absolute inset-0 bg-grid-brand opacity-[0.03] pointer-events-none" />
+        <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-brand-green/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/3 right-1/10 w-80 h-80 bg-brand-orange/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <main id="main-content">
-        {/* Hero Section */}
-        <header className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-10" aria-hidden="true">
-            <div className="absolute top-20 right-[-10%] w-[600px] h-[600px] bg-brand-light-green rounded-full blur-[120px] animate-float" />
-            <div className="absolute bottom-10 left-[-5%] w-[400px] h-[400px] bg-brand-orange rounded-full blur-[100px]" />
+        <div className="max-w-7xl mx-auto px-6 w-full text-center relative z-10">
+          <div className="flex flex-col items-center max-w-4xl mx-auto">
+            {/* Pill Badge */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 bg-brand-green/10 border border-brand-green/20 px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase text-brand-green mb-8 shadow-sm backdrop-blur-md"
+            >
+              <Leaf className="w-4 h-4 text-brand-orange-dark animate-pulse" />
+              <span>{lp.heroBadge}</span>
+            </motion.div>
+
+            {/* Main Headline - Reduced as requested */}
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl sm:text-5xl md:text-[52px] font-serif text-brand-green tracking-tight leading-tight mb-6"
+            >
+              {language === "bn" ? "কৃষি বর্জ্যকে রূপান্তর করুন" : "Turning Agricultural Waste"} <br />
+              <span className="italic text-brand-orange block mt-2">
+                {language === "bn" ? "উচ্চ-মূল্যের পরিবেশবান্ধব পণ্যে" : "into High-Value Green Products."}
+              </span>
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-base sm:text-lg md:text-xl text-brand-ink/75 font-normal leading-relaxed max-w-2xl mb-12"
+            >
+              {lp.heroSubtitle}
+            </motion.p>
+
+            {/* Action Buttons */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap gap-4 justify-center items-center mb-16"
+            >
+              <a 
+                href="#problem"
+                className="bg-brand-green text-white px-8 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-brand-ink transition-all duration-300 shadow-xl shadow-brand-green/20 hover:scale-[1.02]"
+              >
+                {lp.exploreButton}
+              </a>
+              <Link 
+                to="/dss"
+                className="bg-white text-brand-green border border-brand-green/20 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:border-brand-green hover:bg-brand-green/5 transition-all duration-300 shadow-md flex items-center gap-2 hover:scale-[1.02]"
+              >
+                <span>Launch DSS AI</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
           </div>
 
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <span className="inline-block px-4 py-1 rounded-full border border-brand-green/20 text-brand-green text-xs font-bold uppercase tracking-widest mb-6">
-                  {lp.heroBadge}
-                </span>
-                <div className="text-brand-orange text-sm md:text-base font-bold uppercase tracking-[0.2em] mb-3">
-                  {lp.heroTagline}
-                </div>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif leading-[1.05] text-brand-green mb-8 tracking-tight font-medium">
-                  {lp.heroTitle1} <br />
-                  <span className="italic text-brand-orange">{lp.heroTitle2}</span>
-                </h1>
-
-                {/* Highlighted Stat Badge */}
-                <div className="inline-flex items-center gap-3.5 bg-brand-green/[0.03] hover:bg-brand-green/[0.05] border border-brand-green/10 rounded-2xl p-4 mb-8 transition-colors max-w-md">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-brand-green/10 text-brand-green shrink-0">
-                    <Leaf className="w-5 h-5" aria-hidden="true" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xl md:text-2xl font-serif font-bold text-brand-green leading-none">
-                      {lp.heroStatNumber}
-                    </div>
-                    <div className="text-[10px] md:text-xs font-bold text-brand-green/60 uppercase tracking-wider mt-1.5">
-                      {lp.heroStatText}
-                    </div>
-                  </div>
-                </div>
-
-                <p className="text-xl md:text-2xl text-brand-ink/70 max-w-xl mb-10 leading-relaxed">
-                  {lp.heroSubtitle}
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <button 
-                    onClick={() => {
-                      const element = document.getElementById("solution");
-                      if (element) element.scrollIntoView({ behavior: "smooth" });
-                    }} 
-                    className="bg-brand-green text-white px-8 py-4 rounded-full text-lg font-medium hover:scale-105 transition-transform flex items-center gap-3"
-                  >
-                    {lp.exploreButton} <ArrowRight className="w-5 h-5" aria-hidden="true" />
-                  </button>
-                  <div className="flex items-center gap-4 px-6 py-4 border border-brand-green/10 rounded-full bg-white/50">
-                    <div className="flex -space-x-2" aria-hidden="true">
-                      {[
-                        "https://images.unsplash.com/photo-1590487988256-9ed24133863e?auto=format&fit=crop&q=80&w=100",
-                        "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=100",
-                        "https://images.unsplash.com/photo-1596401057633-52a0335e414d?auto=format&fit=crop&q=80&w=100"
-                      ].map((url, i) => (
-                        <div key={i} className="w-8 h-8 rounded-full border-2 border-brand-paper bg-brand-light-green/20 overflow-hidden">
-                          <img src={url} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                        </div>
-                      ))}
-                    </div>
-                    <span className="text-sm font-medium text-brand-green">{lp.farmersImpacted}</span>
-                  </div>
-                </div>
-              </motion.div>
-
+          {/* Bento grid container with 3D Parallax hover */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, type: "spring", stiffness: 50 }}
+            className="w-full mt-8"
+          >
+            <div 
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="perspective-1000 w-full"
+            >
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.2 }}
-                className="relative perspective-2000"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+                style={{ rotateX, rotateY }}
+                className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6 bg-brand-green/[0.02] border border-brand-green/10 rounded-[36px] shadow-2xl backdrop-blur-3xl preserve-3d"
               >
-                {/* Product & DSS Integrated Bento Composition */}
-                <motion.div 
-                  style={{ rotateX, rotateY }}
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-brand-green/[0.02] border border-brand-green/10 rounded-[32px] shadow-2xl backdrop-blur-3xl preserve-3d"
-                >
-                  {/* Card 1: BioSense DSS Dashboard (Flagship AI Platform) */}
-                  <div className="col-span-1 sm:col-span-2 bg-gradient-to-br from-[#0B3A2C] to-[#0F4B36] text-white rounded-[28px] p-6 md:p-8 border border-white/10 shadow-2xl relative overflow-hidden group transition-all duration-500 hover:shadow-[0_20px_50px_rgba(11,58,44,0.35)] hover:border-[#3ED97D]/20 min-h-[460px] md:min-h-[420px] flex flex-col justify-between">
+                  {/* Card 1: BioSense DSS Dashboard (Flagship AI Platform) - Undisputed Hero spanning 3 cols */}
+                  <div className="col-span-1 sm:col-span-3 bg-gradient-to-br from-[#0B3A2C] to-[#0F4B36] text-white rounded-[30px] p-6 md:p-10 border border-white/10 shadow-2xl relative overflow-hidden group transition-all duration-500 hover:shadow-[0_24px_60px_rgba(11,58,44,0.4)] hover:border-[#3ED97D]/25 min-h-[520px] md:min-h-[480px] flex flex-col justify-between">
                     {/* Glowing green wave particles at bottom */}
-                    <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none select-none z-0 opacity-50 overflow-hidden">
+                    <div className="absolute inset-x-0 bottom-0 h-28 pointer-events-none select-none z-0 opacity-60 overflow-hidden">
                       <svg viewBox="0 0 800 100" className="w-full h-full" preserveAspectRatio="none">
-                        <path d="M0,60 Q150,30 300,70 T600,40 T800,50" fill="none" stroke="#3ED97D" strokeWidth="1.5" strokeDasharray="4 6" className="animate-[dash_12s_linear_infinite]" />
-                        <path d="M0,70 Q200,40 400,80 T800,60" fill="none" stroke="#6CFF9F" strokeWidth="1" strokeDasharray="2 8" opacity="0.6" />
+                        <motion.path 
+                          d="M0,60 Q150,30 300,70 T600,40 T800,50" 
+                          fill="none" 
+                          stroke="#3ED97D" 
+                          strokeWidth="1.5" 
+                          strokeDasharray="10 15" 
+                          animate={{ strokeDashoffset: [0, -50] }}
+                          transition={{ repeat: Infinity, duration: 18, ease: "linear" }}
+                        />
+                        <motion.path 
+                          d="M0,70 Q200,40 400,80 T800,60" 
+                          fill="none" 
+                          stroke="#6CFF9F" 
+                          strokeWidth="1" 
+                          strokeDasharray="6 12" 
+                          opacity="0.6" 
+                          animate={{ strokeDashoffset: [0, 50] }}
+                          transition={{ repeat: Infinity, duration: 24, ease: "linear" }}
+                        />
                         <circle cx="280" cy="65" r="2" fill="#6CFF9F" className="animate-pulse" />
                         <circle cx="450" cy="50" r="1.5" fill="#3ED97D" />
                         <circle cx="150" cy="40" r="1" fill="#6CFF9F" />
@@ -1451,44 +1380,44 @@ function LandingPage({ user }: { user: any }) {
                       </svg>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center h-full relative z-10 w-full">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center h-full relative z-10 w-full">
                       {/* Left: Branding & Info */}
                       <div className="md:col-span-5 flex flex-col justify-center text-left h-full">
-                        <div className="flex items-center gap-1.5 w-fit bg-white/[0.08] border border-white/10 px-3 py-1 rounded-full text-[9px] md:text-[10px] font-bold tracking-widest uppercase text-white/90 mb-4 shadow-sm backdrop-blur-md">
+                        <div className="flex items-center gap-1.5 w-fit bg-white/[0.08] border border-white/10 px-3.5 py-1.5 rounded-full text-[9px] md:text-[10.5px] font-bold tracking-widest uppercase text-white/95 mb-5 shadow-sm backdrop-blur-md">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#3ED97D] animate-ping" />
                           <span>{language === "bn" ? "আমাদের ফ্ল্যাগশিপ প্ল্যাটফর্ম" : "OUR FLAGSHIP PLATFORM"}</span>
                         </div>
                         
-                        <h4 className="font-sans text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-none">
-                          BioSense DSS<span className="align-super text-[#F6B54C] text-[16px] md:text-[18px] ml-0.5 font-bold">™</span>
+                        <h4 className="font-sans text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-none">
+                          BioSense DSS<span className="align-super text-[#F6B54C] text-[18px] md:text-[20px] ml-0.5 font-bold">™</span>
                         </h4>
                         
-                        <p className="text-[#3ED97D] font-sans text-sm md:text-base font-semibold tracking-tight leading-snug mt-1.5 mb-3">
+                        <p className="text-[#3ED97D] font-sans text-base md:text-lg font-semibold tracking-tight leading-snug mt-2.5 mb-4">
                           {language === "bn" ? "এআই-চালিত সিদ্ধান্ত বুদ্ধিমত্তা প্ল্যাটফর্ম" : "AI-Driven Decision Intelligence Platform"}
                         </p>
                         
-                        <p className="text-white/75 font-sans text-xs md:text-sm font-normal leading-relaxed max-w-sm">
+                        <p className="text-white/80 font-sans text-xs md:text-sm font-normal leading-relaxed max-w-sm">
                           {language === "bn" 
                             ? "বায়োমাস সরবরাহ চেইন অপ্টিমাইজ করা, চাহিদা অনুমান করা এবং টেকসই ভবিষ্যতের জন্য মূল্য বৃদ্ধি করা।" 
                             : "Optimizing biomass supply chains, predicting demand, and maximizing value for a sustainable future."}
                         </p>
                       </div>
 
-                      {/* Right: Premium Laptop Mockup */}
+                      {/* Right: Premium Laptop Mockup (Increased Size & Screen Details) */}
                       <div className="md:col-span-7 flex flex-col justify-center items-center relative w-full mt-4 md:mt-0">
                         {/* Soft green radial glow behind laptop */}
-                        <div className="absolute w-72 h-72 bg-[#3ED97D]/15 rounded-full blur-[80px] -z-10 pointer-events-none" />
+                        <div className="absolute w-80 h-80 bg-[#3ED97D]/20 rounded-full blur-[90px] -z-10 pointer-events-none" />
                         
-                        {/* Laptop body structure */}
-                        <div className="relative w-full max-w-[420px] aspect-[16/10] bg-[#1a1a1a] rounded-[16px] p-[5px] border border-white/15 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.7)] overflow-hidden">
+                        {/* Laptop body structure - Increased max-w and padding */}
+                        <div className="relative w-full max-w-[480px] aspect-[16/10] bg-[#1a1a1a] rounded-[18px] p-[6px] border border-white/15 shadow-[0_28px_60px_-12px_rgba(0,0,0,0.85)] overflow-hidden">
                           {/* Inner Bezel and Screen */}
-                          <div className="w-full h-full bg-[#0E1411] rounded-[11px] overflow-hidden flex text-left font-sans text-[7px] select-none border border-white/5 relative">
+                          <div className="w-full h-full bg-[#0E1411] rounded-[12px] overflow-hidden flex text-left font-sans text-[7.5px] select-none border border-white/5 relative">
                             {/* Screen Left Sidebar Menu */}
-                            <div className="w-[50px] bg-[#070D0B] border-r border-white/5 p-1 flex flex-col gap-[2px]">
+                            <div className="w-[56px] bg-[#070D0B] border-r border-white/5 p-1 flex flex-col gap-[2.5px]">
                               {/* Sidebar Logo */}
-                              <div className="flex items-center gap-1 mb-2 px-1 py-0.5">
+                              <div className="flex items-center gap-1 mb-2.5 px-1 py-0.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#3ED97D]" />
-                                <span className="text-[5px] font-black tracking-widest text-white/50 uppercase">DSS Alpha</span>
+                                <span className="text-[5.5px] font-black tracking-widest text-white/50 uppercase">DSS Alpha</span>
                               </div>
                               {/* Sidebar Items */}
                               {[
@@ -1510,40 +1439,42 @@ function LandingPage({ user }: { user: any }) {
                                     <rect x="14" y="12" width="7" height="9" rx="1" />
                                     <rect x="3" y="16" width="7" height="5" rx="1" />
                                   </svg>
-                                  <span className="text-[5px] tracking-tight">{item.name}</span>
+                                  <span className="text-[5.5px] tracking-tight">{item.name}</span>
                                 </div>
                               ))}
                             </div>
 
                             {/* Screen Right Main Workspace */}
-                            <div className="flex-1 p-1.5 flex flex-col justify-between bg-[#0E1411] overflow-hidden">
+                            <div className="flex-1 p-2 flex flex-col justify-between bg-[#0E1411] overflow-hidden">
                               {/* Top Bar */}
-                              <div className="flex justify-between items-center mb-1 pb-0.5 border-b border-white/5">
-                                <span className="text-white/90 font-bold text-[8px]">{language === "bn" ? "ড্যাশবোর্ড" : "Dashboard"}</span>
-                                <span className="text-[5px] text-white/40 bg-white/[0.04] px-1 py-0.5 rounded border border-white/5">v1.5.2</span>
+                              <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/5">
+                                <span className="text-white/90 font-bold text-[8.5px]">{language === "bn" ? "ড্যাশবোর্ড" : "Dashboard"}</span>
+                                <span className="text-[5.5px] text-white/40 bg-white/[0.04] px-1 py-0.5 rounded border border-white/5">v1.5.2</span>
                               </div>
 
                               {/* Top Row KPI Cards */}
-                              <div className="grid grid-cols-4 gap-1 mb-1">
+                              <div className="grid grid-cols-4 gap-1 mb-1.5">
                                 {[
                                   { label: "Total Biomass", value: "12,450t", color: "text-white" },
                                   { label: "Utilized (Tons)", value: "8,320t", color: "text-white" },
                                   { label: "Available (Tons)", value: "4,130t", color: "text-white" },
                                   { label: "Util. Rate", value: "24.5%", color: "text-[#3ED97D]" }
                                 ].map((card, idx) => (
-                                  <div key={idx} className="bg-white/[0.01] border border-white/5 rounded-[4px] p-1 flex flex-col justify-between min-h-[26px]">
+                                  <div key={idx} className="bg-white/[0.01] border border-white/5 rounded-[4px] p-1 flex flex-col justify-between min-h-[28px]">
                                     <div className="text-[4.5px] text-white/40 tracking-tight leading-none scale-[0.9] origin-left">{card.label}</div>
-                                    <div className={`text-[7px] font-extrabold leading-none my-0.5 ${card.color}`}>{card.value}</div>
+                                    <div className={`text-[7.5px] font-extrabold leading-none my-0.5 ${card.color}`}>
+                                      <CountUp value={card.value} />
+                                    </div>
                                     <div className="text-[4px] text-[#3ED97D] font-semibold scale-[0.8] origin-left">View Details</div>
                                   </div>
                                 ))}
                               </div>
 
                               {/* Bottom Visual Panels */}
-                              <div className="grid grid-cols-2 gap-1 flex-1 overflow-hidden">
+                              <div className="grid grid-cols-2 gap-1.5 flex-1 overflow-hidden">
                                 {/* Left Map Panel */}
                                 <div className="bg-white/[0.01] border border-white/5 rounded-[6px] p-1 flex flex-col justify-between relative overflow-hidden h-full">
-                                  <div className="text-[5px] text-white/50 font-bold tracking-tight mb-1">{language === "bn" ? "বায়োমাস মানচিত্র" : "Biomass Availability Map"}</div>
+                                  <div className="text-[5.5px] text-white/50 font-bold tracking-tight mb-1">{language === "bn" ? "বায়োমাস মানচিত্র" : "Biomass Availability Map"}</div>
                                   
                                   {/* Simulated Map Coordinates Grid */}
                                   <div className="flex-1 relative border border-white/[0.03] rounded bg-[#0b0f0d] overflow-hidden flex items-center justify-center">
@@ -1556,16 +1487,16 @@ function LandingPage({ user }: { user: any }) {
 
                                     {/* Flashing Location Pins */}
                                     <div className="absolute top-[30%] left-[45%] flex items-center justify-center">
-                                      <span className="absolute w-2 h-2 rounded-full bg-[#3ED97D]/50 animate-ping" />
-                                      <span className="w-1 h-1 rounded-full bg-[#3ED97D]" />
+                                      <span className="absolute w-2.5 h-2.5 rounded-full bg-[#3ED97D]/50 animate-ping" />
+                                      <span className="w-1.5 h-1.5 rounded-full bg-[#3ED97D]" />
                                     </div>
                                     <div className="absolute top-[55%] left-[60%] flex items-center justify-center">
-                                      <span className="absolute w-2 h-2 rounded-full bg-[#3ED97D]/50 animate-ping [animation-delay:0.3s]" />
-                                      <span className="w-1 h-1 rounded-full bg-[#3ED97D]" />
+                                      <span className="absolute w-2.5 h-2.5 rounded-full bg-[#3ED97D]/50 animate-ping [animation-delay:0.3s]" />
+                                      <span className="w-1.5 h-1.5 rounded-full bg-[#3ED97D]" />
                                     </div>
                                     <div className="absolute top-[65%] left-[38%] flex items-center justify-center">
-                                      <span className="absolute w-2 h-2 rounded-full bg-[#3ED97D]/50 animate-ping [animation-delay:0.6s]" />
-                                      <span className="w-1 h-1 rounded-full bg-[#3ED97D]" />
+                                      <span className="absolute w-2.5 h-2.5 rounded-full bg-[#3ED97D]/50 animate-ping [animation-delay:0.6s]" />
+                                      <span className="w-1.5 h-1.5 rounded-full bg-[#3ED97D]" />
                                     </div>
                                   </div>
                                 </div>
@@ -1573,8 +1504,8 @@ function LandingPage({ user }: { user: any }) {
                                 {/* Right Chart Panel */}
                                 <div className="bg-white/[0.01] border border-white/5 rounded-[6px] p-1 flex flex-col justify-between h-full">
                                   <div className="flex justify-between items-center mb-1">
-                                    <span className="text-[5px] text-white/50 font-bold tracking-tight">{language === "bn" ? "চাহিদা পূর্বাভাস" : "Demand Forecast"}</span>
-                                    <span className="text-[4px] text-white/30">This Month</span>
+                                    <span className="text-[5.5px] text-white/50 font-bold tracking-tight">{language === "bn" ? "চাহিদা পূর্বাভাস" : "Demand Forecast"}</span>
+                                    <span className="text-[4.5px] text-white/30">This Month</span>
                                   </div>
 
                                   {/* Recharts / SVG Sparkline */}
@@ -1591,8 +1522,23 @@ function LandingPage({ user }: { user: any }) {
                                       <line x1="0" y1="20" x2="100" y2="20" stroke="white" strokeOpacity="0.03" strokeWidth="0.5" />
                                       <line x1="0" y1="30" x2="100" y2="30" stroke="white" strokeOpacity="0.03" strokeWidth="0.5" />
                                       {/* Sparkline Path */}
-                                      <path d="M0,32 Q20,30 40,22 T70,14 T100,6" fill="none" stroke="#3ED97D" strokeWidth="1" strokeLinecap="round" />
-                                      <path d="M0,32 Q20,30 40,22 T70,14 T100,6 L100,40 L0,40 Z" fill="url(#chartGrad)" />
+                                      <motion.path 
+                                        d="M0,32 Q20,30 40,22 T70,14 T100,6" 
+                                        fill="none" 
+                                        stroke="#3ED97D" 
+                                        strokeWidth="1" 
+                                        strokeLinecap="round" 
+                                        initial={{ pathLength: 0 }}
+                                        animate={{ pathLength: 1 }}
+                                        transition={{ duration: 1.8, ease: "easeOut", delay: 0.5 }}
+                                      />
+                                      <motion.path 
+                                        d="M0,32 Q20,30 40,22 T70,14 T100,6 L100,40 L0,40 Z" 
+                                        fill="url(#chartGrad)" 
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 1, delay: 1.5 }}
+                                      />
                                       {/* Interactive Pointer */}
                                       <circle cx="100" cy="6" r="1" fill="#3ED97D" className="animate-pulse" />
                                     </svg>
@@ -1604,15 +1550,15 @@ function LandingPage({ user }: { user: any }) {
                         </div>
 
                         {/* Laptop Base (Anodized dark aluminum reflection base) */}
-                        <div className="relative w-[110%] max-w-[450px] h-[6px] bg-[#222] rounded-b-[4px] border-t border-white/20 shadow-[0_12px_24px_-4px_rgba(0,0,0,0.8)] -mt-[1px] z-10 flex justify-center">
-                          <div className="w-10 h-[2px] bg-[#111] rounded-b-[1px]" />
+                        <div className="relative w-[110%] max-w-[510px] h-[6px] bg-[#222] rounded-b-[4px] border-t border-white/20 shadow-[0_14px_28px_-4px_rgba(0,0,0,0.85)] -mt-[1px] z-10 flex justify-center">
+                          <div className="w-12 h-[2px] bg-[#111] rounded-b-[1px]" />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Card 2: Bio-Composite Boards */}
-                  <div className="bg-brand-paper/85 rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-brand-green/30 min-h-[185px]">
+                  {/* Card 2: Bio-Composite Boards - 1/3 Width Side-by-side card */}
+                  <div className="col-span-1 bg-brand-paper/85 rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-brand-green/30 min-h-[165px]">
                     <div className="absolute inset-0 z-0">
                       <img 
                         src={biocompositeBoardsImg} 
@@ -1638,8 +1584,8 @@ function LandingPage({ user }: { user: any }) {
                     </div>
                   </div>
 
-                  {/* Card 3: Biodegradable Plates & Tableware */}
-                  <div className="bg-brand-paper/85 rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-brand-green/30 min-h-[185px]">
+                  {/* Card 3: Biodegradable Plates & Tableware - 1/3 Width Side-by-side card */}
+                  <div className="col-span-1 bg-brand-paper/85 rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-brand-green/30 min-h-[165px]">
                     <div className="absolute inset-0 z-0">
                       <img 
                         src={organicDinnerwareImg} 
@@ -1665,39 +1611,38 @@ function LandingPage({ user }: { user: any }) {
                     </div>
                   </div>
 
-                  {/* Card 4: Pineapple Leaf Fiber / Raw Materials */}
-                  <div className="col-span-1 sm:col-span-2 bg-gradient-to-r from-brand-paper to-brand-green/[0.04] rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex items-center justify-between group transition-all duration-300 hover:border-brand-green/30">
-                    <div className="flex items-center gap-4 relative z-10 text-left">
-                      <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm shrink-0 border border-brand-green/10">
-                        <img 
-                          src={pineappleLeafFiberImg} 
-                          alt="Pineapple Leaf Fiber" 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
-                      <div>
-                        <span className="text-[8px] uppercase font-bold text-brand-green tracking-widest block mb-0.5">
-                          {language === "bn" ? "উদ্বৃত্ত কৃষি উপাদান" : "Upcycled Raw Material"}
-                        </span>
-                        <h5 className="font-serif text-sm font-bold text-brand-green leading-tight">
-                          {language === "bn" ? "আনারস পাতা ও বাঁশ তন্তু" : "Pineapple Leaf & Muli Bamboo"}
-                        </h5>
-                        <p className="text-[10px] text-brand-ink/60 mt-0.5">
-                          {language === "bn" ? "কৃষকদের কাছ থেকে প্রতি টনে ২,০০০ টাকায় কেনা হয়।" : "Sourced from local farm waste at ₹2,000/tonne."}
-                        </p>
-                      </div>
+                  {/* Card 4: Pineapple Leaf & Muli Bamboo / Raw Materials - 1/3 Width Side-by-side card */}
+                  <div className="col-span-1 bg-brand-paper/85 rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-brand-green/30 min-h-[165px]">
+                    <div className="absolute inset-0 z-0">
+                      <img 
+                        src={pineappleLeafFiberImg} 
+                        alt="Pineapple Leaf Fiber" 
+                        className="w-full h-full object-cover opacity-20 group-hover:opacity-35 transition-opacity duration-300"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-paper via-brand-paper/70 to-transparent" />
                     </div>
-                    <div className="text-right shrink-0 pr-2">
-                      <div className="text-xl font-serif font-bold text-brand-orange">+20%</div>
-                      <div className="text-[8px] font-bold text-brand-ink/40 uppercase tracking-tight">Farmer Income</div>
+                    <div className="relative z-10 flex justify-between items-start mb-2">
+                      <span className="text-[9px] uppercase font-bold text-brand-green bg-brand-green/10 px-2 py-0.5 rounded-full">
+                        {language === "bn" ? "কাঁচামাল" : "Material"}
+                      </span>
+                      <span className="text-[9px] font-bold text-brand-orange">+20% Income</span>
+                    </div>
+                    <div className="relative z-10 mt-auto text-left">
+                      <h5 className="font-serif text-sm font-bold text-brand-green leading-tight mb-1">
+                        {language === "bn" ? "আনারস পাতা ও বাঁশ তন্তু" : "Pineapple Leaf & Bamboo"}
+                      </h5>
+                      <p className="text-[9px] text-brand-ink/60 leading-normal">
+                        {language === "bn" ? "স্থানীয় বর্জ্য থেকে প্রতি টনে ২,০০০ টাকায় কেনা।" : "Upcycled agro-waste sourced from local Tripura farmers."}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           </div>
         </header>
+
 
         {/* The Problem Section */}
         <section id="problem" className="py-24 px-6 bg-brand-green text-white relative overflow-hidden" aria-labelledby="problem-title">
@@ -1884,10 +1829,10 @@ function LandingPage({ user }: { user: any }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className={`bg-brand-paper rounded-3xl overflow-hidden border transition-all duration-500 group cursor-pointer relative flex flex-col justify-between ${
+                  className={`bg-brand-paper rounded-3xl overflow-hidden border transition-all duration-500 group cursor-pointer relative flex flex-col justify-between hover:-translate-y-1.5 ${
                     product.isFlagship 
-                      ? "border-brand-orange/30 shadow-md shadow-brand-orange/5 hover:border-brand-orange hover:shadow-2xl hover:shadow-brand-orange/10" 
-                      : "border-brand-green/5 hover:shadow-xl hover:border-brand-green/20"
+                      ? "border-brand-orange/30 shadow-md shadow-brand-orange/5 hover:border-brand-orange hover:shadow-[0_20px_40px_rgba(245,158,11,0.18)]" 
+                      : "border-brand-green/5 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:border-brand-green/20"
                   }`}
                   onClick={() => setSelectedProduct(product)}
                 >
@@ -2428,7 +2373,9 @@ function LandingPage({ user }: { user: any }) {
                       </div>
                       <div className="bg-white/5 rounded-2xl p-6 border border-white/10 relative group">
                         <div className="flex items-center justify-between mb-4">
-                          <div className="text-4xl font-serif text-brand-light-green">-12kg</div>
+                          <div className="text-4xl font-serif text-brand-light-green">
+                            <CountUp value="-12kg" />
+                          </div>
                           <div className="w-10 h-10 bg-brand-light-green/20 rounded-full flex items-center justify-center">
                             <Leaf className="w-5 h-5 text-brand-light-green" />
                           </div>
@@ -2470,7 +2417,9 @@ function LandingPage({ user }: { user: any }) {
                   {/* Bottom Stats */}
                   <div className="mt-10 pt-8 border-t border-white/10 grid grid-cols-2 gap-4">
                     <div className="text-center">
-                      <div className="text-2xl font-serif text-brand-orange">100k+</div>
+                      <div className="text-2xl font-serif text-brand-orange">
+                        <CountUp value="100k+" />
+                      </div>
                       <div className="text-[9px] uppercase tracking-widest opacity-40">{lp.tonnesWasteSaved}</div>
                     </div>
                     <div className="text-center">
@@ -2948,7 +2897,6 @@ function LandingPage({ user }: { user: any }) {
             </div>
           </div>
         </section>
-      </main>
 
       {/* CTA / Footer */}
       <footer className="py-24 px-6 bg-brand-paper" aria-label="Footer">
@@ -2969,19 +2917,27 @@ function LandingPage({ user }: { user: any }) {
             
             <div className="grid md:grid-cols-4 gap-8 mb-16">
               <div>
-                <div className="text-brand-orange-dark font-serif text-4xl mb-2">₹1.5 Cr</div>
+                <div className="text-brand-orange-dark font-serif text-4xl mb-2">
+                  <CountUp value="₹1.5 Cr" />
+                </div>
                 <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.seedAsk}</div>
               </div>
               <div>
-                <div className="text-brand-green font-serif text-4xl mb-2">20 Units</div>
+                <div className="text-brand-green font-serif text-4xl mb-2">
+                  <CountUp value="20 Units" />
+                </div>
                 <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.by2027}</div>
               </div>
               <div>
-                <div className="text-brand-green font-serif text-4xl mb-2">₹496L</div>
+                <div className="text-brand-green font-serif text-4xl mb-2">
+                  <CountUp value="₹496L" />
+                </div>
                 <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.y3Revenue}</div>
               </div>
               <div>
-                <div className="text-brand-green font-serif text-4xl mb-2">1,000+</div>
+                <div className="text-brand-green font-serif text-4xl mb-2">
+                  <CountUp value="1,000+" />
+                </div>
                 <div className="text-xs uppercase tracking-widest opacity-60 font-bold">{lp.farmersImpactedFooter}</div>
               </div>
             </div>

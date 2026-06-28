@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { useLanguage } from "../context/LanguageContext";
+import { CountUp } from "./CountUp";
 import { CropDiseaseDSS } from "./CropDiseaseDSS";
 import { SoilIntelligence } from "./SoilIntelligence";
 import { MarketIntelligence } from "./MarketIntelligence";
@@ -377,7 +378,7 @@ const MetricCard = ({ title, value, icon: Icon, color = "brand-green" }: any) =>
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
         >
-          {value}
+          <CountUp value={String(value)} />
         </motion.div>
       </AnimatePresence>
     </div>
@@ -439,7 +440,12 @@ const ResourceIntelligence = ({ resources }: { resources: DistrictResource[] }) 
         </div>
       </div>
 
-      <div className="glass-card overflow-hidden border-brand-green/5">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="glass-card overflow-hidden border-brand-green/5"
+      >
         <div className="p-8 border-b border-brand-green/5 bg-brand-green/[0.02]">
           <h3 className="text-2xl font-serif text-brand-green">{t("dss.pineappleFibre")}</h3>
         </div>
@@ -480,18 +486,22 @@ const ResourceIntelligence = ({ resources }: { resources: DistrictResource[] }) 
                 name="Fibre Stock" 
                 radius={[8, 8, 0, 0]}
                 barSize={40}
+                isAnimationActive={true}
+                animationDuration={1500}
+                animationEasing="ease-out"
               >
                 {resources.map((_entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
                     fill={index % 2 === 0 ? '#004225' : '#F59E0B'} 
+                    className="transition-all duration-300 hover:opacity-80"
                   />
                 ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
