@@ -1,66 +1,89 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Menu, 
   X, 
-  ArrowRight, 
   Send,
-  Globe
+  Globe,
+  ChevronDown
 } from "lucide-react";
-import { useLanguage, Language } from "../context/LanguageContext";
+import { useLanguage } from "../context/LanguageContext";
 
-export interface NavLink {
+interface DropdownItem {
   label: string;
   href: string;
-  external?: boolean;
 }
-
-export const navLinks: NavLink[] = [
-  { label: 'BioSense DSS', href: '/dss' },
-  { label: 'The Problem', href: '/#problem' },
-  { label: 'The Model', href: '/#solution' },
-  { label: 'Products', href: '/#products' },
-  { label: 'Vision 2030', href: '/#vision' },
-  { label: 'Process', href: '/#process' },
-  { label: 'Impact', href: '/#impact' },
-  { label: 'Roadmap', href: '/#roadmap' },
-  { label: 'Partner', href: '/#partner' }
-];
-
-const navLinksKeys: Record<string, string> = {
-  'BioSense DSS': 'nav.dss',
-  'The Problem': 'nav.problem',
-  'The Model': 'nav.model',
-  'Products': 'nav.products',
-  'Vision 2030': 'nav.vision',
-  'Process': 'nav.process',
-  'Impact': 'nav.impact',
-  'Roadmap': 'nav.roadmap',
-  'Partner': 'nav.partner',
-};
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProductsHovered, setIsProductsHovered] = useState(false);
+  const [isAboutHovered, setIsAboutHovered] = useState(false);
+  const [isProductsMobileOpen, setIsProductsMobileOpen] = useState(false);
+  const [isAboutMobileOpen, setIsAboutMobileOpen] = useState(false);
+
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
   const { language, setLanguage, t } = useLanguage();
 
   const handleLinkClick = (href: string) => {
     setIsMenuOpen(false);
-    if (href.startsWith("/#") && isHomePage) {
-      const id = href.replace("/#", "");
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+    setIsProductsMobileOpen(false);
+    setIsAboutMobileOpen(false);
+
+    if (href === "/") {
+      if (isHomePage) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        navigate("/");
       }
+      return;
+    }
+
+    if (href.startsWith("/#")) {
+      const id = href.replace("/#", "");
+      if (isHomePage) {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        navigate(href);
+      }
+    } else {
+      navigate(href);
     }
   };
+
+  const isHashActive = (hash: string) => {
+    return isHomePage && location.hash === hash;
+  };
+
+  const productItems: DropdownItem[] = [
+    { label: "nav.dss", href: "/dss" },
+    { label: "nav.bioboards", href: "/#products" },
+    { label: "nav.plates", href: "/#products" },
+    { label: "nav.tableware", href: "/#products" }
+  ];
+
+  const aboutItems: DropdownItem[] = [
+    { label: "nav.vision", href: "/#vision" },
+    { label: "nav.roadmap", href: "/#roadmap" },
+    { label: "nav.company", href: "/#moat-title" }
+  ];
+
+  const isHomeActive = isHomePage && !location.hash;
+  const isDssActive = location.pathname === "/dss";
+  const isImpactActive = isHashActive("#impact");
+  const isProductsActive = isDssActive || isHashActive("#products");
+  const isAboutActive = isHashActive("#vision") || isHashActive("#roadmap") || isHashActive("#moat-title");
 
   return (
     <nav className="fixed top-0 w-full z-50 px-4 md:px-6 py-4" aria-label="Main navigation">
       <div className="max-w-7xl mx-auto flex justify-between items-center glass-card px-4 md:px-8 py-3 md:py-4">
-        <Link to="/" className="flex items-center gap-3 flex-shrink-0 group">
+        {/* Brand Logo */}
+        <Link to="/" className="flex items-center gap-3 flex-shrink-0 group" onClick={() => handleLinkClick("/")}>
           <div className="relative">
             <img 
               src="/logo.svg" 
@@ -81,50 +104,103 @@ export const Navbar = () => {
           </div>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden xl:flex items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-brand-green/70">
-          {navLinks.map((link) => {
-            const isInternalHash = link.href.startsWith("/#");
-            const isActive = location.pathname === link.href || (isInternalHash && isHomePage && location.hash === link.href.replace("/", ""));
-            const localizedLabel = t(navLinksKeys[link.label] || link.label);
+        {/* Desktop Navigation Links (5 main items) */}
+        <div className="hidden xl:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-brand-green/70">
+          {/* 1. Home */}
+          <button 
+            onClick={() => handleLinkClick("/")}
+            className={`hover:text-brand-orange transition-colors relative group py-2 font-bold cursor-pointer ${isHomeActive ? 'text-brand-orange' : ''}`}
+          >
+            {t("nav.home")}
+            <span className={`absolute bottom-0 left-0 h-0.5 bg-brand-orange transition-all group-hover:w-full ${isHomeActive ? 'w-full' : 'w-0'}`} />
+          </button>
 
-            if (isInternalHash && isHomePage) {
-              return (
-                <a 
-                  key={link.href}
-                  href={link.href.replace("/", "")}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleLinkClick(link.href);
-                  }}
-                  className={`hover:text-brand-orange transition-colors relative group py-2 ${isActive ? 'text-brand-orange' : ''}`}
+          {/* 2. BioSense DSS */}
+          <button 
+            onClick={() => handleLinkClick("/dss")}
+            className={`hover:text-brand-orange transition-colors relative group py-2 font-bold cursor-pointer ${isDssActive ? 'text-brand-orange' : ''}`}
+          >
+            {t("nav.dss")}
+            <span className={`absolute bottom-0 left-0 h-0.5 bg-brand-orange transition-all group-hover:w-full ${isDssActive ? 'w-full' : 'w-0'}`} />
+          </button>
+
+          {/* 3. Products Dropdown */}
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsProductsHovered(true)}
+            onMouseLeave={() => setIsProductsHovered(false)}
+          >
+            <button className={`flex items-center gap-1 hover:text-brand-orange transition-colors py-2 uppercase tracking-widest font-bold cursor-pointer ${isProductsActive ? 'text-brand-orange' : ''}`}>
+              {t("nav.products")}
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isProductsHovered ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {isProductsHovered && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 mt-1 w-56 bg-brand-paper/95 backdrop-blur-md border border-brand-green/10 rounded-2xl p-2 shadow-xl z-50 text-left"
                 >
-                  {localizedLabel}
-                  <span className={`absolute bottom-0 left-0 h-0.5 bg-brand-orange transition-all group-hover:w-full ${isActive ? 'w-full' : 'w-0'}`} />
-                </a>
-              );
-            }
+                  {productItems.map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => handleLinkClick(item.href)}
+                      className="w-full text-left px-4 py-2.5 text-[10px] font-bold text-brand-green/80 hover:text-brand-orange hover:bg-brand-green/5 rounded-xl transition-all block uppercase tracking-wider cursor-pointer"
+                    >
+                      {t(item.label)}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-            return (
-              <Link 
-                key={link.href}
-                to={link.href} 
-                className={`transition-all relative group py-2 hover:text-brand-orange ${
-                  link.href === '/dss' 
-                    ? 'bg-brand-orange/10 text-brand-orange-dark px-4 py-2 rounded-xl hover:bg-brand-orange hover:text-white' 
-                    : isActive ? 'text-brand-orange' : ''
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {localizedLabel}
-                {link.href !== '/dss' && (
-                  <span className={`absolute bottom-0 left-0 h-0.5 bg-brand-orange transition-all group-hover:w-full ${isActive ? 'w-full' : 'w-0'}`} />
-                )}
-              </Link>
-            );
-          })}
+          {/* 4. Impact */}
+          <button 
+            onClick={() => handleLinkClick("/#impact")}
+            className={`hover:text-brand-orange transition-colors relative group py-2 font-bold cursor-pointer ${isImpactActive ? 'text-brand-orange' : ''}`}
+          >
+            {t("nav.impact")}
+            <span className={`absolute bottom-0 left-0 h-0.5 bg-brand-orange transition-all group-hover:w-full ${isImpactActive ? 'w-full' : 'w-0'}`} />
+          </button>
+
+          {/* 5. About Dropdown */}
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsAboutHovered(true)}
+            onMouseLeave={() => setIsAboutHovered(false)}
+          >
+            <button className={`flex items-center gap-1 hover:text-brand-orange transition-colors py-2 uppercase tracking-widest font-bold cursor-pointer ${isAboutActive ? 'text-brand-orange' : ''}`}>
+              {t("nav.about")}
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isAboutHovered ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {isAboutHovered && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 mt-1 w-56 bg-brand-paper/95 backdrop-blur-md border border-brand-green/10 rounded-2xl p-2 shadow-xl z-50 text-left"
+                >
+                  {aboutItems.map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => handleLinkClick(item.href)}
+                      className="w-full text-left px-4 py-2.5 text-[10px] font-bold text-brand-green/80 hover:text-brand-orange hover:bg-brand-green/5 rounded-xl transition-all block uppercase tracking-wider cursor-pointer"
+                    >
+                      {t(item.label)}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
+        {/* Right side controls: Language Switcher & Partner Button */}
         <div className="flex items-center gap-3">
           {/* Language Switcher Pill */}
           <div className="flex items-center gap-1 bg-brand-green/5 border border-brand-green/10 rounded-full p-1 text-[9px] font-bold">
@@ -133,7 +209,7 @@ export const Navbar = () => {
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
-                className={`px-2 py-1 rounded-full uppercase tracking-wider transition-all duration-200 ${
+                className={`px-2 py-1 rounded-full uppercase tracking-wider transition-all duration-200 cursor-pointer ${
                   language === lang
                     ? "bg-brand-green text-white shadow-sm"
                     : "text-brand-ink/50 hover:text-brand-green hover:bg-brand-green/5"
@@ -144,13 +220,12 @@ export const Navbar = () => {
             ))}
           </div>
 
+          {/* 6. Partner Button (CTA) */}
           <a 
             href="/#partner" 
             onClick={(e) => {
-              if (isHomePage) {
-                e.preventDefault();
-                handleLinkClick("/#partner");
-              }
+              e.preventDefault();
+              handleLinkClick("/#partner");
             }}
             className="hidden sm:inline-flex bg-brand-green text-white px-5 md:px-6 py-2 md:py-2.5 rounded-full text-[10px] md:text-xs font-bold hover:bg-brand-ink transition-all uppercase tracking-widest shadow-lg shadow-brand-green/20"
           >
@@ -159,7 +234,7 @@ export const Navbar = () => {
           
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="xl:hidden p-2 text-brand-green hover:bg-brand-green/5 rounded-xl transition-colors"
+            className="xl:hidden p-2 text-brand-green hover:bg-brand-green/5 rounded-xl transition-colors cursor-pointer"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -174,7 +249,7 @@ export const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-24 left-4 right-4 bg-brand-paper/95 backdrop-blur-2xl border border-white/20 rounded-[32px] p-8 shadow-2xl xl:hidden z-50 overflow-hidden"
+            className="absolute top-24 left-4 right-4 bg-brand-paper/95 backdrop-blur-2xl border border-white/20 rounded-[32px] p-8 shadow-2xl xl:hidden z-50 overflow-hidden text-left"
           >
             <div className="flex flex-col gap-6">
               {/* Mobile Language Switcher */}
@@ -188,7 +263,7 @@ export const Navbar = () => {
                     <button
                       key={lang}
                       onClick={() => setLanguage(lang)}
-                      className={`px-3 py-1.5 rounded-full uppercase tracking-wider transition-all ${
+                      className={`px-3 py-1.5 rounded-full uppercase tracking-wider transition-all cursor-pointer ${
                         language === lang
                           ? "bg-brand-green text-white shadow-sm"
                           : "text-brand-ink/50 hover:text-brand-green"
@@ -200,60 +275,102 @@ export const Navbar = () => {
                 </div>
               </div>
 
-              {navLinks.map((link, i) => {
-                const isInternalHash = link.href.startsWith("/#");
-                const localizedLabel = t(navLinksKeys[link.label] || link.label);
-                
-                if (isInternalHash && isHomePage) {
-                  return (
-                    <motion.a
-                      key={link.href}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      href={link.href.replace("/", "")}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleLinkClick(link.href);
-                      }}
-                      className="text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors flex justify-between items-center group"
-                    >
-                      {localizedLabel}
-                      <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0" />
-                    </motion.a>
-                  );
-                }
+              {/* Mobile Links with accordions */}
+              <div className="flex flex-col gap-4 max-h-[60vh] overflow-y-auto pr-2">
+                {/* 1. Home */}
+                <button
+                  onClick={() => handleLinkClick("/")}
+                  className="text-left text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors py-1 cursor-pointer"
+                >
+                  {t("nav.home")}
+                </button>
 
-                return (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
+                {/* 2. BioSense DSS */}
+                <button
+                  onClick={() => handleLinkClick("/dss")}
+                  className="text-left text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors py-1 cursor-pointer"
+                >
+                  {t("nav.dss")}
+                </button>
+
+                {/* 3. Products Dropdown Accordion */}
+                <div className="flex flex-col">
+                  <button
+                    onClick={() => setIsProductsMobileOpen(!isProductsMobileOpen)}
+                    className="flex justify-between items-center text-left text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors py-1 cursor-pointer"
                   >
-                    <Link
-                      to={link.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`text-2xl font-serif transition-colors flex justify-between items-center group ${
-                        link.href === '/dss' ? 'text-brand-orange-dark hover:text-brand-orange' : 'text-brand-green hover:text-brand-orange'
-                      }`}
-                    >
-                      {localizedLabel}
-                      <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0" />
-                    </Link>
-                  </motion.div>
-                );
-              })}
+                    {t("nav.products")}
+                    <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isProductsMobileOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  <AnimatePresence>
+                    {isProductsMobileOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden pl-4 flex flex-col gap-2 mt-2 border-l-2 border-brand-orange/20"
+                      >
+                        {productItems.map((item) => (
+                          <button
+                            key={item.label}
+                            onClick={() => handleLinkClick(item.href)}
+                            className="text-left text-sm font-bold text-brand-green/70 hover:text-brand-orange transition-colors py-1.5 uppercase tracking-wide cursor-pointer"
+                          >
+                            {t(item.label)}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* 4. Impact */}
+                <button
+                  onClick={() => handleLinkClick("/#impact")}
+                  className="text-left text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors py-1 cursor-pointer"
+                >
+                  {t("nav.impact")}
+                </button>
+
+                {/* 5. About Dropdown Accordion */}
+                <div className="flex flex-col">
+                  <button
+                    onClick={() => setIsAboutMobileOpen(!isAboutMobileOpen)}
+                    className="flex justify-between items-center text-left text-2xl font-serif text-brand-green hover:text-brand-orange transition-colors py-1 cursor-pointer"
+                  >
+                    {t("nav.about")}
+                    <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isAboutMobileOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  <AnimatePresence>
+                    {isAboutMobileOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden pl-4 flex flex-col gap-2 mt-2 border-l-2 border-brand-orange/20"
+                      >
+                        {aboutItems.map((item) => (
+                          <button
+                            key={item.label}
+                            onClick={() => handleLinkClick(item.href)}
+                            className="text-left text-sm font-bold text-brand-green/70 hover:text-brand-orange transition-colors py-1.5 uppercase tracking-wide cursor-pointer"
+                          >
+                            {t(item.label)}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
               
-              <div className="mt-4 pt-8 border-t border-brand-green/10">
+              {/* Partner CTA */}
+              <div className="mt-4 pt-4 border-t border-brand-green/10">
                 <a 
                   href="/#partner" 
                   onClick={(e) => {
-                    setIsMenuOpen(false);
-                    if (isHomePage) {
-                      e.preventDefault();
-                      handleLinkClick("/#partner");
-                    }
+                    e.preventDefault();
+                    handleLinkClick("/#partner");
                   }}
                   className="flex justify-center items-center gap-2 w-full bg-brand-orange text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-xs"
                 >

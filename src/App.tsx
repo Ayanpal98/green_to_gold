@@ -68,8 +68,8 @@ import {
 } from "lucide-react";
 import { Navbar } from "./components/Navbar";
 import { PartnerForm } from "./components/PartnerForm";
-import biocompositeBoardsImg from "./assets/images/biocomposite_boards_1781093871984.png";
-import organicDinnerwareImg from "./assets/images/organic_dinnerware_1781093892153.png";
+import biocompositeBoardsImg from "./assets/images/biocomposite_boards_1782637503190.jpg";
+import organicDinnerwareImg from "./assets/images/organic_dinnerware_1782637520179.jpg";
 
 const SectionTitle = ({ children, subtitle, light = false, id }: { children: ReactNode, subtitle?: string, light?: boolean, id?: string }) => (
   <div className="mb-12 md:mb-16">
