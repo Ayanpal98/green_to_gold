@@ -70,6 +70,8 @@ import { Navbar } from "./components/Navbar";
 import { PartnerForm } from "./components/PartnerForm";
 import biocompositeBoardsImg from "./assets/images/biocomposite_boards_1782637503190.jpg";
 import organicDinnerwareImg from "./assets/images/organic_dinnerware_1782637520179.jpg";
+import pineappleLeafFiberImg from "./assets/images/pineapple_leaf_fiber_1782639876334.jpg";
+import tripuraPineapplePlantationImg from "./assets/images/tripura_pineapple_plantation_1782639906830.jpg";
 
 const SectionTitle = ({ children, subtitle, light = false, id }: { children: ReactNode, subtitle?: string, light?: boolean, id?: string }) => (
   <div className="mb-12 md:mb-16">
@@ -295,8 +297,11 @@ const ChatBot = () => {
 const LP_TRANSLATIONS = {
   en: {
     heroBadge: "Tripura's Sustainable Manufacturing Leader",
-    heroTitle1: "From Waste",
-    heroTitle2: "to Wealth.",
+    heroTagline: "From Waste to Wealth",
+    heroTitle1: "Turning Agricultural Waste",
+    heroTitle2: "into High-Value Green Products.",
+    heroStatNumber: "50,000+ Tons",
+    heroStatText: "of agricultural waste ready for circular manufacturing",
     heroSubtitle: "Transforming agricultural waste into high-demand biodegradable plates, organic tableware, and high-strength bio-composite boards replacing premium plywood — cheaper, stronger, and built from Tripura's own soil.",
     exploreButton: "Explore the Model",
     farmersImpacted: "1,000+ Farmers Impacted",
@@ -529,8 +534,11 @@ const LP_TRANSLATIONS = {
   },
   bn: {
     heroBadge: "ত্রিপুরায় টেকসই তিসি বর্জ্যভিত্তিক বায়ার ম্যানুফ্যাকচারিং",
-    heroTitle1: "বর্জ্য থেকে",
-    heroTitle2: "সম্পদ।",
+    heroTagline: "বর্জ্য থেকে সম্পদ",
+    heroTitle1: "কৃষি বর্জ্যকে রূপান্তর করুন",
+    heroTitle2: "উচ্চ-মূল্যের পরিবেশবান্ধব পণ্যে।",
+    heroStatNumber: "৫০,০০০+ টন",
+    heroStatText: "কৃষি বর্জ্য বৃত্তাকার উৎপাদনের জন্য প্রস্তুত",
     heroSubtitle: "কৃষি বর্জ্যকে উচ্চ চাহিদাপূর্ণ পচনশীল থালা-বাসন, পরিবেশবান্ধব টেবিলসামগ্রী এবং প্লাইউডের বিকল্প উচ্চ-শক্তির বায়ো-কম্পোজিট বোর্ডে রূপান্তর — সস্তা, আরো উন্নত এবং ত্রিপুরার নিজস্ব মাটি থেকে নির্মিত।",
     exploreButton: "মডেলটি অন্বেষণ করুন",
     farmersImpacted: "১,০০০+ কৃষক উপকৃত হয়েছেন",
@@ -763,8 +771,11 @@ const LP_TRANSLATIONS = {
   },
   kok: {
     heroBadge: "Tripura ni Phola-Haste Thungmung Swk",
-    heroTitle1: "Waste Stream ni",
-    heroTitle2: "Wealth dila.",
+    heroTagline: "Waste Stream ni Wealth dila",
+    heroTitle1: "Agricultural Waste no",
+    heroTitle2: "High-Value Green Products khlaimung.",
+    heroStatNumber: "50,000+ Tons",
+    heroStatText: "agri waste circular swngmungni bagwi tawi tongma",
     heroSubtitle: "Agri waste no premium biodegradable plates, organic tableware, tei high-strength bioboard raw laminated plywood alternative khlaimung — rang chom tei force kotor.",
     exploreButton: "Laman no choba phiadi",
     farmersImpacted: "১,০০০+ Cooperatives impact khlaio",
@@ -1360,10 +1371,29 @@ function LandingPage({ user }: { user: any }) {
                 <span className="inline-block px-4 py-1 rounded-full border border-brand-green/20 text-brand-green text-xs font-bold uppercase tracking-widest mb-6">
                   {lp.heroBadge}
                 </span>
-                <h1 className="text-7xl md:text-9xl font-serif leading-[0.9] text-brand-green mb-8">
+                <div className="text-brand-orange text-sm md:text-base font-bold uppercase tracking-[0.2em] mb-3">
+                  {lp.heroTagline}
+                </div>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif leading-[1.05] text-brand-green mb-8 tracking-tight font-medium">
                   {lp.heroTitle1} <br />
                   <span className="italic text-brand-orange">{lp.heroTitle2}</span>
                 </h1>
+
+                {/* Highlighted Stat Badge */}
+                <div className="inline-flex items-center gap-3.5 bg-brand-green/[0.03] hover:bg-brand-green/[0.05] border border-brand-green/10 rounded-2xl p-4 mb-8 transition-colors max-w-md">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-brand-green/10 text-brand-green shrink-0">
+                    <Leaf className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-xl md:text-2xl font-serif font-bold text-brand-green leading-none">
+                      {lp.heroStatNumber}
+                    </div>
+                    <div className="text-[10px] md:text-xs font-bold text-brand-green/60 uppercase tracking-wider mt-1.5">
+                      {lp.heroStatText}
+                    </div>
+                  </div>
+                </div>
+
                 <p className="text-xl md:text-2xl text-brand-ink/70 max-w-xl mb-10 leading-relaxed">
                   {lp.heroSubtitle}
                 </p>
@@ -1395,145 +1425,139 @@ function LandingPage({ user }: { user: any }) {
               </motion.div>
 
               <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, delay: 0.2 }}
                 className="relative perspective-2000"
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
               >
-                {/* The 3D Illustration Container */}
+                {/* Product & DSS Integrated Bento Composition */}
                 <motion.div 
-                   style={{ rotateX, rotateY }}
-                  className="relative aspect-square md:aspect-[4/3] preserve-3d"
+                  style={{ rotateX, rotateY }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-brand-green/[0.02] border border-brand-green/10 rounded-[32px] shadow-2xl backdrop-blur-3xl preserve-3d"
                 >
-                  
-                  {/* Base Platform (Glass Island) */}
-                  <div className="absolute inset-[10%] bg-brand-green/5 backdrop-blur-3xl rounded-full border border-white/20 shadow-[0_64px_128px_-32px_rgba(30,58,30,0.3)] translate-z-0" />
-                  
-                  {/* Animated Connecting Rings */}
-                  <div className="absolute inset-[5%] rounded-full border border-brand-green/20 animate-[spin_20s_linear_infinite]" />
-                  <div className="absolute inset-[15%] rounded-full border border-brand-orange/10 animate-[spin_15s_linear_infinite_reverse]" />
-
-                  {/* Central Industrial Hub */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 translate-z-100 scale-110 md:scale-125">
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-brand-orange blur-[60px] opacity-20 animate-pulse" />
-                      <div className="w-40 h-40 md:w-56 md:h-56 rounded-[48px] bg-brand-ink flex flex-col items-center justify-center border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] relative z-10 overflow-hidden backdrop-blur-md">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-brand-orange/30 to-transparent" />
-                        <div className="p-4 bg-brand-green/20 rounded-2xl mb-4 border border-brand-green/20">
-                          <Factory className="w-10 h-10 text-brand-orange" />
-                        </div>
-                        <span className="text-white font-bold tracking-[0.3em] text-[10px] uppercase mb-1">ATSFY GLOBAL</span>
-                        <h4 className="text-brand-orange font-serif text-lg italic">Industrial Core</h4>
+                  {/* Card 1: BioSense DSS Dashboard (Sleek dark interface) */}
+                  <div className="col-span-1 sm:col-span-2 bg-brand-ink text-white rounded-[24px] p-6 border border-white/10 shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[195px] group transition-all duration-300 hover:border-brand-orange/30">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-green/10 rounded-full blur-2xl pointer-events-none" />
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-[10px] uppercase font-bold tracking-widest text-white/60">
+                          {language === "bn" ? "রিয়েল-টাইম ড্যাশবোর্ড" : language === "kok" ? "Real-Time System" : "Real-Time DSS"}
+                        </span>
+                      </div>
+                      <span className="text-[9px] uppercase font-bold text-brand-orange bg-brand-orange/10 px-2.5 py-1 rounded-full border border-brand-orange/20">
+                        Active Hub
+                      </span>
+                    </div>
+                    <div>
+                      <h4 className="font-serif text-lg md:text-xl text-white font-medium mb-1">
+                        {language === "bn" ? "বায়োসেন্স ডিএসএস ড্যাশবোর্ড" : "BioSense DSS Dashboard"}
+                      </h4>
+                      <p className="text-[10px] md:text-xs text-white/50 mb-4 max-w-sm">
+                        {language === "bn" ? "কৃষিজাত বর্জ্য সরবরাহ ও প্রক্রিয়াকরণ পর্যবেক্ষণ ড্যাশবোর্ড।" : "AI-driven supply chain & manufacturing optimization platform."}
+                      </p>
+                    </div>
+                    {/* Micro Charts/Stats */}
+                    <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/10 text-left">
+                      <div>
+                        <div className="text-[9px] uppercase font-bold text-white/40 tracking-wider">Biomass Vol</div>
+                        <div className="text-sm font-bold text-brand-orange mt-0.5">84,200t</div>
+                      </div>
+                      <div>
+                        <div className="text-[9px] uppercase font-bold text-white/40 tracking-wider">Moisture</div>
+                        <div className="text-sm font-bold text-emerald-400 mt-0.5">14.2%</div>
+                      </div>
+                      <div>
+                        <div className="text-[9px] uppercase font-bold text-white/40 tracking-wider">Efficiency</div>
+                        <div className="text-sm font-bold text-white mt-0.5">98.6%</div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Module 1: The Problem (Agricultural Waste) */}
-                  <div className="absolute top-[8%] left-[12%] z-20 translate-z-40">
-                    <motion.div 
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.5 }}
-                      className="glass-card p-6 md:p-8 border-white/40 shadow-2xl backdrop-blur-xl rotate-[-8deg] hover:rotate-0 transition-transform"
-                    >
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-red-500/10 rounded-lg">
-                          <Flame className="w-5 h-5 text-red-500" />
-                        </div>
-                        <span className="text-[10px] uppercase font-bold text-brand-ink/40 tracking-widest">
-                          {language === "bn" ? "সমস্যা ক্ষেত্র" : language === "kok" ? "Khakchangya Case" : "Problem Case"}
-                        </span>
-                      </div>
-                      <div className="text-lg font-serif mb-2 leading-tight">
-                        {language === "bn" ? <>ধান ও কৃষিজ <br /> বর্জ্য পোড়ানো</> : language === "kok" ? <>Agri Waste <br /> Burning</> : <>Biomass <br /> Burning</>}
-                      </div>
-                      <div className="h-1 w-12 bg-red-500/20 mb-3" />
-                      <p className="text-[10px] text-brand-ink/60 uppercase font-bold tracking-tighter">
-                        {language === "bn" ? "১,৫০০ কিমি শিলিগুড়ি করিডোর" : language === "kok" ? "1,500km Siliguri Tunnel" : "1,500km Siliguri Bottleneck"}
+                  {/* Card 2: Bio-Composite Boards */}
+                  <div className="bg-brand-paper/85 rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-brand-green/30 min-h-[185px]">
+                    <div className="absolute inset-0 z-0">
+                      <img 
+                        src={biocompositeBoardsImg} 
+                        alt="Bio-Composite Board" 
+                        className="w-full h-full object-cover opacity-20 group-hover:opacity-35 transition-opacity duration-300"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-paper via-brand-paper/70 to-transparent" />
+                    </div>
+                    <div className="relative z-10 flex justify-between items-start mb-2">
+                      <span className="text-[9px] uppercase font-bold text-brand-green bg-brand-green/10 px-2 py-0.5 rounded-full">
+                        {language === "bn" ? "বোর্ড" : "Boards"}
+                      </span>
+                      <span className="text-[9px] font-bold text-brand-ink/40">IS:12406</span>
+                    </div>
+                    <div className="relative z-10 mt-auto text-left">
+                      <h5 className="font-serif text-sm font-bold text-brand-green leading-tight mb-1">
+                        {language === "bn" ? "বায়ো-কম্পোজিট নির্মাণ বোর্ড" : "Bio-Composite Board"}
+                      </h5>
+                      <p className="text-[9px] text-brand-ink/60 leading-normal">
+                        {language === "bn" ? "প্লাইউড বিকল্প, অত্যন্ত টেকসই ও সাশ্রয়ী।" : "Tree-free premium plywood substitute, waterproof & fireproof."}
                       </p>
-                    </motion.div>
+                    </div>
                   </div>
 
-                  {/* Module 2: Raw Material (Pineapple & Bamboo) */}
-                  <div className="absolute top-[15%] right-[8%] z-40 translate-z-60">
-                    <motion.div 
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.7 }}
-                      className="w-48 md:w-64 rounded-[40px] overflow-hidden shadow-2xl border border-white/20 rotate-[5deg] hover:rotate-0 transition-transform"
-                    >
-                      <div className="aspect-video relative">
+                  {/* Card 3: Biodegradable Plates & Tableware */}
+                  <div className="bg-brand-paper/85 rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex flex-col justify-between group transition-all duration-300 hover:border-brand-green/30 min-h-[185px]">
+                    <div className="absolute inset-0 z-0">
+                      <img 
+                        src={organicDinnerwareImg} 
+                        alt="Organic Tableware" 
+                        className="w-full h-full object-cover opacity-20 group-hover:opacity-35 transition-opacity duration-300"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-paper via-brand-paper/70 to-transparent" />
+                    </div>
+                    <div className="relative z-10 flex justify-between items-start mb-2">
+                      <span className="text-[9px] uppercase font-bold text-brand-orange bg-brand-orange/10 px-2 py-0.5 rounded-full">
+                        {language === "bn" ? "টেবিলওয়্যার" : "Tableware"}
+                      </span>
+                      <span className="text-[9px] font-bold text-brand-ink/40">100% Eco</span>
+                    </div>
+                    <div className="relative z-10 mt-auto text-left">
+                      <h5 className="font-serif text-sm font-bold text-brand-green leading-tight mb-1">
+                        {language === "bn" ? "পচনশীল থালা-বাসন" : "Biodegradable Plates"}
+                      </h5>
+                      <p className="text-[9px] text-brand-ink/60 leading-normal">
+                        {language === "bn" ? "১০০% কপোস্টযোগ্য ও পানি-প্রতিরোধী পাত্র।" : "100% home compostable, water & heat-resistant dining bowls."}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Card 4: Pineapple Leaf Fiber / Raw Materials */}
+                  <div className="col-span-1 sm:col-span-2 bg-gradient-to-r from-brand-paper to-brand-green/[0.04] rounded-[24px] p-4 border border-brand-green/10 shadow-md relative overflow-hidden flex items-center justify-between group transition-all duration-300 hover:border-brand-green/30">
+                    <div className="flex items-center gap-4 relative z-10 text-left">
+                      <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm shrink-0 border border-brand-green/10">
                         <img 
-                          src="https://images.unsplash.com/photo-1550828520-4cb49c929f15?auto=format&fit=crop&q=80&w=400" 
-                          alt="Pineapple" 
-                          className="w-full h-full object-cover"
+                          src={pineappleLeafFiberImg} 
+                          alt="Pineapple Leaf Fiber" 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          referrerPolicy="no-referrer"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-brand-green/80 to-transparent" />
-                        <div className="absolute bottom-4 left-4">
-                          <span className="text-[9px] uppercase font-bold text-white/60 tracking-widest block mb-1">
-                            {language === "bn" ? "ত্রিপুরা ফসল" : language === "kok" ? "Crops of Tripura" : "Crops of Tripura"}
-                          </span>
-                          <div className="text-white font-serif text-lg leading-tight">
-                            {language === "bn" ? "বাড়তি কৃষি হেক্টরি" : language === "kok" ? "Agri Surplus" : "Agricultural Surplus"}
-                          </div>
-                        </div>
                       </div>
-                    </motion.div>
-                  </div>
-
-                  {/* Module 3: Modern Products (Tableware) */}
-                  <div className="absolute bottom-[10%] right-[10%] z-50 translate-z-80">
-                    <motion.div 
-                      initial={{ y: -20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.9 }}
-                      className="glass-card p-6 md:p-10 border-brand-orange/30 shadow-2xl border-r-[8px] border-r-brand-orange translate-z-20 scale-105"
-                    >
-                      <div className="text-[9px] uppercase font-bold text-brand-orange mb-3 tracking-widest">
-                        {language === "bn" ? "প্রিমিয়াম পণ্য" : language === "kok" ? "Premium Product" : "Premium Product"}
-                      </div>
-                      <div className="text-2xl font-serif text-brand-green mb-4">
-                        {language === "bn" ? <>ধানের তুষ ও <br /> বাটিসামগ্রী</> : language === "kok" ? <>Rice Tableware <br /> Items</> : <>Rice Husk <br /> Tableware</>}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-brand-orange fill-brand-orange" />
-                        <span className="text-[10px] font-bold text-brand-ink/40 uppercase">
-                          {language === "bn" ? "রপ্তানির উপযোগী" : language === "kok" ? "Export Ready" : "Global Export Ready"}
+                      <div>
+                        <span className="text-[8px] uppercase font-bold text-brand-green tracking-widest block mb-0.5">
+                          {language === "bn" ? "উদ্বৃত্ত কৃষি উপাদান" : "Upcycled Raw Material"}
                         </span>
+                        <h5 className="font-serif text-sm font-bold text-brand-green leading-tight">
+                          {language === "bn" ? "আনারস পাতা ও বাঁশ তন্তু" : "Pineapple Leaf & Muli Bamboo"}
+                        </h5>
+                        <p className="text-[10px] text-brand-ink/60 mt-0.5">
+                          {language === "bn" ? "কৃষকদের কাছ থেকে প্রতি টনে ২,০০০ টাকায় কেনা হয়।" : "Sourced from local farm waste at ₹2,000/tonne."}
+                        </p>
                       </div>
-                    </motion.div>
+                    </div>
+                    <div className="text-right shrink-0 pr-2">
+                      <div className="text-xl font-serif font-bold text-brand-orange">+20%</div>
+                      <div className="text-[8px] font-bold text-brand-ink/40 uppercase tracking-tight">Farmer Income</div>
+                    </div>
                   </div>
-
-                  {/* Module 4: Economic Impact (Cheaper Cost) */}
-                  <div className="absolute bottom-[12%] left-[8%] z-40 translate-z-60">
-                    <motion.div 
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 1.1 }}
-                      className="p-8 rounded-[40px] bg-brand-green text-white shadow-[0_32px_64px_-12px_rgba(0,100,0,0.4)] rotate-[-4deg]"
-                    >
-                      <div className="text-[10px] uppercase font-bold text-brand-orange mb-3 tracking-[0.2em]">
-                        {language === "bn" ? "আঞ্চলিক সুবিধা" : language === "kok" ? "Regional Moat" : "Regional Advantage"}
-                      </div>
-                      <div className="flex items-baseline gap-2 mb-2">
-                        <span className="text-4xl font-serif">₹48</span>
-                        <span className="text-xs opacity-50">/sqft</span>
-                      </div>
-                      <div className="h-px w-full bg-white/10 my-4" />
-                      <p className="text-[10px] opacity-70 leading-relaxed font-bold uppercase tracking-tight">
-                        {language === "bn" ? "বিকল্প ₹১০২ আমদানিকৃত কাঠের প্লাইউড" : language === "kok" ? "VS ₹102 PLYWOOD" : "VS ₹102 IMPORTED PLYWOOD"}
-                      </p>
-                    </motion.div>
-                  </div>
-
-                  {/* Dynamic Connectors (SVG Paths) */}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30 z-0" aria-hidden="true">
-                    <path d="M 200,200 L 400,400" stroke="currentColor" fill="none" className="text-brand-orange" strokeWidth="1" strokeDasharray="8 8" />
-                    <path d="M 600,200 L 400,400" stroke="currentColor" fill="none" className="text-brand-green" strokeWidth="1" strokeDasharray="8 8" />
-                    <circle cx="50%" cy="50%" r="20%" stroke="currentColor" fill="none" className="text-brand-green/20" strokeWidth="2" />
-                  </svg>
                 </motion.div>
               </motion.div>
             </div>
@@ -1572,7 +1596,7 @@ function LandingPage({ user }: { user: any }) {
         <section className="relative h-[450px] md:h-[650px] overflow-hidden flex items-center">
           <div className="absolute inset-0">
             <img 
-              src="https://images.unsplash.com/photo-1550828520-4cb49c929f15?auto=format&fit=crop&q=80&w=2664" 
+              src={tripuraPineapplePlantationImg} 
               alt="Lush pineapple plantation in Tripura, showcasing the raw material source for bio-composites" 
               className="w-full h-full object-cover scale-110 grayscale-[10%] brightness-75"
               referrerPolicy="no-referrer"
