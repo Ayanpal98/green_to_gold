@@ -1437,41 +1437,176 @@ function LandingPage({ user }: { user: any }) {
                   style={{ rotateX, rotateY }}
                   className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-brand-green/[0.02] border border-brand-green/10 rounded-[32px] shadow-2xl backdrop-blur-3xl preserve-3d"
                 >
-                  {/* Card 1: BioSense DSS Dashboard (Sleek dark interface) */}
-                  <div className="col-span-1 sm:col-span-2 bg-brand-ink text-white rounded-[24px] p-6 border border-white/10 shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[195px] group transition-all duration-300 hover:border-brand-orange/30">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-green/10 rounded-full blur-2xl pointer-events-none" />
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        <span className="text-[10px] uppercase font-bold tracking-widest text-white/60">
-                          {language === "bn" ? "রিয়েল-টাইম ড্যাশবোর্ড" : language === "kok" ? "Real-Time System" : "Real-Time DSS"}
-                        </span>
-                      </div>
-                      <span className="text-[9px] uppercase font-bold text-brand-orange bg-brand-orange/10 px-2.5 py-1 rounded-full border border-brand-orange/20">
-                        Active Hub
-                      </span>
+                  {/* Card 1: BioSense DSS Dashboard (Flagship AI Platform) */}
+                  <div className="col-span-1 sm:col-span-2 bg-gradient-to-br from-[#0B3A2C] to-[#0F4B36] text-white rounded-[28px] p-6 md:p-8 border border-white/10 shadow-2xl relative overflow-hidden group transition-all duration-500 hover:shadow-[0_20px_50px_rgba(11,58,44,0.35)] hover:border-[#3ED97D]/20 min-h-[460px] md:min-h-[420px] flex flex-col justify-between">
+                    {/* Glowing green wave particles at bottom */}
+                    <div className="absolute inset-x-0 bottom-0 h-24 pointer-events-none select-none z-0 opacity-50 overflow-hidden">
+                      <svg viewBox="0 0 800 100" className="w-full h-full" preserveAspectRatio="none">
+                        <path d="M0,60 Q150,30 300,70 T600,40 T800,50" fill="none" stroke="#3ED97D" strokeWidth="1.5" strokeDasharray="4 6" className="animate-[dash_12s_linear_infinite]" />
+                        <path d="M0,70 Q200,40 400,80 T800,60" fill="none" stroke="#6CFF9F" strokeWidth="1" strokeDasharray="2 8" opacity="0.6" />
+                        <circle cx="280" cy="65" r="2" fill="#6CFF9F" className="animate-pulse" />
+                        <circle cx="450" cy="50" r="1.5" fill="#3ED97D" />
+                        <circle cx="150" cy="40" r="1" fill="#6CFF9F" />
+                        <circle cx="620" cy="75" r="2" fill="#3ED97D" className="animate-pulse" />
+                      </svg>
                     </div>
-                    <div>
-                      <h4 className="font-serif text-lg md:text-xl text-white font-medium mb-1">
-                        {language === "bn" ? "বায়োসেন্স ডিএসএস ড্যাশবোর্ড" : "BioSense DSS Dashboard"}
-                      </h4>
-                      <p className="text-[10px] md:text-xs text-white/50 mb-4 max-w-sm">
-                        {language === "bn" ? "কৃষিজাত বর্জ্য সরবরাহ ও প্রক্রিয়াকরণ পর্যবেক্ষণ ড্যাশবোর্ড।" : "AI-driven supply chain & manufacturing optimization platform."}
-                      </p>
-                    </div>
-                    {/* Micro Charts/Stats */}
-                    <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/10 text-left">
-                      <div>
-                        <div className="text-[9px] uppercase font-bold text-white/40 tracking-wider">Biomass Vol</div>
-                        <div className="text-sm font-bold text-brand-orange mt-0.5">84,200t</div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center h-full relative z-10 w-full">
+                      {/* Left: Branding & Info */}
+                      <div className="md:col-span-5 flex flex-col justify-center text-left h-full">
+                        <div className="flex items-center gap-1.5 w-fit bg-white/[0.08] border border-white/10 px-3 py-1 rounded-full text-[9px] md:text-[10px] font-bold tracking-widest uppercase text-white/90 mb-4 shadow-sm backdrop-blur-md">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#3ED97D] animate-ping" />
+                          <span>{language === "bn" ? "আমাদের ফ্ল্যাগশিপ প্ল্যাটফর্ম" : "OUR FLAGSHIP PLATFORM"}</span>
+                        </div>
+                        
+                        <h4 className="font-sans text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-none">
+                          BioSense DSS<span className="align-super text-[#F6B54C] text-[16px] md:text-[18px] ml-0.5 font-bold">™</span>
+                        </h4>
+                        
+                        <p className="text-[#3ED97D] font-sans text-sm md:text-base font-semibold tracking-tight leading-snug mt-1.5 mb-3">
+                          {language === "bn" ? "এআই-চালিত সিদ্ধান্ত বুদ্ধিমত্তা প্ল্যাটফর্ম" : "AI-Driven Decision Intelligence Platform"}
+                        </p>
+                        
+                        <p className="text-white/75 font-sans text-xs md:text-sm font-normal leading-relaxed max-w-sm">
+                          {language === "bn" 
+                            ? "বায়োমাস সরবরাহ চেইন অপ্টিমাইজ করা, চাহিদা অনুমান করা এবং টেকসই ভবিষ্যতের জন্য মূল্য বৃদ্ধি করা।" 
+                            : "Optimizing biomass supply chains, predicting demand, and maximizing value for a sustainable future."}
+                        </p>
                       </div>
-                      <div>
-                        <div className="text-[9px] uppercase font-bold text-white/40 tracking-wider">Moisture</div>
-                        <div className="text-sm font-bold text-emerald-400 mt-0.5">14.2%</div>
-                      </div>
-                      <div>
-                        <div className="text-[9px] uppercase font-bold text-white/40 tracking-wider">Efficiency</div>
-                        <div className="text-sm font-bold text-white mt-0.5">98.6%</div>
+
+                      {/* Right: Premium Laptop Mockup */}
+                      <div className="md:col-span-7 flex flex-col justify-center items-center relative w-full mt-4 md:mt-0">
+                        {/* Soft green radial glow behind laptop */}
+                        <div className="absolute w-72 h-72 bg-[#3ED97D]/15 rounded-full blur-[80px] -z-10 pointer-events-none" />
+                        
+                        {/* Laptop body structure */}
+                        <div className="relative w-full max-w-[420px] aspect-[16/10] bg-[#1a1a1a] rounded-[16px] p-[5px] border border-white/15 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.7)] overflow-hidden">
+                          {/* Inner Bezel and Screen */}
+                          <div className="w-full h-full bg-[#0E1411] rounded-[11px] overflow-hidden flex text-left font-sans text-[7px] select-none border border-white/5 relative">
+                            {/* Screen Left Sidebar Menu */}
+                            <div className="w-[50px] bg-[#070D0B] border-r border-white/5 p-1 flex flex-col gap-[2px]">
+                              {/* Sidebar Logo */}
+                              <div className="flex items-center gap-1 mb-2 px-1 py-0.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#3ED97D]" />
+                                <span className="text-[5px] font-black tracking-widest text-white/50 uppercase">DSS Alpha</span>
+                              </div>
+                              {/* Sidebar Items */}
+                              {[
+                                { name: "Dashboard", active: true },
+                                { name: "Biomass", active: false },
+                                { name: "Collection", active: false },
+                                { name: "Facilities", active: false },
+                                { name: "Analytics", active: false },
+                                { name: "Reports", active: false },
+                                { name: "Settings", active: false }
+                              ].map((item, idx) => (
+                                <div 
+                                  key={idx} 
+                                  className={`flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer transition-colors ${item.active ? 'bg-[#3ED97D]/10 text-[#3ED97D] font-bold' : 'text-white/40 hover:bg-white/[0.02]'}`}
+                                >
+                                  <svg viewBox="0 0 24 24" className="w-1.5 h-1.5 fill-none stroke-current" strokeWidth="2.5">
+                                    <rect x="3" y="3" width="7" height="9" rx="1" />
+                                    <rect x="14" y="3" width="7" height="5" rx="1" />
+                                    <rect x="14" y="12" width="7" height="9" rx="1" />
+                                    <rect x="3" y="16" width="7" height="5" rx="1" />
+                                  </svg>
+                                  <span className="text-[5px] tracking-tight">{item.name}</span>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Screen Right Main Workspace */}
+                            <div className="flex-1 p-1.5 flex flex-col justify-between bg-[#0E1411] overflow-hidden">
+                              {/* Top Bar */}
+                              <div className="flex justify-between items-center mb-1 pb-0.5 border-b border-white/5">
+                                <span className="text-white/90 font-bold text-[8px]">{language === "bn" ? "ড্যাশবোর্ড" : "Dashboard"}</span>
+                                <span className="text-[5px] text-white/40 bg-white/[0.04] px-1 py-0.5 rounded border border-white/5">v1.5.2</span>
+                              </div>
+
+                              {/* Top Row KPI Cards */}
+                              <div className="grid grid-cols-4 gap-1 mb-1">
+                                {[
+                                  { label: "Total Biomass", value: "12,450t", color: "text-white" },
+                                  { label: "Utilized (Tons)", value: "8,320t", color: "text-white" },
+                                  { label: "Available (Tons)", value: "4,130t", color: "text-white" },
+                                  { label: "Util. Rate", value: "24.5%", color: "text-[#3ED97D]" }
+                                ].map((card, idx) => (
+                                  <div key={idx} className="bg-white/[0.01] border border-white/5 rounded-[4px] p-1 flex flex-col justify-between min-h-[26px]">
+                                    <div className="text-[4.5px] text-white/40 tracking-tight leading-none scale-[0.9] origin-left">{card.label}</div>
+                                    <div className={`text-[7px] font-extrabold leading-none my-0.5 ${card.color}`}>{card.value}</div>
+                                    <div className="text-[4px] text-[#3ED97D] font-semibold scale-[0.8] origin-left">View Details</div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* Bottom Visual Panels */}
+                              <div className="grid grid-cols-2 gap-1 flex-1 overflow-hidden">
+                                {/* Left Map Panel */}
+                                <div className="bg-white/[0.01] border border-white/5 rounded-[6px] p-1 flex flex-col justify-between relative overflow-hidden h-full">
+                                  <div className="text-[5px] text-white/50 font-bold tracking-tight mb-1">{language === "bn" ? "বায়োমাস মানচিত্র" : "Biomass Availability Map"}</div>
+                                  
+                                  {/* Simulated Map Coordinates Grid */}
+                                  <div className="flex-1 relative border border-white/[0.03] rounded bg-[#0b0f0d] overflow-hidden flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-grid-white opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '4px 4px' }} />
+                                    
+                                    {/* Stylized Tripura border polygon outline */}
+                                    <svg viewBox="0 0 100 100" className="w-full h-full p-1 opacity-20">
+                                      <path d="M 50,15 L 65,35 L 75,45 L 60,65 L 45,85 L 30,75 L 35,55 L 25,40 Z" fill="none" stroke="#3ED97D" strokeWidth="1" />
+                                    </svg>
+
+                                    {/* Flashing Location Pins */}
+                                    <div className="absolute top-[30%] left-[45%] flex items-center justify-center">
+                                      <span className="absolute w-2 h-2 rounded-full bg-[#3ED97D]/50 animate-ping" />
+                                      <span className="w-1 h-1 rounded-full bg-[#3ED97D]" />
+                                    </div>
+                                    <div className="absolute top-[55%] left-[60%] flex items-center justify-center">
+                                      <span className="absolute w-2 h-2 rounded-full bg-[#3ED97D]/50 animate-ping [animation-delay:0.3s]" />
+                                      <span className="w-1 h-1 rounded-full bg-[#3ED97D]" />
+                                    </div>
+                                    <div className="absolute top-[65%] left-[38%] flex items-center justify-center">
+                                      <span className="absolute w-2 h-2 rounded-full bg-[#3ED97D]/50 animate-ping [animation-delay:0.6s]" />
+                                      <span className="w-1 h-1 rounded-full bg-[#3ED97D]" />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Right Chart Panel */}
+                                <div className="bg-white/[0.01] border border-white/5 rounded-[6px] p-1 flex flex-col justify-between h-full">
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-[5px] text-white/50 font-bold tracking-tight">{language === "bn" ? "চাহিদা পূর্বাভাস" : "Demand Forecast"}</span>
+                                    <span className="text-[4px] text-white/30">This Month</span>
+                                  </div>
+
+                                  {/* Recharts / SVG Sparkline */}
+                                  <div className="flex-1 flex items-center justify-center bg-[#0b0f0d] rounded border border-white/[0.03] p-1">
+                                    <svg viewBox="0 0 100 40" className="w-full h-full overflow-visible">
+                                      <defs>
+                                        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                                          <stop offset="0%" stopColor="#3ED97D" stopOpacity="0.25" />
+                                          <stop offset="100%" stopColor="#3ED97D" stopOpacity="0" />
+                                        </linearGradient>
+                                      </defs>
+                                      {/* Gridlines */}
+                                      <line x1="0" y1="10" x2="100" y2="10" stroke="white" strokeOpacity="0.03" strokeWidth="0.5" />
+                                      <line x1="0" y1="20" x2="100" y2="20" stroke="white" strokeOpacity="0.03" strokeWidth="0.5" />
+                                      <line x1="0" y1="30" x2="100" y2="30" stroke="white" strokeOpacity="0.03" strokeWidth="0.5" />
+                                      {/* Sparkline Path */}
+                                      <path d="M0,32 Q20,30 40,22 T70,14 T100,6" fill="none" stroke="#3ED97D" strokeWidth="1" strokeLinecap="round" />
+                                      <path d="M0,32 Q20,30 40,22 T70,14 T100,6 L100,40 L0,40 Z" fill="url(#chartGrad)" />
+                                      {/* Interactive Pointer */}
+                                      <circle cx="100" cy="6" r="1" fill="#3ED97D" className="animate-pulse" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Laptop Base (Anodized dark aluminum reflection base) */}
+                        <div className="relative w-[110%] max-w-[450px] h-[6px] bg-[#222] rounded-b-[4px] border-t border-white/20 shadow-[0_12px_24px_-4px_rgba(0,0,0,0.8)] -mt-[1px] z-10 flex justify-center">
+                          <div className="w-10 h-[2px] bg-[#111] rounded-b-[1px]" />
+                        </div>
                       </div>
                     </div>
                   </div>
