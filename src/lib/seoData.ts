@@ -89,6 +89,9 @@ export const COMPOSITE_BOARD_PRODUCT_SCHEMA = {
   "name": "Green-to-Gold Bio-Composite Boards",
   "image": "https://picsum.photos/seed/bioboards/800/600",
   "description": "Premium tree-free eco-construction boards pressed from Muli bamboo and pineapple leaf fiber. Termite-proof, water-resistant, and 54% cheaper than imported plywood.",
+  "category": "Construction Materials > Engineered Wood > Bio-Composites",
+  "material": "Muli Bamboo, Pineapple Leaf Fiber (PALF)",
+  "color": "Natural Bamboo Amber",
   "brand": {
     "@type": "Brand",
     "name": "Green-to-Gold"
@@ -112,6 +115,184 @@ export const COMPOSITE_BOARD_PRODUCT_SCHEMA = {
   "audience": {
     "@type": "Audience",
     "audienceType": "Construction companies, architecture firms, interior designers, modular furniture manufacturers"
+  }
+};
+
+// 3b. Product Schema for Biodegradable Plates
+export const BIODEGRADABLE_PLATES_PRODUCT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${SITE_URL}/#product-plates`,
+  "name": "Green-to-Gold Biodegradable Plates",
+  "image": "https://picsum.photos/seed/biodegradableplates/800/600",
+  "description": "Completely compostable, chemical-free dining plates manufactured from agricultural residues of local farming hubs in Tripura.",
+  "category": "Food Service Supplies > Tableware > Disposable Plates",
+  "material": "Areca Leaf, Rice Straw, Bamboo Waste",
+  "brand": {
+    "@type": "Brand",
+    "name": "Green-to-Gold"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "INR",
+    "price": "3.50",
+    "description": "Price per plate in bulk batches.",
+    "availability": "https://schema.org/InStock"
+  }
+};
+
+// 3c. Product Schema for Organic Tableware
+export const ORGANIC_TABLEWARE_PRODUCT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${SITE_URL}/#product-tableware`,
+  "name": "Green-to-Gold Organic Tableware",
+  "image": "https://picsum.photos/seed/organictableware/800/600",
+  "description": "Elegant, food-safe, temperature-resistant organic dinnerware crafted from pressure-molded crop residues.",
+  "category": "Kitchen & Dining > Tableware > Dinnerware Sets",
+  "material": "Agricultural Residues, Non-toxic plant binders",
+  "brand": {
+    "@type": "Brand",
+    "name": "Green-to-Gold"
+  }
+};
+
+// 3d. Product Schema for Pineapple Leaf Fiber Products
+export const PINEAPPLE_FIBER_PRODUCT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${SITE_URL}/#product-palf`,
+  "name": "Green-to-Gold Pineapple Leaf Fiber (PALF)",
+  "image": "https://picsum.photos/seed/pineapplefiber/800/600",
+  "description": "Premium industrial grade cellulose-rich fibers extracted from pineapple crop waste, offering extreme tensile strength for textiles and composite reinforcement.",
+  "category": "Raw Materials > Textile Fibers > Natural Cellulose Fibers",
+  "material": "Pineapple Leaf Fiber (PALF)",
+  "brand": {
+    "@type": "Brand",
+    "name": "Green-to-Gold"
+  }
+};
+
+// 3e. Product Schema for Bamboo Biomaterials
+export const BAMBOO_BIOMATERIALS_PRODUCT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${SITE_URL}/#product-bamboobiomass`,
+  "name": "Green-to-Gold Bamboo Bio-materials",
+  "image": "https://picsum.photos/seed/bamboobiomaterial/800/600",
+  "description": "Sustainably harvested Tripura Muli bamboo fractions optimized for bioplastics, structural reinforcements, and clean energy pellets.",
+  "category": "Raw Materials > Biomass > Bamboo Biomaterial",
+  "material": "Tripura Muli Bamboo Shavings",
+  "brand": {
+    "@type": "Brand",
+    "name": "Green-to-Gold"
+  }
+};
+
+// 3f. Product Schema for Biodegradable Packaging Materials
+export const BIODEGRADABLE_PACKAGING_PRODUCT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${SITE_URL}/#product-packaging`,
+  "name": "Green-to-Gold Biodegradable Packaging",
+  "image": "https://picsum.photos/seed/biodegpackaging/800/600",
+  "description": "Eco-friendly protective packaging cushions and boxes pressed from agro-waste. 100% home compostable and replaces Styrofoam.",
+  "category": "Packaging Materials > Protective Packaging > Bio-Cushions",
+  "material": "Pineapple leaf agricultural waste, natural starches",
+  "brand": {
+    "@type": "Brand",
+    "name": "Green-to-Gold"
+  }
+};
+
+// 3g. Service Schema - Decentralized Sourcing & Sourcing Service
+export const DECENTRALIZED_SOURCING_SERVICE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": `${SITE_URL}/#service-sourcing`,
+  "name": "Decentralized Farm-Gate Biomass Sourcing",
+  "provider": {
+    "@type": "Organization",
+    "name": "ATSFY Technologies"
+  },
+  "areaServed": {
+    "@type": "State",
+    "name": "Tripura"
+  },
+  "description": "AI-optimized, localized agricultural waste pre-processing and collection ledgers that enable direct, zero-emissions value transfers to rural farmers.",
+  "serviceType": "Circular Supply Chain Management"
+};
+
+// 3h. ContactPoint Schema
+export const CONTACT_POINT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "ContactPoint",
+  "telephone": "+91-381-1234567",
+  "contactType": "customer service",
+  "areaServed": "IN",
+  "availableLanguage": ["English", "Hindi", "Bengali"],
+  "email": "ayanpal0698@gmail.com"
+};
+
+// 3i. ImageObject Schema
+export const IMAGE_OBJECT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "@id": `${SITE_URL}/#logoimage`,
+  "url": `${SITE_URL}/logo.svg`,
+  "caption": "Green-to-Gold by ATSFY Technologies Logo",
+  "inLanguage": "en"
+};
+
+// 3j. WebSite with SearchAction Schema
+export const WEBSITE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  "url": SITE_URL,
+  "name": "Green-to-Gold",
+  "description": "Tree-Free Bio-Composite Boards & Circular Economy Technology in Tripura, India",
+  "publisher": {
+    "@id": `${SITE_URL}/#organization`
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${SITE_URL}/?search={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
+};
+
+// 3k. WebPage Schemas for Homepage & DSS Dashboard
+export const WEBPAGE_HOME_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${SITE_URL}/#webpage`,
+  "url": SITE_URL,
+  "name": "Green-to-Gold — Sustainable Tree-Free Bio-Composite Boards & Tableware",
+  "description": "Converting agricultural residues into high-performance sustainable circular products in Northeast India using AI Decision Intelligence.",
+  "isPartOf": {
+    "@id": `${SITE_URL}/#website`
+  },
+  "about": {
+    "@id": `${SITE_URL}/#organization`
+  },
+  "primaryImageOfPage": {
+    "@id": `${SITE_URL}/#logoimage`
+  }
+};
+
+export const WEBPAGE_DSS_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${SITE_URL}/dss#webpage`,
+  "url": `${SITE_URL}/dss`,
+  "name": "BioSense DSS™ Hub — AI-Driven Sourcing & Crop Diagnostics",
+  "description": "Agricultural intelligence, soil reports, biomass forecasts, and disease diagnostics for state coordinators and farm-gate supply chain leaders.",
+  "isPartOf": {
+    "@id": `${SITE_URL}/#website`
   }
 };
 

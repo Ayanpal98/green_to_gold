@@ -34,6 +34,11 @@ import {
   ORGANIZATION_SCHEMA, 
   LOCAL_BUSINESS_SCHEMA, 
   BIOSENSE_DSS_SCHEMA, 
+  DECENTRALIZED_SOURCING_SERVICE_SCHEMA,
+  CONTACT_POINT_SCHEMA,
+  IMAGE_OBJECT_SCHEMA,
+  WEBSITE_SCHEMA,
+  WEBPAGE_DSS_SCHEMA,
   BREADCRUMB_SCHEMA 
 } from "../lib/seoData";
 
@@ -265,12 +270,17 @@ const BioSenseDSS = () => {
       <SEO 
         title="BioSense DSS™ | AI Sourcing & Supply Chain Decision Support System"
         description="Optimize local biomass supply chains, crop disease diagnostics, and regional soil intelligence with BioSense DSS™, the AI-driven Decision support platform by ATSFY Technologies."
-        keywords="BioSense DSS, ATSFY Technologies, AI Decision Support System, biomass sourcing, soil intelligence, crop diagnostics, Tripura, circular economy"
+        keywords="BioSense DSS, ATSFY Technologies, AI Decision Support System, biomass sourcing, soil intelligence, crop diagnostics, Tripura, circular economy, agricultural waste, climate tech India"
         canonicalPath="/dss"
         schemaData={[
           ORGANIZATION_SCHEMA,
           LOCAL_BUSINESS_SCHEMA,
           BIOSENSE_DSS_SCHEMA,
+          DECENTRALIZED_SOURCING_SERVICE_SCHEMA,
+          CONTACT_POINT_SCHEMA,
+          IMAGE_OBJECT_SCHEMA,
+          WEBSITE_SCHEMA,
+          WEBPAGE_DSS_SCHEMA,
           BREADCRUMB_SCHEMA
         ]}
       />

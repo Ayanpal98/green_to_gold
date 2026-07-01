@@ -14,6 +14,14 @@ import {
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { GoogleGenAI } from "@google/genai";
 import BioSenseDSS from "./components/BioSenseDSS";
+import AboutBioSenseDSS from "./pages/AboutBioSenseDSS";
+import AgriculturalWaste from "./pages/AgriculturalWaste";
+import BioCompositeBoards from "./pages/BioCompositeBoards";
+import PineappleLeafFiber from "./pages/PineappleLeafFiber";
+import CircularBioeconomy from "./pages/CircularBioeconomy";
+import SustainableManufacturing from "./pages/SustainableManufacturing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import { useLanguage } from "./context/LanguageContext";
 import { CountUp } from "./components/CountUp";
 import { SEO } from "./components/SEO";
@@ -23,6 +31,16 @@ import {
   ORGANIZATION_SCHEMA, 
   LOCAL_BUSINESS_SCHEMA, 
   COMPOSITE_BOARD_PRODUCT_SCHEMA, 
+  BIODEGRADABLE_PLATES_PRODUCT_SCHEMA,
+  ORGANIC_TABLEWARE_PRODUCT_SCHEMA,
+  PINEAPPLE_FIBER_PRODUCT_SCHEMA,
+  BAMBOO_BIOMATERIALS_PRODUCT_SCHEMA,
+  BIODEGRADABLE_PACKAGING_PRODUCT_SCHEMA,
+  DECENTRALIZED_SOURCING_SERVICE_SCHEMA,
+  CONTACT_POINT_SCHEMA,
+  IMAGE_OBJECT_SCHEMA,
+  WEBSITE_SCHEMA,
+  WEBPAGE_HOME_SCHEMA,
   FAQ_PAGE_SCHEMA, 
   BREADCRUMB_SCHEMA 
 } from "./lib/seoData";
@@ -137,11 +155,11 @@ Your goal is to provide Decision Support (DSS) for farmers and partners across c
 4. Water & Irrigation: Micro-irrigation and rainwater harvesting targeting 45% TSP coverage by 2030 (SDG Vision), using waste-based mulches.
 
 [Contact]
-- Email: contact@greentogold.in, Info.atsfy@gmail.com
+- Email: atsfy.tech.info@gmail.com, Info.atsfy@gmail.com
 - LinkedIn: https://www.linkedin.com/in/atsfy/
 - Location: Agartala, Tripura, India.
 
-Be professional, concise, and enthusiastic about the project's impact on Tripura and Northeast India. If you don't know the answer, politely direct them to contact@greentogold.in or Info.atsfy@gmail.com.
+Be professional, concise, and enthusiastic about the project's impact on Tripura and Northeast India. If you don't know the answer, politely direct them to atsfy.tech.info@gmail.com or Info.atsfy@gmail.com.
 `;
 
 const ChatBot = () => {
@@ -198,10 +216,10 @@ const ChatBot = () => {
     } catch (error) {
       console.error("Chat Error:", error);
       const errText = language === 'bn' 
-        ? "আমি দুঃখিত, আমি একটি অভ্যন্তরীণ সমস্যার সম্মুখীন হয়েছি। দয়া করে পরে আবার চেষ্টা করুন অথবা contact@greentogold.in এ আমাদের সাথে যোগাযোগ করুন।" 
+        ? "আমি দুঃখিত, আমি একটি অভ্যন্তরীণ সমস্যার সম্মুখীন হয়েছি। দয়া করে পরে আবার চেষ্টা করুন অথবা atsfy.tech.info@gmail.com এ আমাদের সাথে যোগাযোগ করুন।" 
         : language === 'kok'
-        ? "I'm sorry, back-end line error tongo. Please try again or email us contact@greentogold.in."
-        : "I'm sorry, I encountered an error. Please try again later or contact us at contact@greentogold.in.";
+        ? "I'm sorry, back-end line error tongo. Please try again or email us atsfy.tech.info@gmail.com."
+        : "I'm sorry, I encountered an error. Please try again later or contact us at atsfy.tech.info@gmail.com.";
       setMessages(prev => [...prev, { role: 'model', text: errText }]);
     } finally {
       setIsLoading(false);
@@ -1281,12 +1299,22 @@ export const LandingPage = ({ user }: { user: any }) => {
       <SEO 
         title="Green-to-Gold | Tree-Free Bio-Composite Boards & Sustainable Manufacturing, Tripura India"
         description="ATSFY Technologies transforms agricultural waste (pineapple leaf fiber, bamboo, rice husk) into tree-free bio-composite boards & compostable tableware in Tripura."
-        keywords="Green-to-Gold, ATSFY Technologies, BioSense DSS, bio-composite boards, agricultural waste, Tripura, circular bioeconomy, sustainable manufacturing, tree-free plywood"
+        keywords="Green-to-Gold, ATSFY Technologies, BioSense DSS, bio-composite boards, agricultural waste, Tripura, circular bioeconomy, sustainable manufacturing, tree-free plywood, climate tech India, agro waste recycling"
         canonicalPath="/"
         schemaData={[
           ORGANIZATION_SCHEMA,
           LOCAL_BUSINESS_SCHEMA,
           COMPOSITE_BOARD_PRODUCT_SCHEMA,
+          BIODEGRADABLE_PLATES_PRODUCT_SCHEMA,
+          ORGANIC_TABLEWARE_PRODUCT_SCHEMA,
+          PINEAPPLE_FIBER_PRODUCT_SCHEMA,
+          BAMBOO_BIOMATERIALS_PRODUCT_SCHEMA,
+          BIODEGRADABLE_PACKAGING_PRODUCT_SCHEMA,
+          DECENTRALIZED_SOURCING_SERVICE_SCHEMA,
+          CONTACT_POINT_SCHEMA,
+          IMAGE_OBJECT_SCHEMA,
+          WEBSITE_SCHEMA,
+          WEBPAGE_HOME_SCHEMA,
           FAQ_PAGE_SCHEMA,
           BREADCRUMB_SCHEMA
         ]}
@@ -1588,7 +1616,8 @@ export const LandingPage = ({ user }: { user: any }) => {
                     <div className="absolute inset-0 z-0">
                       <img 
                         src={biocompositeBoardsImg} 
-                        alt="Bio-Composite Board" 
+                        alt="Green-to-Gold Tree-Free Bio-Composite Boards engineered from agricultural waste in Tripura India" 
+                        loading="lazy"
                         className="w-full h-full object-cover opacity-20 group-hover:opacity-35 transition-opacity duration-300"
                         referrerPolicy="no-referrer"
                       />
@@ -1615,7 +1644,8 @@ export const LandingPage = ({ user }: { user: any }) => {
                     <div className="absolute inset-0 z-0">
                       <img 
                         src={organicDinnerwareImg} 
-                        alt="Organic Tableware" 
+                        alt="Green-to-Gold Biodegradable Plates and Organic Tableware made from compostable agricultural waste" 
+                        loading="lazy"
                         className="w-full h-full object-cover opacity-20 group-hover:opacity-35 transition-opacity duration-300"
                         referrerPolicy="no-referrer"
                       />
@@ -1642,7 +1672,8 @@ export const LandingPage = ({ user }: { user: any }) => {
                     <div className="absolute inset-0 z-0">
                       <img 
                         src={pineappleLeafFiberImg} 
-                        alt="Pineapple Leaf Fiber" 
+                        alt="Pineapple Leaf Fiber natural cellulose extracted for high-strength bio-composite reinforcement" 
+                        loading="lazy"
                         className="w-full h-full object-cover opacity-20 group-hover:opacity-35 transition-opacity duration-300"
                         referrerPolicy="no-referrer"
                       />
@@ -1703,7 +1734,8 @@ export const LandingPage = ({ user }: { user: any }) => {
           <div className="absolute inset-0">
             <img 
               src={tripuraPineapplePlantationImg} 
-              alt="Lush pineapple plantation in Tripura, showcasing the raw material source for bio-composites" 
+              alt="Lush agricultural pineapple plantation fields in Tripura Northeast India - organic source of premium pineapple leaf fiber (PALF) biomaterial" 
+              loading="lazy"
               className="w-full h-full object-cover scale-110 grayscale-[10%] brightness-75"
               referrerPolicy="no-referrer"
             />
@@ -1864,7 +1896,13 @@ export const LandingPage = ({ user }: { user: any }) => {
                 >
                   <div>
                     <div className="h-48 overflow-hidden relative">
-                      <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" />
+                      <img 
+                        src={product.image} 
+                        alt={`Green-to-Gold ${product.title} - eco-sustainable climate-tech product manufactured in Tripura`} 
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                        referrerPolicy="no-referrer" 
+                      />
                       <div className="absolute inset-0 bg-brand-green/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div className="bg-white/90 backdrop-blur-md px-6 py-3 rounded-full text-brand-green font-bold text-xs flex items-center gap-2">
                           <Target className="w-4 h-4" />
@@ -1931,7 +1969,8 @@ export const LandingPage = ({ user }: { user: any }) => {
                 <div className="w-full md:w-1/2 relative min-h-[300px] md:min-h-full">
                   <img 
                     src={selectedProduct.image} 
-                    alt={selectedProduct.title}
+                    alt={`Green-to-Gold ${selectedProduct.title} - organic composite preview`}
+                    loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-green to-transparent opacity-60" />
@@ -1942,7 +1981,12 @@ export const LandingPage = ({ user }: { user: any }) => {
                       <div className="flex -space-x-2">
                         {[1, 2, 3].map(i => (
                           <div key={i} className="w-8 h-8 rounded-full border-2 border-brand-green bg-white/20 overflow-hidden backdrop-blur-md" >
-                             <img src={`https://images.unsplash.com/photo-${1500000000000+i}?auto=format&fit=crop&q=80&w=100`} className="w-full h-full object-cover opacity-50" />
+                             <img 
+                               src={`https://images.unsplash.com/photo-${1500000000000+i}?auto=format&fit=crop&q=80&w=100`} 
+                               alt="Farming community partner avatar representing decentralized ecosystem" 
+                               loading="lazy"
+                               className="w-full h-full object-cover opacity-50" 
+                             />
                           </div>
                         ))}
                       </div>
@@ -2971,9 +3015,36 @@ export const LandingPage = ({ user }: { user: any }) => {
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-x-12 gap-y-6 pt-12 border-t border-brand-ink/5">
-              <a href="mailto:contact@greentogold.in" className="flex items-center gap-3 text-brand-green hover:text-brand-orange-dark transition-colors font-medium">
-                <Mail className="w-5 h-5" aria-hidden="true" /> contact@greentogold.in
+            {/* Knowledge Hub & Semantic Resource Directories */}
+            <div className="border-t border-b border-brand-ink/5 py-12 mb-12 text-left">
+              <h3 className="text-xs uppercase tracking-[0.2em] font-bold text-brand-green mb-6 text-center md:text-left">
+                Enterprise Circular Economy & AI Knowledge Hub
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-sm">
+                <Link to="/about-dss" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
+                  <Cpu className="w-3.5 h-3.5 text-brand-orange-dark" /> About BioSense DSS™
+                </Link>
+                <Link to="/agricultural-waste-management" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
+                  <Leaf className="w-3.5 h-3.5 text-brand-orange-dark" /> Agro-Waste Hub
+                </Link>
+                <Link to="/bio-composite-boards" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
+                  <Layers className="w-3.5 h-3.5 text-brand-orange-dark" /> Bio-Composite Boards
+                </Link>
+                <Link to="/pineapple-leaf-fiber" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
+                  <Trees className="w-3.5 h-3.5 text-brand-orange-dark" /> Pineapple Leaf Fiber
+                </Link>
+                <Link to="/circular-bioeconomy" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
+                  <RefreshCw className="w-3.5 h-3.5 text-brand-orange-dark" /> Circular Bioeconomy
+                </Link>
+                <Link to="/sustainable-manufacturing-india" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
+                  <Factory className="w-3.5 h-3.5 text-brand-orange-dark" /> India Green Industry
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row flex-wrap items-center justify-center gap-x-12 gap-y-6 pt-12">
+              <a href="mailto:atsfy.tech.info@gmail.com" className="flex items-center gap-3 text-brand-green hover:text-brand-orange-dark transition-colors font-medium">
+                <Mail className="w-5 h-5" aria-hidden="true" /> atsfy.tech.info@gmail.com
               </a>
               <a href="mailto:Info.atsfy@gmail.com" className="flex items-center gap-3 text-brand-green hover:text-brand-orange-dark transition-colors font-medium">
                 <Mail className="w-5 h-5" aria-hidden="true" /> Info.atsfy@gmail.com
@@ -2998,8 +3069,8 @@ export const LandingPage = ({ user }: { user: any }) => {
             <span>{lp.underAtsfy}</span>
           </div>
           <div className="flex gap-8 mt-4 md:mt-0">
-            <a href="#" className="hover:opacity-100 transition-opacity">{lp.privacy}</a>
-            <a href="#" className="hover:opacity-100 transition-opacity">{lp.terms}</a>
+            <Link to="/privacy-policy" className="hover:opacity-100 transition-opacity">{lp.privacy}</Link>
+            <Link to="/terms-of-service" className="hover:opacity-100 transition-opacity">{lp.terms}</Link>
             <a href="#" className="hover:opacity-100 transition-opacity">{lp.investorPortal}</a>
           </div>
         </div>
@@ -3015,6 +3086,14 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage user={null} />} />
         <Route path="/dss" element={<BioSenseDSS />} />
+        <Route path="/about-dss" element={<AboutBioSenseDSS />} />
+        <Route path="/agricultural-waste-management" element={<AgriculturalWaste />} />
+        <Route path="/bio-composite-boards" element={<BioCompositeBoards />} />
+        <Route path="/pineapple-leaf-fiber" element={<PineappleLeafFiber />} />
+        <Route path="/circular-bioeconomy" element={<CircularBioeconomy />} />
+        <Route path="/sustainable-manufacturing-india" element={<SustainableManufacturing />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
       </Routes>
     </BrowserRouter>
   );
