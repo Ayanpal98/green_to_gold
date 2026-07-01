@@ -28,6 +28,14 @@ import { CountUp } from "./CountUp";
 import { CropDiseaseDSS } from "./CropDiseaseDSS";
 import { SoilIntelligence } from "./SoilIntelligence";
 import { MarketIntelligence } from "./MarketIntelligence";
+import { SEO } from "./SEO";
+import { Breadcrumbs } from "./Breadcrumbs";
+import { 
+  ORGANIZATION_SCHEMA, 
+  LOCAL_BUSINESS_SCHEMA, 
+  BIOSENSE_DSS_SCHEMA, 
+  BREADCRUMB_SCHEMA 
+} from "../lib/seoData";
 
 import { 
   BarChart, 
@@ -253,7 +261,25 @@ const BioSenseDSS = () => {
   return (
     <div className="min-h-screen bg-brand-paper selection:bg-brand-orange selection:text-white pt-24 pb-12">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-6 mt-12">
+      
+      <SEO 
+        title="BioSense DSS™ | AI Sourcing & Supply Chain Decision Support System"
+        description="Optimize local biomass supply chains, crop disease diagnostics, and regional soil intelligence with BioSense DSS™, the AI-driven Decision support platform by ATSFY Technologies."
+        keywords="BioSense DSS, ATSFY Technologies, AI Decision Support System, biomass sourcing, soil intelligence, crop diagnostics, Tripura, circular economy"
+        canonicalPath="/dss"
+        schemaData={[
+          ORGANIZATION_SCHEMA,
+          LOCAL_BUSINESS_SCHEMA,
+          BIOSENSE_DSS_SCHEMA,
+          BREADCRUMB_SCHEMA
+        ]}
+      />
+      
+      <div className="max-w-7xl mx-auto px-6 mt-4">
+        <Breadcrumbs />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 mt-4">
         <header className="mb-12">
           {/* Prototype Banner */}
           <div className="mb-12 p-4 bg-brand-orange/10 border border-brand-orange/20 rounded-2xl flex items-center gap-3">

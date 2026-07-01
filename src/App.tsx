@@ -16,6 +16,16 @@ import { GoogleGenAI } from "@google/genai";
 import BioSenseDSS from "./components/BioSenseDSS";
 import { useLanguage } from "./context/LanguageContext";
 import { CountUp } from "./components/CountUp";
+import { SEO } from "./components/SEO";
+import { Breadcrumbs } from "./components/Breadcrumbs";
+import { FAQAccordion } from "./components/FAQAccordion";
+import { 
+  ORGANIZATION_SCHEMA, 
+  LOCAL_BUSINESS_SCHEMA, 
+  COMPOSITE_BOARD_PRODUCT_SCHEMA, 
+  FAQ_PAGE_SCHEMA, 
+  BREADCRUMB_SCHEMA 
+} from "./lib/seoData";
 import { 
   ArrowRight, 
   Leaf, 
@@ -1267,6 +1277,22 @@ export const LandingPage = ({ user }: { user: any }) => {
   return (
     <div className="min-h-screen bg-brand-paper text-brand-ink selection:bg-brand-orange/20 selection:text-brand-orange-dark font-sans relative overflow-x-hidden">
       <Navbar />
+      
+      <SEO 
+        title="Green-to-Gold | Tree-Free Bio-Composite Boards & Sustainable Manufacturing, Tripura India"
+        description="ATSFY Technologies transforms agricultural waste (pineapple leaf fiber, bamboo, rice husk) into tree-free bio-composite boards & compostable tableware in Tripura."
+        keywords="Green-to-Gold, ATSFY Technologies, BioSense DSS, bio-composite boards, agricultural waste, Tripura, circular bioeconomy, sustainable manufacturing, tree-free plywood"
+        canonicalPath="/"
+        schemaData={[
+          ORGANIZATION_SCHEMA,
+          LOCAL_BUSINESS_SCHEMA,
+          COMPOSITE_BOARD_PRODUCT_SCHEMA,
+          FAQ_PAGE_SCHEMA,
+          BREADCRUMB_SCHEMA
+        ]}
+      />
+      
+      <Breadcrumbs />
       
       {/* Hero Section */}
       <header className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden flex flex-col items-center">
@@ -2897,6 +2923,9 @@ export const LandingPage = ({ user }: { user: any }) => {
             </div>
           </div>
         </section>
+
+        {/* Dynamic FAQ & Knowledge Base for SEO/AEO/GEO optimization */}
+        <FAQAccordion />
 
       {/* CTA / Footer */}
       <footer className="py-24 px-6 bg-brand-paper" aria-label="Footer">
