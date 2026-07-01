@@ -22,6 +22,7 @@ import CircularBioeconomy from "./pages/CircularBioeconomy";
 import SustainableManufacturing from "./pages/SustainableManufacturing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import RiceHuskEnergy from "./pages/RiceHuskEnergy";
 import { useLanguage } from "./context/LanguageContext";
 import { CountUp } from "./components/CountUp";
 import { SEO } from "./components/SEO";
@@ -3020,7 +3021,7 @@ export const LandingPage = ({ user }: { user: any }) => {
               <h3 className="text-xs uppercase tracking-[0.2em] font-bold text-brand-green mb-6 text-center md:text-left">
                 Enterprise Circular Economy & AI Knowledge Hub
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6 text-sm">
                 <Link to="/about-dss" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
                   <Cpu className="w-3.5 h-3.5 text-brand-orange-dark" /> About BioSense DSS™
                 </Link>
@@ -3038,6 +3039,9 @@ export const LandingPage = ({ user }: { user: any }) => {
                 </Link>
                 <Link to="/sustainable-manufacturing-india" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
                   <Factory className="w-3.5 h-3.5 text-brand-orange-dark" /> India Green Industry
+                </Link>
+                <Link to="/rice-husk-energy" className="text-brand-ink/60 hover:text-brand-orange-dark transition-colors flex items-center gap-1.5 font-medium">
+                  <Flame className="w-3.5 h-3.5 text-brand-orange-dark animate-pulse" /> Rice Husk Energy
                 </Link>
               </div>
             </div>
@@ -3094,6 +3098,7 @@ export default function App() {
         <Route path="/sustainable-manufacturing-india" element={<SustainableManufacturing />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/rice-husk-energy" element={<RiceHuskEnergy />} />
       </Routes>
     </BrowserRouter>
   );
